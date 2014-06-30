@@ -1,0 +1,10 @@
+== Manual compile ==
+
+autoreconf -fvi
+./configure
+make
+
+== Compile Debian package ==
+
+dpkg-buildpackage -b -us -uc
+

@@ -1,0 +1,11 @@
+libjel
+
+JPEG Embedding Library
+
+This library supplies an API for embedding and extracting bit strings
+into / from JPEG images.  The library uses heavily quantized frequency
+components to provide storage that is stabilized by the JPEG
+compression process.  As a result, embedded bit strings are preserved
+under a number of different transformations, including transcoding to
+higher quality, DC or low frequency shifts in pixel value, and limited
+image rescaling.

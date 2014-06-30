@@ -1,0 +1,17 @@
+*.o
+build/
+jpeg-6b/cjpeg
+jpeg-6b/djpeg
+jpeg-6b/jpegtran
+jpeg-6b/*.a
+jpeg-6b/*.lo
+jpeg-6b/rdjpgcom
+jpeg-6b/wrjpgcom
+jpeg-6b/config.guess.cdbs-orig
+jpeg-6b/config.sub.cdbs-orig
+docs/paper/jpegsteg.aux
+docs/paper/jpegsteg.bbl
+docs/paper/jpegsteg.blg
+docs/paper/jpegsteg.log
+obj-x86_64-linux-gnu/
+

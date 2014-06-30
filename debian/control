@@ -1,0 +1,14 @@
+Source: saferdefiance-jel
+Maintainer: Jeroen Massar <massar@fsi.io>
+Section: web
+Priority: extra
+Standards-Version: 3.9.2
+Build-Depends: debhelper (>= 8.0.0~), libc6-dev, libc6-dev-i386 [amd64] | libc6-dev-amd64 [i386]
+Homepage: http://www.safdef.org
+
+Package: saferdefiance-jel
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: SAFER DEFIANCE JPEG Embedding Library (JEL)
+ SAFER DEFIANCE JPEG Embedding Library (JEL)
+

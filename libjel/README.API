@@ -1,0 +1,133 @@
+JPEG Embedding Library - libjel
+
+API for libjel - push as much functionality as possible into a
+library.  We should use dynamic libraries, but can certainly offer
+static if desired.
+
+Linux and Mac are the most important platforms.
+
+Namespaces: This is C, so we should do something to avoid collision.
+Use "jel_" as a prefix for all structs and functions.
+
+
+Data Structures:
+
+Main structure is a config object that tells us what base quality we
+should use, what frequency components we want, and whether we should
+use files or memory (the former through a FILE pointer).  Here's an
+abstract version of the structure:
+
+typedef struct {
+  jpeg source
+  quality
+  frequencies
+  bit-packing strategies
+  message information
+} jel_config;
+
+
+
+
+Rich Error Regime:
+
+Need a good facility for reporting error, with a reasonable taxonomy
+of error types.  Is it sufficient to define a rich set of error codes?
+Suggest that we use negative values for errors.
+
+How about more general exception handling?  It's C, so we have limited
+options.  I'm more inclined to write the library so that we always
+return a meaningful error code, terminating the procedure if
+necessary.  This is opposed to "throwing" an exception and then
+devising some mechanism for catching it somewhere up the stack.  The
+latter mechanism is available through libjpeg, so this is still an
+option, but I would like the API to be as simple as possible, and JPEG
+is anything but simple.
+
+void jel_error( jel_config * cfg );
+
+cfg       A properly initialized jel_config object
+
+Prints a string on stderr describing the most recent error.
+
+
+
+int jel_error_code( jel_config * cfg );
+
+Returns the most recent error code.
+
+
+char * jel_error_string( jel_config * cfg );
+
+Returns the most recent error string.
+
+
+
+
+
+Init:
+
+Returns a config object.  Should there be arguments to this function?
+We need a way to specify whether files or memory should be used.
+There should be a few critical arguments, but many options should be
+set through another API ( set_stuff_option / get_stuff_option ).  If
+the config object also defines the source and destination JPEG
+objects, then just about all other functions can take the jel_config
+object.  However, the setup of this object is complicated somewhat by
+the fact that it is a transcoding operation, requiring a both a JPEG
+source and destination.  On the other hand, this is natural, and will
+always be required.  Meaningful specs for src and dest are needed:
+
+jel_config * jel_init( int nlevels );
+
+
+Capacity: 
+
+How much message can I stuff?  How do we specify the image?
+
+int jel_capacity( jel_config * );  /* Returns the number of bytes of capacity. */
+
+
+Stuff:
+
+Embed a message in an image:
+
+int jel_embed( jel_config * cfg, unsigned char * msg, int len);
+
+cfg       A properly initialized jel_config object
+msg       A region of memory containing bytes to be embedded
+len       The number of bytes of msg to embed
+
+Returns the number of bytes that were embedded, or a negative error
+code.  If the return value is positive but less than 'len', call
+'jel_error' for more information.
+
+
+
+Unstuff:
+
+Extract a message from an image.
+
+int jel_extract( jel_config * cfg, unsigned char * msg, int len);
+
+cfg       A properly initialized jel_config object
+msg       A region of memory to contain the extracted message
+len       The maximum size in bytes of msg
+
+Returns the number of bytes that were extracted, or a negative error
+code.  Note that if 'msg' is not large enough to hold the extracted
+message, a negative error code will be returned, but msg will still
+contain the bytes that WERE extracted.
+
+
+
+Other issues:
+
+Hiding JPEG internals: Since the library is tied to JPEG, we should
+hide JPEG internals from the caller.  Allow filename strings, FILE*
+objects, and memory regions as potential JPEG sources and
+destinations.
+
+Internal transcoding to a specific quality: Is this desirable?  At
+present, we assume a JPEG file on input and output.  The quality is
+arbitrary.  When we stuff or unstuff, though, we always have a desired
+base quality + frequency components in mind.  

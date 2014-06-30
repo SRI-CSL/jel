@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import os
+import sys
+from random import *
+
+# From a uniform distribution, emit a fixed-length sequence of random
+# bytes on stdout.  Usually, you will want to redirect this to a file.
+
+if (len(sys.argv) < 2):
+    print "Usage: randmsg <nbytes>"
+    print "Writes a message on stdout consisting of uniformly-distributed random bytes in [0,255]"
+    exit(-1)
+
+
+nbytes = int(sys.argv[1])
+
+for i in range(0,nbytes):
+    b = randrange(0,255)
+    sys.stdout.write(chr(b))
+
