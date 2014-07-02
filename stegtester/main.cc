@@ -61,7 +61,7 @@ int main(int argc, char** argv){
     fprintf(stderr, "FAIL: %u in %u out\n", data_length, message_length);
   } else if ((diff = memcmp(data, message, data_length)) != 0){
     if(verbose){
-      int j;
+      unsigned int j;
       for(j = 0; j < data_length; j++){
         if(message[j] != data[j]){
           fprintf(stderr, "FAIL: j = %d:  %u  %u\n", j, message[j], data[j]);
