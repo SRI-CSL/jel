@@ -226,6 +226,8 @@ static image_p embed_message_aux(image_p cover, unsigned char* message, int mess
    /* insert the message */
    bytes_embedded = jel_embed(jel, message, message_length);
 
+   fprintf(stderr, "jel_embed: bytes_embedded = %d message_length = %d\n", bytes_embedded, message_length);
+ 
    /* figure out the real size of destination */
    if(bytes_embedded >= message_length){ 
      if(jel->jpeglen > 0){
@@ -262,7 +264,7 @@ image_p embed_message(unsigned char* message, int message_length){
         destination = (unsigned char*)malloc(destination_length);
         if(destination == NULL){ break; }
         retval = embed_message_aux(cover, message, message_length, destination, destination_length);
-        //fprintf(stderr, "embed_message_aux:  %d  %p\n",  destination_length, retval);
+        fprintf(stderr, "embed_message_aux:  %d  %p\n",  destination_length, retval);
       } while((failures++ < 10) && (retval == NULL));
 
       if(retval != NULL){

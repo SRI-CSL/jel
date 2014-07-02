@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -Wall  -I../jpeg-6b/  $(shell pkg-config --cflags jel) -I/usr/include/jel
+CFLAGS = -Wall  $(shell pkg-config --cflags jel) 
 
 LINK = $(shell pkg-config --libs jel)
 
