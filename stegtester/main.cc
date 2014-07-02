@@ -51,11 +51,11 @@ int main(int argc, char** argv){
 
   body_length = construct_jpeg_body(data, data_length, &body);
 
-  fprintf(stderr, "construct_jpeg_body: %u\n", body_length); 
+  fprintf(stderr, "construct_jpeg_body: cover image plus message is %u bytes\n", body_length); 
 
   message_length =  deconstruct_jpeg_body(body, body_length, &message);
 
-  fprintf(stderr, "deconstruct_jpeg_body: %u\n", message_length);
+  fprintf(stderr, "deconstruct_jpeg_body: extracted a message of length %u bytes\n", message_length);
 
   if(data_length != message_length){
     fprintf(stderr, "FAIL: %u in %u out\n", data_length, message_length);
@@ -80,8 +80,10 @@ int main(int argc, char** argv){
   free(data);
   free(body);
   free(message);
-
-  fprintf(stderr, "images debugging: %d %d\n", inM, outM);
+  
+  if(verbose){
+    fprintf(stderr, "images debugging: %d %d\n", inM, outM);
+  }
 
   return 0;
 }

@@ -252,7 +252,7 @@ image_p embed_message(unsigned char* message, int message_length){
   if(message != NULL){
     image_p cover = get_cover_image( message_length );
     if(cover != NULL){
-      fprintf(stderr, "embed_message:  %d %s\n",  message_length, cover->path);
+      fprintf(stderr, "embed_message:  embedding %d bytes into %s\n",  message_length, cover->path);
       int failures = 0, destination_length = cover->size;
       unsigned char* destination = NULL;
       
@@ -262,11 +262,11 @@ image_p embed_message(unsigned char* message, int message_length){
         destination = (unsigned char*)malloc(destination_length);
         if(destination == NULL){ break; }
         retval = embed_message_aux(cover, message, message_length, destination, destination_length);
-        fprintf(stderr, "embed_message_aux:  %d  %p\n",  destination_length, retval);
+        //fprintf(stderr, "embed_message_aux:  %d  %p\n",  destination_length, retval);
       } while((failures++ < 10) && (retval == NULL));
 
       if(retval != NULL){
-        fprintf(stderr, "embed_message:  stegged image size = %zd\n",  retval->size);
+        fprintf(stderr, "embed_message:  resulting stegged image size = %zd\n",  retval->size);
       }
     }
   }
