@@ -25,7 +25,7 @@ main: images.o main.o
 
 
 clean:
-	rm -f *.o
+	rm -f main *.o
 
 
 
