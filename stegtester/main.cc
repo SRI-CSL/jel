@@ -41,6 +41,9 @@ static unsigned int deconstruct_jpeg_body(unsigned char *body, unsigned int body
 
 
 int main(int argc, char** argv){
+  if(argc > 1){
+    verbose = 1;
+  }
   int inM = load_images("data/images");
   unsigned int data_length = 16416, body_length, message_length;
   unsigned char* data = (unsigned char*)malloc(data_length), *body = NULL, *message = NULL;
