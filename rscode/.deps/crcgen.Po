@@ -1,0 +1,3 @@
+rscode/crcgen.o: rscode/crcgen.c rscode/ecc.h
+
+rscode/ecc.h:
