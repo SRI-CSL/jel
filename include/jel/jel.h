@@ -96,7 +96,8 @@ typedef struct {
 
   int len;             // Actual length of data
   int maxlen;          // Maximum length of data
-  unsigned char *data; // Data to be encoded
+  unsigned char *data;   // Data to be encoded
+  unsigned char *plain;  // If ECC is in use, NULL or the plain text.
 
   int jel_errno;
   int ecc_method;
@@ -123,6 +124,8 @@ jel_config * jel_init( int nlevels );  /* Initialize and requests at least 'nlev
 
 
 void jel_free( jel_config *cfg );   /* Free the jel_config struct: */
+
+void jel_describe( jel_config *cfg ); /* Describe the jel object in the log */
 
 /*
  * Set source and destination objects - return 0 on success, negative

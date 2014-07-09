@@ -21,6 +21,8 @@ static int init = 1;
 static int block_len = BLOCKLEN;
 static int max_mlen = BLOCKLEN-NPAR;
 
+void ijel_buffer_dump(unsigned char *, int);
+
 int ijel_set_ecc_blocklen(int new_len) {
   block_len = new_len;
   max_mlen = block_len - NPAR;
@@ -70,6 +72,8 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
    * each block, EXCLUSIVE of length and parity: */
   msgchunk = max_mlen - 1;
 
+  printf("ijel_encode_ecc: msgchunk=%d; NPAR=%d; blocklen=%d\n", msgchunk, NPAR, block_len);
+
   /* This is the number of ECC blocks we will need to encode all of
    * the msg including parity bytes - always add an extra block to
    * terminate.  This block will have the value (1) msgchunk, or (2)
@@ -94,7 +98,6 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
     assert(in_len >= 0);
 
     memset(message, 0, 256);
-    //    if ( i < (nblocks-1) ) message[0] = msgchunk;
 
     if ( in_len >= msgchunk ) message[0] = msgchunk;
     else if ( in_len < msgchunk ) message[0] = in_len;
@@ -106,6 +109,12 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
     /* Add 1 to msgchunk to account for the length byte at message[0]: */
     encode_data(message, msgchunk+1, next_out);
 
+#if 0
+    printf("---ijel_encode_ecc input message: ");
+    ijel_buffer_dump( message, msgchunk+1 );
+    printf("---ijel_encode_ecc ecc block (msg + parity): ");
+    ijel_buffer_dump( next_out, msgchunk+1+NPAR );
+#endif
     /* ECC blocks are block_len bytes long.  Keep on truckin' */
     next_out += block_len;
     *outlen += block_len;
@@ -123,15 +132,15 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
 
 
 /*
- * Return value is a malloc'ed buffer that contains ecc-encoded data.
+ * Return value is a calloc'ed buffer that contains ecc-encoded data.
  * The *outlen pointer is updated to contain the length of the
  * ecc-encoded data buffer.  Caller must free when done.
  */
 
 unsigned char *ijel_decode_ecc(unsigned char *ecc, int ecclen, int *msglen) {
   int mlen, nblocks, in_len, i, k; //n_out, 
-  unsigned char *out, *next_out;
-  unsigned char *in;
+  unsigned char *out=NULL, *next_out=NULL;
+  unsigned char *in=NULL;
   int done = 0;
 
   if (init) {
@@ -145,7 +154,7 @@ unsigned char *ijel_decode_ecc(unsigned char *ecc, int ecclen, int *msglen) {
    * otherwise it is trash:
    */
   if ( (ecclen % block_len) != 0 ) {
-    fprintf(stderr, "ijel_decode_ecc error:  ecclen is %d, not a multiple of block_len!\n", ecclen);
+    fprintf(stderr, "ijel_decode_ecc error:  ecclen is %d, but is not a multiple of block_len!\n", ecclen);
     return NULL;
   }
 
@@ -153,7 +162,7 @@ unsigned char *ijel_decode_ecc(unsigned char *ecc, int ecclen, int *msglen) {
 
   //n_out = nblocks * max_mlen;   /* Maximum number of bytes we need for decoded output */
 
-  out = malloc(nblocks * block_len);  /* Allocate buffer */
+  out = calloc(nblocks, block_len);  /* Allocate buffer */
   next_out = out;         /* Initialize the output buffer position */
 
   in = ecc;         /* Pointer to unfinished business */
@@ -173,10 +182,12 @@ unsigned char *ijel_decode_ecc(unsigned char *ecc, int ecclen, int *msglen) {
     }
 
     /* On input, we had set the first byte to be the length of text
-     * within the block.  This will be 127 for all but the last block,
-     * where it will be in [1,255]:
+     * within the block.  This will be max_mlen for all but the last block,
+     * where it will be in [ 1, max_mlen-1 ]:
      */
+
     mlen = in[0];
+
     //    fprintf(stderr, "block %d: in[0] = %d\n", i, in[0]);
 
     if (mlen < max_mlen-1) done = 1;

@@ -392,11 +392,6 @@ main (int argc, char **argv)
   if (sfp != NULL && sfp != stdin) fclose(sfp);
   if (output_file != NULL && output_file != stdout) fclose(output_file);
 
-  /* ?? */
-  if(jel->data && ecc) { 
-    free(jel->data);
-  }
-
   free(message);
 
   jel_free(jel);

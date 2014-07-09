@@ -83,6 +83,8 @@ static int capacity(image_p image){
   } else {
     ret = jel_capacity(jel);
   }
+  jel_log(jel, "In capacity:\n");
+  jel_describe(jel);
   jel_free(jel);
   return ret;
 }
@@ -223,8 +225,13 @@ static image_p embed_message_aux(image_p cover, unsigned char* message, int mess
     } 
    jel_setprop(jel, JEL_PROP_EMBED_LENGTH, EMBED_LENGTH);
 
+   jel_log(jel, "In embed_message_aux:\n");
+   jel_describe(jel);
+
    /* insert the message */
+   jel_log(jel, "Before call to jel_embed, message[0] = %d\n", message[0]);
    bytes_embedded = jel_embed(jel, message, message_length);
+   jel_log(jel, "After call to jel_embed, message[0] = %d\n", message[0]);
 
    fprintf(stderr, "jel_embed: bytes_embedded = %d message_length = %d\n", bytes_embedded, message_length);
  
@@ -289,7 +296,12 @@ int extract_message(unsigned char** messagep, unsigned char* jpeg_data, unsigned
     fprintf(stderr, "extract_message: capacity = %d\n", msglen);
     unsigned char* message = (unsigned char*)calloc(msglen+1, sizeof(unsigned char));
     jel_setprop(jel, JEL_PROP_EMBED_LENGTH, EMBED_LENGTH);
+
+    jel_log(jel, "In extract_message:\n");
+    jel_describe(jel);
+
     msglen = jel_extract(jel, message, msglen);
+    jel_log(jel, "After call to jel_extract, message[0] = %d; jel->data[0] = %d\n", message[0], jel->data[0]);
     jel_log(jel, "extract_message: %d bytes extracted\n", msglen);
     jel_close_log(jel);
     jel_free(jel);

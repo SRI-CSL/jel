@@ -141,6 +141,9 @@ int ijel_stuff_message(jel_config *cfg) {
   JBLOCKARRAY row_ptrs;
   //size_t block_row_size = (size_t) SIZEOF(JCOEF)*DCTSIZE2*cinfo->comp_info[compnum].width_in_blocks;
 
+  jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
+	  raw[0], raw[1], raw[2], raw[3], raw[4]);
+
 #if ECC
   plain_len = msglen; /* Save the plaintext length */
 
@@ -151,6 +154,9 @@ int ijel_stuff_message(jel_config *cfg) {
 
     if (!cfg->embed_length) message = ijel_encode_ecc_nolength(raw, msglen, &i);
     else message = ijel_encode_ecc(raw,  msglen, &i);
+
+    jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
+	    message[0], message[1], message[2], message[3], message[4]);
 
     if (!message) message = raw; /* No ecc */
     else {
@@ -210,6 +216,7 @@ int ijel_stuff_message(jel_config *cfg) {
   k = 0;
 
   if (!cfg->embed_length) embed_k = 0;
+  else jel_log(cfg, "ijel_stuff_message: embedded length = %d bytes\n", length_in);
 
   for (blk_y = 0; blk_y < bheight && k < msglen;
        blk_y += compptr->v_samp_factor) {
@@ -234,7 +241,7 @@ int ijel_stuff_message(jel_config *cfg) {
 	  embed_k--;
 	} else {            /* Bytes of the message: */
 	  if (echo) printf("%c", message[k]);
-	  insert_byte( (unsigned char) message[k] & 0xFF, fspec->freqs, mcu );
+	  insert_byte( (unsigned char) (message[k] & 0xFF), fspec->freqs, mcu );
 	  k++;
 	}
       }
@@ -267,9 +274,7 @@ int ijel_unstuff_message(jel_config *cfg) {
   FILE *logger = cfg->logger;
   jel_freq_spec *fspec = &(cfg->freqs);
   unsigned char *message = cfg->data;
-  //  unsigned char *raw;
 
-  //(struct jpeg_decompress_struct *cinfo, jvirt_barray_ptr *coef_arrays, Message *msg, FILE *logger) {
   static int compnum = 0;  /* static?  Really?  This is the component number, 0=luminance.  */
   int plain_len = 0;
   int msglen = 0;
@@ -315,8 +320,6 @@ int ijel_unstuff_message(jel_config *cfg) {
   //  MCU_cols = cinfo->image_width / (cinfo->max_h_samp_factor * DCTSIZE);
   compptr = cinfo->comp_info + compnum;
 
-  k = 0;
-
   /* Initialize msglen to some positive value.  We will reset this
      once we get the length in: */
   if ( cfg->embed_length ) msglen = 4;  
@@ -342,6 +345,8 @@ int ijel_unstuff_message(jel_config *cfg) {
   jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
 	  msglen, length_in, cfg->len);
 	  
+  k = 0;
+
   for (blk_y = 0; blk_y < bheight && k < msglen;
        blk_y += compptr->v_samp_factor) {
 
@@ -373,18 +378,23 @@ int ijel_unstuff_message(jel_config *cfg) {
     }
   }
 
+  if (cfg->embed_length) jel_log(cfg, "ijel_unstuff_message: embedded length = %d bytes\n", length_in);
+
 #if ECC
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     /* If we have reached here, we are using rscode for Reed-Solomon
-     * error correction.  The codeword is in 'message', but must be RS
-     * decoded to reconstruct the original plaintext.  The value of k
-     * needs to be ceiling'ed up to the nearest block to get all of
-     * the ECC blocks.
+     * error correction.  The codeword is in 'message', obtained from
+     * cfg->data, but must be RS decoded to reconstruct the original
+     * plaintext.  The value of k needs to be ceiling'ed up to the
+     * nearest block to get all of the ECC blocks.
      */
     int truek;
     unsigned char *raw;
     truek = ijel_ecc_block_length(k);
     jel_log(cfg, "ijel_unstuff_message: ijel_ecc_length(%d) => %d\n", k, truek);
+
+    jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
+	    message[0], message[1], message[2], message[3], message[4]);
 
     /* If we are not embedding length, then plaintext length is a
      * shared secret and we pass it: */
@@ -394,16 +404,26 @@ int ijel_unstuff_message(jel_config *cfg) {
       i = plain_len;
     }
 
+    /* 'raw' is a newly-allocated buffer.  When should it be freed?? */
     if (raw) {
       jel_log(cfg, "ijel_unstuff_message: ECC enabled, %d bytes of ECC data decoded into %d bytes of message.\n", k, i); 
       /* Fails on Linux: */
       //      free(message);
       k = i;
-      cfg->data = raw;
+
+      /* What happens to the original buffer in cfg->data??? */
+      //      cfg->data = raw;
+      memcpy(cfg->data, raw, k);
+
+      /* Raw was allocated above solely because of ECC.  Free it here? */
+      free(raw);
+
+      jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
+	      raw[0], raw[1], raw[2], raw[3], raw[4]);
     }
+
   }
 #endif
-
 
   cfg->len = k;
   jel_log(cfg, "ijel_unstuff_message: k=%d\n", k);
@@ -460,4 +480,11 @@ void ijel_log_qtables(jel_config *c) {
 
 void ijel_log_hufftables(jel_config *c) {
   return;
+}
+
+
+void ijel_buffer_dump( unsigned char *data, int nbytes) {
+  int i;
+  for (i = 0; i < nbytes; i++) printf(" %d ", data[i]);
+  printf("\n");
 }

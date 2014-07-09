@@ -59,6 +59,7 @@ char *jel_version_string() {
 
 jel_config * jel_init( int nlevels ) {
   jel_config * result;
+  int ijel_get_ecc_blocklen();
   struct jpeg_compress_struct *cinfo;
 
   /* Allocate: */
@@ -123,6 +124,7 @@ jel_config * jel_init( int nlevels ) {
 #if ECC
   result->ecc_method = JEL_ECC_RSCODE;
   // result->ecc_method = JEL_ECC_NONE;
+  result->ecc_blocklen = ijel_get_ecc_blocklen();
 #endif
   
   //  ijel_init_freq_spec(result->freqs);
@@ -135,7 +137,6 @@ jel_config * jel_init( int nlevels ) {
 
 
 
-
 void jel_free( jel_config *cfg ) {
   /* Does anything else need to be freed here? */
   jpeg_destroy_decompress(&cfg->srcinfo);
@@ -143,6 +144,32 @@ void jel_free( jel_config *cfg ) {
   memset(cfg, 0, sizeof(jel_config));
   free(cfg);
   return;
+}
+
+
+
+void jel_describe( jel_config *cfg ) {
+  int i, nf;
+  jel_log(cfg, "jel_config Object 0x%x {\n", cfg);
+  jel_log(cfg, "    srcfp = 0x%x,\n", cfg->srcfp);
+  jel_log(cfg, "    dstfp = 0x%x,\n", cfg->dstfp);
+  jel_log(cfg, "    quality = %d,\n", cfg->quality);
+  jel_log(cfg, "    extract_only = %d,\n", cfg->extract_only);
+  jel_log(cfg, "    freqs = ( ");
+  nf = cfg->freqs.nfreqs;
+  for (i = 0; i < nf; i++) jel_log(cfg, " %d ", cfg->freqs.freqs[i]);
+  jel_log(cfg, "),\n");
+  jel_log(cfg, "    embed_length = %d,\n", cfg->embed_length);
+  jel_log(cfg, "    jpeglen = %d,\n", cfg->jpeglen);
+  jel_log(cfg, "    len = %d,\n", cfg->len);
+  jel_log(cfg, "    maxlen = %d,\n", cfg->maxlen);
+  jel_log(cfg, "    jel_errno = %d,\n", cfg->jel_errno);
+  jel_log(cfg, "    ecc_method = ");
+  if (cfg->ecc_method == JEL_ECC_NONE) jel_log(cfg, "NONE,\n");
+  else if (cfg->ecc_method == JEL_ECC_RSCODE) jel_log(cfg, "RSCODE,\n");
+  else jel_log(cfg, "UNRECOGNIZED,\n");
+  jel_log(cfg, "    ecc_blocklen = %d\n", cfg->ecc_blocklen);
+  jel_log(cfg, "}\n");
 }
 
 
