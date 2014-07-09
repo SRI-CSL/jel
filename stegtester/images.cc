@@ -85,6 +85,7 @@ static int capacity(image_p image){
   }
   jel_log(jel, "In capacity:\n");
   jel_describe(jel);
+  jel_close_log(jel);
   jel_free(jel);
   return ret;
 }
