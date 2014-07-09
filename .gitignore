@@ -36,6 +36,12 @@ libjel.a
 libjel/.deps/
 libjel/.dirstamp
 libjpeg.a
+jpeg-6b/.deps/
+rscode/.deps/
+rscode/.dirstamp
+stegtester/main
+utils/.deps/
+utils/.dirstamp
 unwedge
 wcap
 wedge
