@@ -5,7 +5,7 @@ CFLAGS = -Wall  $(shell pkg-config --cflags jel)
 LINK = $(shell pkg-config --libs jel)
 
 
-VALGRIND = valgrind --leak-check=yes  --dsymutil=yes --trace-children=no
+VALGRIND = valgrind --leak-check=yes  --dsymutil=yes --trace-children=no  --track-origins=yes
 
 
 XVALGRIND = valgrind  --leak-check=full --show-reachable=yes --trace-children=no
