@@ -415,12 +415,13 @@ int ijel_unstuff_message(jel_config *cfg) {
       //      cfg->data = raw;
       memcpy(cfg->data, raw, k);
 
+      jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
+	      raw[0], raw[1], raw[2], raw[3], raw[4]);
+ 
       /* Raw was allocated above solely because of ECC.  Free it here? */
       free(raw);
 
-      jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
-	      raw[0], raw[1], raw[2], raw[3], raw[4]);
-    }
+   }
 
   }
 #endif
