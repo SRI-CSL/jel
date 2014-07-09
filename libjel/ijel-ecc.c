@@ -67,12 +67,12 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
     init = 0;
     initialize_ecc();
   }
-
+  
   /* This is the max number of bytes of message that we will put in
    * each block, EXCLUSIVE of length and parity: */
   msgchunk = max_mlen - 1;
 
-  printf("ijel_encode_ecc: msgchunk=%d; NPAR=%d; blocklen=%d\n", msgchunk, NPAR, block_len);
+  //printf("ijel_encode_ecc: msgchunk=%d; NPAR=%d; blocklen=%d\n", msgchunk, NPAR, block_len);
 
   /* This is the number of ECC blocks we will need to encode all of
    * the msg including parity bytes - always add an extra block to
@@ -94,6 +94,7 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
 
   *outlen = 0;      /* Total output length. */
 
+
   for (i = 0; i < nblocks; i++) {
     assert(in_len >= 0);
 
@@ -103,7 +104,10 @@ unsigned char *ijel_encode_ecc(unsigned char *msg, int msglen, int *outlen) {
     else if ( in_len < msgchunk ) message[0] = in_len;
     else fprintf(stderr, "End of loop, but in_len = %d!\n", in_len);
 
-    if (in_len > 0) memcpy(message+1, in, msgchunk);
+    if (in_len > 0){
+      int count = msgchunk < in_len ? msgchunk : in_len;
+      memcpy(message+1, in, count); 
+    }
     //    fprintf(stderr, "block %d: message[0] = %d\n", i, message[0]);
 
     /* Add 1 to msgchunk to account for the length byte at message[0]: */
