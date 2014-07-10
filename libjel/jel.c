@@ -71,6 +71,10 @@ jel_config * jel_init( int nlevels ) {
   /* also zero the nfreqs (valgrind) */
   result->freqs.nfreqs = 0;
 
+  /* Zero seed implies fixed set of frequencies.  Nonzero seed implies
+   * use of srand() to generate frequencies. */
+  result->freqs.seed = 0;
+
   /* better zero this too (valgrind); maybe calloc the whole structure?? */
   result->dstfp =  NULL;
 
@@ -342,6 +346,9 @@ int jel_getprop( jel_config *cfg, jel_property prop ) {
   case JEL_PROP_ECC_BLOCKLEN:
     return cfg->ecc_blocklen;
 
+  case JEL_PROP_FREQ_SEED:
+    return cfg->freqs.seed;
+
   }
 
   cfg->jel_errno = JEL_ERR_NOSUCHPROP;
@@ -386,6 +393,12 @@ int jel_setprop( jel_config *cfg, jel_property prop, int value ) {
     ijel_set_ecc_blocklen(value);
 #endif
     return value;
+
+  case JEL_PROP_FREQ_SEED:
+    cfg->freqs.seed = value;  /* Redundant. */
+    srand(value);
+    return value;
+
   }
 
   cfg->jel_errno = JEL_ERR_NOSUCHPROP;

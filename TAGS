@@ -1,22 +1,523 @@
 
-jpeg-6b/ansi2knr.c,396
-#  undef HAVE_ISASCII	294,12569
-#  define HAVE_ISASCII 295,12611
-#  define is_ascii(299,12683
-#  define is_ascii(301,12713
-#define is_space(304,12754
-#define is_alpha(305,12802
-#define is_alnum(306,12850
-#define isidchar(309,12921
-#define isidfirstchar(310,12972
-main(320,13149
-#define bufsize 324,13216
-skipspace(428,15831
-writeblanks(452,16324
-test1(476,17045
-convert1(528,18448
+utils/jhist.c,290
+#define JHIST_VERSION 23,658
+static const char * progname;25,687
+static char * outfilename 26,756
+static int symmetry 27,816
+LOCAL(29,842
+keymatch 44,1075
+parse_switches 66,1679
+#define HSIZE 107,2924
+int ijel_print_hist(111,2993
+static int jel_print_hist(205,5750
+main 221,5968
 
-jpeg-6b/cdjpeg.c,182
+utils/wcap.c,202
+static const char * progname;18,449
+static char * outfilename;19,517
+static char * msgfilename;20,570
+static char * message 21,622
+static int freq[freq22,652
+static int nfreq 23,673
+main 31,736
+
+utils/jquant.c,488
+static int nfreqs 10,278
+static int nlevels 11,301
+static int quality 15,384
+static int verbose 16,409
+static int print_quanta 17,433
+static int print_bits 18,462
+static int print_huff 19,489
+static int usage 21,517
+static int parse_switches 48,1679
+void print_qtable(84,2608
+  UINT8 bits[bits99,2928
+  UINT8 huffval[huffval101,3033
+  boolean sent_table;107,3378
+} JHUFF_TBL;108,3439
+void print_huffman_table(111,3460
+void print_huffman_info(130,3888
+int main(144,4319
+
+utils/wedge.c,641
+#define WEDGE_VERSION 26,890
+#define PriSize_t 29,937
+#define PriSSize_t 30,961
+#define PriSize_t 32,992
+#define PriSSize_t 33,1017
+static const char * progname;45,1375
+static char * outfilename 46,1444
+static char * msgfilename 47,1504
+static unsigned char * message 48,1564
+static int freq[freq49,1603
+static int nfreq 50,1624
+static int embed_length 52,1672
+static int message_length;53,1733
+static int quality 54,1819
+static int ecc 55,1918
+static int ecclen 56,1938
+LOCAL(58,1962
+keymatch 84,3523
+LOCAL(104,4115
+LOCAL(124,4383
+LOCAL(205,6823
+METHODDEF(219,7166
+static size_t read_message(274,8518
+main 309,9230
+
+utils/unwge.c.c,538
+#define UNWEDGE_VERSION 19,660
+static const char * progname;30,1020
+static char * outfilename 31,1089
+static unsigned char * message 32,1149
+static int freq[freq33,1188
+static int nfreq 34,1209
+static int msglen 35,1231
+static int embed_length 36,1255
+static int ecc 37,1284
+static int ecclen 38,1304
+LOCAL(41,1329
+keymatch 65,2416
+LOCAL(87,3010
+LOCAL(171,5550
+METHODDEF(186,5894
+static int ijel_printf_message(236,7145
+static void ijel_describe_message(240,7243
+static int ijel_fprintf_message(255,7706
+main 275,7990
+
+utils/jblock.c,388
+  int xdim;7,79
+  int ydim;8,91
+  int bpp;9,103
+  unsigned char **pixels;pixels10,114
+} myimage;11,140
+struct my_error_mgr 15,154
+  struct jpeg_error_mgr pub;16,176
+  jmp_buf setjmp_buffer;18,228
+typedef struct my_error_mgr * my_error_ptr;21,284
+METHODDEF(27,375
+myimage * read_jpeg_file 42,784
+int save_pnm_file(148,4024
+double image_blockiness(168,4404
+int main(193,4968
+
+libjel/jp-memed-dst.c,472
+  struct jpeg_destination_mgr pub;14,283
+  long length;15,338
+  unsigned char *outbuf;outbuf17,420
+  int maxsize;18,466
+  JOCTET * buffer;19,481
+} mem_destination_mgr;20,523
+typedef mem_destination_mgr * mem_dest_ptr;22,547
+#define OUTPUT_BUF_SIZE 24,592
+static int judp_errno 26,668
+#define JUDP_ERR_CANTEMPTY 28,696
+#define JUDP_ERR_TOOMUCHDATA 29,729
+GLOBAL(31,763
+METHODDEF(41,927
+METHODDEF(82,2513
+METHODDEF(117,3367
+GLOBAL(145,4109
+GLOBAL(171,5066
+
+libjel/jp-fd-d-dst.c,268
+  struct jpeg_destination_mgr pub;19,473
+  int fd;21,529
+  JOCTET * buffer;22,560
+} fd_destination_mgr;23,602
+typedef fd_destination_mgr * fd_dest_ptr;25,625
+#define OUTPUT_BUF_SIZE 27,668
+METHODDEF(35,853
+METHODDEF(73,2481
+METHODDEF(98,3130
+GLOBAL(121,3813
+
+libjel/ij-ecccc.c,599
+#define BLOCKLEN 11,213
+#define ML 14,305
+static int init 20,477
+static int block_len 21,498
+static int max_mlen 22,531
+int ijel_set_ecc_blocklen(26,615
+int ijel_get_ecc_blocklen(33,733
+unsigned char *ijel_encode_ecc(ijel_encode_ecc59,1560
+unsigned char *ijel_decode_ecc(ijel_decode_ecc144,4383
+int ijel_capacity_ecc(226,6738
+int ijel_message_ecc_length(242,7094
+int ijel_ecc_block_length(260,7783
+int ijel_ecc_sanity_check(274,8003
+unsigned char *ijel_encode_ecc_nolength(ijel_encode_ecc_nolength307,8857
+unsigned char *ijel_decode_ecc_nolength(ijel_decode_ecc_nolength381,11208
+
+libjel/jel.c,1095
+#define WEDGEDEBUG 14,160
+#define UNWEDGEDEBUG 15,181
+char* jel_error_strings[jel_error_strings39,702
+char *jel_version_string(jel_version_string51,1011
+jel_config * jel_init(60,1171
+void jel_free(144,3694
+void jel_describe(155,3927
+typedef struct jel_error_mgr 180,4974
+  struct jpeg_error_mgr mgr;181,5005
+  jmp_buf jmpbuff;182,5035
+} *jel_error_ptr;jel_error_ptr183,5055
+static void jel_error_exit 187,5147
+static int ijel_open_source(201,5402
+int jel_set_fp_source(247,7056
+int jel_set_fp_dest(262,7301
+int jel_set_mem_source(278,7535
+int jel_set_mem_dest(294,7894
+int jel_set_file_source(307,8097
+int jel_set_file_dest(319,8331
+int jel_getprop(333,8708
+int jel_setprop(367,9363
+int jel_open_log(413,10318
+int jel_close_log(429,10632
+int jel_log(447,11006
+int    jel_error_code(463,11373
+char * jel_error_string(468,11489
+int    jel_capacity(482,11829
+int jel_raw_capacity(533,13235
+static void ijel_set_message(547,13537
+static void ijel_set_buffer(555,13726
+static size_t ijel_get_jpeg_length(562,13868
+int jel_embed(579,14215
+int jel_extract(650,16199
+
+libjel/ijel.c,365
+int ijel_find_freqs(39,1100
+int * ijel_get_quanta(66,1636
+int ijel_freqs(79,1876
+static void insert_byte(95,2194
+static unsigned char extract_byte(103,2414
+int ijel_stuff_message(125,3077
+int ijel_unstuff_message(286,8203
+void ijel_print_qtable(453,13685
+void ijel_log_qtables(465,13892
+void ijel_log_hufftables(498,14630
+void ijel_buffer_dump(503,14686
+
+libjel/jp-memes-src.c,345
+  struct jpeg_source_mgr pub;21,477
+  unsigned char *inbuf;inbuf23,528
+  int nbytes;24,580
+  JOCTET * buffer;25,594
+  boolean start_of_file;26,636
+} my_source_mgr;27,696
+typedef my_source_mgr * my_src_ptr;29,714
+#define INPUT_BUF_SIZE 31,751
+METHODDEF(39,923
+METHODDEF(85,3102
+METHODDEF(134,4557
+METHODDEF(175,5883
+GLOBAL(188,6144
+
+libjel/misc.c,43
+int fullread(13,230
+int fullwrite(38,718
+
+libjel/jp-fd-d-src.c,312
+  struct jpeg_source_mgr pub;29,959
+  int fd;31,1010
+  JOCTET * buffer;32,1053
+  boolean start_of_file;33,1095
+} my_source_mgr;34,1155
+typedef my_source_mgr * my_src_ptr;36,1173
+#define INPUT_BUF_SIZE 38,1210
+METHODDEF(46,1382
+METHODDEF(103,3690
+METHODDEF(148,5098
+METHODDEF(189,6424
+GLOBAL(202,6684
+
+jpeg-6b/wpm.c.c,652
+#define PUTPPMSAMPLE(34,1189
+#define BYTESPERSAMPLE 35,1238
+#define PPM_MAXVAL 36,1263
+#define PUTPPMSAMPLE(39,1313
+#define BYTESPERSAMPLE 40,1387
+#define PPM_MAXVAL 41,1412
+#define PUTPPMSAMPLE(44,1501
+#define BYTESPERSAMPLE 49,1644
+#define PPM_MAXVAL 50,1669
+  struct djpeg_dest_struct pub;69,2286
+  char *iobuffer;iobuffer72,2399
+  JSAMPROW pixrow;73,2444
+  size_t buffer_width;74,2497
+  JDIMENSION samples_per_row;75,2547
+} ppm_dest_struct;76,2607
+typedef ppm_dest_struct * ppm_dest_ptr;78,2627
+METHODDEF(89,2891
+METHODDEF(104,3270
+METHODDEF(127,3885
+METHODDEF(152,4717
+METHODDEF(175,5320
+METHODDEF(204,6027
+GLOBAL(218,6324
+
+jpeg-6b/wargagc.c,332
+  Sorry,28,739
+  struct djpeg_dest_struct pub;44,1293
+  char *iobuffer;iobuffer46,1346
+  JDIMENSION buffer_width;47,1391
+} tga_dest_struct;48,1441
+typedef tga_dest_struct * tga_dest_ptr;50,1461
+LOCAL(53,1503
+METHODDEF(98,2868
+METHODDEF(119,3527
+METHODDEF(143,4190
+METHODDEF(166,4789
+METHODDEF(210,6204
+GLOBAL(224,6503
+
+jpeg-6b/jmansnsi.c,278
+#define JPEG_INTERNALS15,516
+#define SEEK_SET 26,893
+GLOBAL(35,1069
+GLOBAL(41,1186
+GLOBAL(55,1574
+GLOBAL(61,1699
+#define DEFAULT_MAX_MEM	77,2206
+GLOBAL(80,2276
+METHODDEF(96,2746
+METHODDEF(109,3121
+METHODDEF(122,3501
+GLOBAL(140,3994
+GLOBAL(157,4451
+GLOBAL(163,4566
+
+jpeg-6b/jctfsfst.c,814
+#define JPEG_INTERNALS35,1797
+  Sorry,48,2061
+#define CONST_BITS 77,3568
+#define PASS1_BITS 78,3590
+#define CONST_BITS 80,3618
+#define PASS1_BITS 81,3640
+#define FIX_1_082392200 92,4096
+#define FIX_1_414213562 93,4160
+#define FIX_1_847759065 94,4224
+#define FIX_2_613125930 95,4288
+#define FIX_1_082392200 97,4358
+#define FIX_1_414213562 98,4400
+#define FIX_1_847759065 99,4442
+#define FIX_2_613125930 100,4484
+#undef DESCALE110,4758
+#define DESCALE(111,4773
+#define MULTIPLY(119,4934
+#define DEQUANTIZE(129,5301
+#define DEQUANTIZE(131,5384
+#define ISHIFT_TEMPS	141,5657
+#define DCTELEMBITS 143,5724
+#define DCTELEMBITS 145,5790
+#define IRIGHT_SHIFT(147,5852
+#define ISHIFT_TEMPS152,6031
+#define IRIGHT_SHIFT(153,6052
+#define IDESCALE(157,6134
+#define IDESCALE(159,6209
+GLOBAL(167,6348
+
+jpeg-6b/jils.s.c,332
+#define JPEG_INTERNALS14,425
+const int jpeg_zigzag_order[jpeg_zigzag_order26,727
+const int jpeg_natural_order[jpeg_natural_order53,1656
+GLOBAL(71,2110
+GLOBAL(80,2275
+#define FMEMCOPY(100,3059
+#define FMEMZERO(101,3114
+#define FMEMCOPY(104,3225
+#define FMEMZERO(105,3327
+GLOBAL(110,3423
+GLOBAL(144,4376
+GLOBAL(164,4874
+
+jpeg-6b/jnputuc.c,335
+#define JPEG_INTERNALS14,488
+  struct jpeg_input_controller pub;22,618
+  boolean inheaders;24,675
+} my_input_controller;25,735
+typedef my_input_controller * my_inputctl_ptr;27,759
+METHODDEF(31,835
+LOCAL(120,4422
+LOCAL(219,8424
+METHODDEF(253,9536
+METHODDEF(270,9964
+METHODDEF(287,10499
+METHODDEF(338,11976
+GLOBAL(360,12666
+
+jpeg-6b/jransnc.c,505
+#define JPEG_INTERNALS13,417
+LOCAL(19,536
+GLOBAL(62,2281
+LOCAL(157,6327
+  struct jpeg_c_coef_controller pub;209,7978
+  JDIMENSION iMCU_row_num;211,8036
+  JDIMENSION mcu_ctr;212,8093
+  int MCU_vert_offset;213,8159
+  int MCU_rows_per_iMCU_row;214,8221
+  jvirt_barray_ptr * whole_image;217,8332
+  JBLOCKROW dummy_buffer[dummy_buffer220,8438
+} my_coef_controller;221,8485
+typedef my_coef_controller * my_coef_ptr;223,8508
+LOCAL(226,8552
+METHODDEF(254,9318
+METHODDEF(277,9970
+LOCAL(362,13149
+
+jpeg-6b/jrepcpct.c,464
+#define JPEG_INTERNALS17,553
+#define CONTEXT_ROWS_SUPPORTED28,946
+  struct jpeg_c_prep_controller pub;54,2001
+  JSAMPARRAY color_buf[color_buf59,2188
+  JDIMENSION rows_to_go;61,2229
+  int next_buf_row;62,2298
+  int this_row_group;65,2431
+  int next_buf_stop;66,2499
+} my_prep_controller;68,2570
+typedef my_prep_controller * my_prep_ptr;70,2593
+METHODDEF(77,2682
+LOCAL(105,3520
+METHODDEF(127,4090
+METHODDEF(194,6441
+LOCAL(266,8962
+GLOBAL(314,10714
+
+jpeg-6b/jaincnct.c,714
+#define JPEG_INTERNALS16,556
+  struct jpeg_d_main_controller pub;115,6161
+  JSAMPARRAY buffer[buffer118,6281
+  boolean buffer_full;120,6319
+  JDIMENSION rowgroup_ctr;121,6390
+  JSAMPIMAGE xbuffer[xbuffer126,6599
+  int whichptr;128,6663
+  int context_state;129,6729
+  JDIMENSION rowgroups_avail;130,6791
+  JDIMENSION iMCU_row_ctr;131,6865
+} my_main_controller;132,6939
+typedef my_main_controller * my_main_ptr;134,6962
+#define CTX_PREPARE_FOR_IMCU	137,7033
+#define CTX_PROCESS_IMCU	138,7098
+#define CTX_POSTPONED_ROW	139,7161
+METHODDEF(143,7252
+LOCAL(194,9111
+LOCAL(237,10694
+LOCAL(265,11627
+METHODDEF(306,13120
+METHODDEF(344,14207
+METHODDEF(384,15578
+METHODDEF(458,18729
+GLOBAL(475,19125
+
+jpeg-6b/rargagc.c,1007
+typedef unsigned char U_CHAR;28,911
+#define UCH(29,941
+typedef char U_CHAR;32,1024
+#define UCH(33,1045
+typedef char U_CHAR;35,1078
+#define UCH(36,1099
+#define	ReadOK(41,1174
+typedef struct _tga_source_struct * tga_source_ptr;46,1299
+typedef struct _tga_source_struct 48,1352
+  struct cjpeg_source_struct pub;49,1388
+  j_compress_ptr cinfo;51,1443
+  JSAMPARRAY colormap;53,1513
+  jvirt_sarray_ptr whole_image;55,1584
+  JDIMENSION current_row;56,1654
+  JMETHOD(59,1793
+  U_CHAR tga_pixel[tga_pixel62,1895
+  int pixel_size;64,1919
+  int block_count;67,2055
+  int dup_pixel_count;68,2116
+  JMETHOD(71,2262
+} tga_source_struct;73,2360
+static const UINT8 c5to8bits[c5to8bits78,2451
+LOCAL(87,2661
+LOCAL(100,2904
+METHODDEF(122,3452
+METHODDEF(135,3746
+METHODDEF(173,4747
+METHODDEF(189,5222
+METHODDEF(210,5831
+METHODDEF(238,6654
+#define get_32bit_row 263,7518
+METHODDEF(272,7779
+METHODDEF(299,8609
+METHODDEF(332,9692
+#define GET_2B(341,9979
+METHODDEF(472,14241
+GLOBAL(483,14407
+
+jpeg-6b/jaramac.c,278
+#define JPEG_INTERNALS13,422
+GLOBAL(22,559
+GLOBAL(63,1927
+GLOBAL(105,3621
+GLOBAL(131,4522
+LOCAL(151,5137
+LOCAL(181,6068
+GLOBAL(267,10001
+GLOBAL(358,13113
+GLOBAL(390,13828
+#define SET_COMP(396,13956
+LOCAL(474,16610
+LOCAL(489,16966
+LOCAL(508,17384
+GLOBAL(536,18123
+
+jpeg-6b/wmp.c.c,516
+  Sorry,31,888
+  struct djpeg_dest_struct pub;45,1428
+  boolean is_os2;47,1481
+  jvirt_sarray_ptr whole_image;49,1541
+  JDIMENSION data_width;50,1607
+  JDIMENSION row_width;51,1655
+  int pad_bytes;52,1728
+  JDIMENSION cur_output_row;53,1791
+} bmp_dest_struct;54,1862
+typedef bmp_dest_struct * bmp_dest_ptr;56,1882
+LOCAL(60,1951
+METHODDEF(105,3145
+METHODDEF(141,4099
+LOCAL(156,4383
+#define PUT_2B(162,4584
+#define PUT_4B(165,4719
+LOCAL(229,7168
+LOCAL(291,9214
+METHODDEF(343,10688
+GLOBAL(389,12039
+
+jpeg-6b/joefcfct.c,781
+#define JPEG_INTERNALS17,643
+#undef BLOCK_SMOOTHING_SUPPORTED23,833
+  struct jpeg_d_coef_controller pub;34,1128
+  JDIMENSION MCU_ctr;38,1317
+  int MCU_vert_offset;39,1383
+  int MCU_rows_per_iMCU_row;40,1445
+  JBLOCKROW MCU_buffer[MCU_buffer53,2120
+  jvirt_barray_ptr whole_image[whole_image57,2280
+  int * coef_bits_latch;62,2441
+#define SAVED_COEFS 63,2466
+} my_coef_controller;65,2527
+typedef my_coef_controller * my_coef_ptr;67,2550
+METHODDEF(70,2620
+METHODDEF(111,3822
+METHODDEF(123,3993
+METHODDEF(151,4899
+METHODDEF(232,7932
+METHODDEF(248,8396
+METHODDEF(319,10978
+#define Q01_POS 395,13817
+#define Q10_POS 396,13836
+#define Q20_POS 397,13855
+#define Q11_POS 398,13875
+#define Q02_POS 399,13894
+LOCAL(409,14235
+METHODDEF(465,15952
+GLOBAL(680,23218
+
+jpeg-6b/cpeg.g.c,182
 static j_common_ptr sig_cinfo;32,1001
 signal_catcher 35,1073
 GLOBAL(46,1334
@@ -27,50 +528,37 @@ GLOBAL(121,3146
 GLOBAL(148,3898
 GLOBAL(166,4286
 
-jpeg-6b/cjpeg.c,274
-#define JMESSAGE(42,1583
-static const char * const cdjpeg_message_table[cdjpeg_message_table44,1623
-static boolean is_targa;76,3179
-LOCAL(79,3239
-static const char * progname;136,4444
-static char * outfilename;137,4512
-LOCAL(140,4567
-LOCAL(198,6963
-main 461,15470
+jpeg-6b/jpiststd.c,127
+#define JPEG_INTERNALS17,701
+LOCAL(23,820
+LOCAL(94,3332
+GLOBAL(151,5443
+GLOBAL(184,6365
+GLOBAL(227,7660
+GLOBAL(252,8436
 
-jpeg-6b/ckconfig.c,1041
-#define HAVE_STDDEF_H	35,1479
-#define HAVE_STDLIB_H	40,1648
-#undef NEED_BSD_STRINGS53,2056
-#undef NEED_SYS_TYPES_H	66,2366
-#undef NEED_SPECIAL_INCLUDE	84,3199
-typedef size_t my_size_t;90,3337
-#define HAVE_PROTOTYPES100,3750
-struct methods_struct 105,3863
-int testfunction 111,4041
-int test2function 116,4131
-#define HAVE_UNSIGNED_CHAR128,4388
-unsigned char un_char;131,4442
-#define HAVE_UNSIGNED_SHORT140,4659
-unsigned short un_short;143,4715
-#define HAVE_VOID151,4884
-typedef void * void_ptr;155,4985
-typedef void (*void_func)void_func157,5096
-typedef void (*void_func)void_func159,5144
-void test3function 163,5239
-#define HAVE_CONST181,5670
-static const int carray[carray184,5708
-int test4function 187,5772
-#undef INCOMPLETE_TYPES_BROKEN202,6009
-typedef struct undefined_structure * undef_struct_ptr;205,6073
-#undef NEED_SHORT_EXTERNAL_NAMES213,6225
-int possibly_duplicate_function 217,6294
-int possibly_dupli_function 222,6346
-int is_char_signed 243,6953
-int is_shifting_signed 261,7435
-int main 286,8178
+jpeg-6b/jmmacac.c,291
+#define JPEG_INTERNALS52,2315
+#define TEMP_FILE_NAME 68,3012
+static int next_file_num;71,3058
+GLOBAL(81,3377
+GLOBAL(87,3494
+GLOBAL(101,3865
+GLOBAL(107,3990
+GLOBAL(118,4196
+METHODDEF(153,5459
+METHODDEF(171,5944
+METHODDEF(189,6435
+GLOBAL(204,6754
+GLOBAL(271,9048
+GLOBAL(285,9463
 
-jpeg-6b/djpeg.c,488
+jpeg-6b/jransnc.c,59
+#define JPEG_INTERNALS13,420
+LOCAL(19,539
+LOCAL(96,3554
+
+jpeg-6b/deg.c.c,488
 #define JMESSAGE(44,1633
 static const char * const cdjpeg_message_table[cdjpeg_message_table46,1673
 	FMT_BMP,60,2026
@@ -91,14 +579,79 @@ LOCAL(353,11953
 METHODDEF(368,12297
 main 424,13582
 
-jpeg-6b/example.c,140
+jpeg-6b/emplelc.c,214
 GLOBAL(71,2376
 struct my_error_mgr 250,10356
+  struct jpeg_error_mgr pub;251,10378
+  jmp_buf setjmp_buffer;253,10430
 typedef struct my_error_mgr * my_error_ptr;256,10486
 METHODDEF(262,10611
 GLOBAL(283,11170
 
-jpeg-6b/jcapimin.c,179
+jpeg-6b/rpm.c.c,667
+typedef unsigned char U_CHAR;42,1565
+#define UCH(43,1595
+typedef char U_CHAR;46,1678
+#define UCH(47,1699
+typedef char U_CHAR;49,1732
+#define UCH(50,1753
+#define	ReadOK(55,1828
+  struct cjpeg_source_struct pub;72,2448
+  U_CHAR *iobuffer;iobuffer74,2503
+  JSAMPROW pixrow;75,2560
+  size_t buffer_width;76,2606
+  JSAMPLE *rescale;rescale77,2656
+} ppm_source_struct;78,2718
+typedef ppm_source_struct * ppm_source_ptr;80,2740
+LOCAL(83,2786
+LOCAL(100,3085
+METHODDEF(140,4153
+METHODDEF(158,4654
+METHODDEF(178,5264
+METHODDEF(199,5894
+METHODDEF(222,6605
+METHODDEF(237,7066
+METHODDEF(261,7771
+METHODDEF(295,8737
+METHODDEF(431,13366
+GLOBAL(442,13530
+
+jpeg-6b/jctinint.c,1040
+#define JPEG_INTERNALS26,1179
+  Sorry,39,1443
+#define CONST_BITS 78,3352
+#define PASS1_BITS 79,3375
+#define CONST_BITS 81,3403
+#define PASS1_BITS 82,3426
+#define FIX_0_298631336 93,3883
+#define FIX_0_390180644 94,3947
+#define FIX_0_541196100 95,4011
+#define FIX_0_765366865 96,4075
+#define FIX_0_899976223 97,4139
+#define FIX_1_175875602 98,4203
+#define FIX_1_501321110 99,4267
+#define FIX_1_847759065 100,4332
+#define FIX_1_961570560 101,4397
+#define FIX_2_053119869 102,4462
+#define FIX_2_562915447 103,4527
+#define FIX_3_072711026 104,4592
+#define FIX_0_298631336 106,4663
+#define FIX_0_390180644 107,4705
+#define FIX_0_541196100 108,4747
+#define FIX_0_765366865 109,4789
+#define FIX_0_899976223 110,4831
+#define FIX_1_175875602 111,4873
+#define FIX_1_501321110 112,4915
+#define FIX_1_847759065 113,4957
+#define FIX_1_961570560 114,4999
+#define FIX_2_053119869 115,5041
+#define FIX_2_562915447 116,5083
+#define FIX_3_072711026 117,5125
+#define MULTIPLY(129,5559
+#define MULTIPLY(131,5619
+GLOBAL(139,5735
+
+jpeg-6b/jpimimin.c,179
 #define JPEG_INTERNALS19,731
 GLOBAL(29,955
 GLOBAL(87,2696
@@ -110,27 +663,10 @@ GLOBAL(213,6580
 GLOBAL(225,6978
 GLOBAL(253,7852
 
-jpeg-6b/jcapistd.c,79
-#define JPEG_INTERNALS17,691
-GLOBAL(37,1527
-GLOBAL(76,3015
-GLOBAL(119,4422
-
-jpeg-6b/jccoefct.c,311
-#define JPEG_INTERNALS13,431
-#define FULL_COEF_BUFFER_SUPPORTED24,809
-#define FULL_COEF_BUFFER_SUPPORTED27,885
-} my_coef_controller;55,2012
-typedef my_coef_controller * my_coef_ptr;57,2035
-METHODDEF(61,2106
-METHODDEF(99,3187
-METHODDEF(142,4396
-METHODDEF(244,8829
-METHODDEF(340,12704
-GLOBAL(404,14918
-
-jpeg-6b/jccolor.c,633
+jpeg-6b/joloroc.c,705
 #define JPEG_INTERNALS11,271
+  struct jpeg_color_converter pub;19,405
+  INT32 * rgb_ycc_tab;22,507
 } my_color_converter;23,574
 typedef my_color_converter * my_cconvert_ptr;25,597
 #define SCALEBITS	58,2325
@@ -156,58 +692,170 @@ METHODDEF(308,10495
 METHODDEF(340,11244
 GLOBAL(351,11398
 
-jpeg-6b/jcdctmgr.c,271
-#define JPEG_INTERNALS14,419
-} my_fdct_controller;39,1174
-typedef my_fdct_controller * my_fdct_ptr;41,1197
-METHODDEF(53,1587
-#define CONST_BITS 98,3180
-METHODDEF(179,5694
-#define DIVIDE_BY(247,8408
-#define DIVIDE_BY(249,8444
-METHODDEF(269,8780
-GLOBAL(344,11469
+jpeg-6b/wpgcocom.c,1248
+#define JPEG_CJPEG_DJPEG	14,439
+#define READ_BINARY	38,1278
+#define WRITE_BINARY	39,1302
+#define READ_BINARY	42,1376
+#define WRITE_BINARY	43,1412
+#define READ_BINARY	45,1493
+#define WRITE_BINARY	46,1518
+#define EXIT_FAILURE 51,1623
+#define EXIT_SUCCESS 55,1686
+#define EXIT_SUCCESS 57,1747
+#define MAX_COM_LENGTH 66,1951
+static FILE * infile;75,2186
+#define NEXTBYTE(78,2280
+static FILE * outfile;80,2314
+#define PUTBYTE(83,2388
+#define ERREXIT(87,2454
+read_1_byte 92,2577
+read_2_bytes 105,2822
+write_1_byte 122,3137
+write_2_bytes 128,3189
+write_marker 135,3292
+copy_rest_of_file 142,3371
+#define M_SOF0 157,3680
+#define M_SOF1 158,3725
+#define M_SOF2 159,3791
+#define M_SOF3 160,3856
+#define M_SOF5 161,3877
+#define M_SOF6 162,3945
+#define M_SOF7 163,3966
+#define M_SOF9 164,3987
+#define M_SOF10 165,4008
+#define M_SOF11 166,4029
+#define M_SOF13 167,4050
+#define M_SOF14 168,4071
+#define M_SOF15 169,4092
+#define M_SOI 170,4113
+#define M_EOI 171,4182
+#define M_SOS 172,4243
+#define M_COM 173,4310
+next_marker 187,4884
+first_marker 222,5751
+copy_variable 244,6295
+skip_variable 264,6761
+scan_JPEG_header 289,7335
+static const char * progname;347,9087
+usage 351,9169
+keymatch 384,10446
+main 413,11259
 
-jpeg-6b/jchuff.c,541
-#define JPEG_INTERNALS17,631
-} savable_state;33,1186
-#define ASSIGN_STATE(41,1419
-#define ASSIGN_STATE(44,1501
-} huff_entropy_encoder;72,2502
-typedef huff_entropy_encoder * huff_entropy_ptr;74,2527
-} working_state;85,2966
-METHODDEF(89,3012
-GLOBAL(178,6060
-#define emit_byte(270,8838
-LOCAL(277,9029
-LOCAL(301,9783
-LOCAL(339,10897
-LOCAL(352,11204
-LOCAL(450,14067
-METHODDEF(475,14610
-METHODDEF(532,16259
-LOCAL(571,17436
-METHODDEF(644,19350
-GLOBAL(704,22034
-#define MAX_CLEN 707,22126
-METHODDEF(845,26361
-GLOBAL(890,27662
+jpeg-6b/jpimimin.c,182
+#define JPEG_INTERNALS19,688
+GLOBAL(29,914
+GLOBAL(90,2825
+GLOBAL(102,3059
+LOCAL(113,3235
+GLOBAL(240,7824
+GLOBAL(286,9245
+GLOBAL(333,10627
+GLOBAL(348,10956
+GLOBAL(368,11505
 
-jpeg-6b/jcinit.c,45
-#define JPEG_INTERNALS18,660
-GLOBAL(29,954
+jpeg-6b/rmp.c.c,754
+typedef unsigned char U_CHAR;32,1158
+#define UCH(33,1188
+typedef char U_CHAR;36,1271
+#define UCH(37,1292
+typedef char U_CHAR;39,1325
+#define UCH(40,1346
+#define	ReadOK(45,1421
+typedef struct _bmp_source_struct * bmp_source_ptr;50,1546
+typedef struct _bmp_source_struct 52,1599
+  struct cjpeg_source_struct pub;53,1635
+  j_compress_ptr cinfo;55,1690
+  JSAMPARRAY colormap;57,1760
+  jvirt_sarray_ptr whole_image;59,1829
+  JDIMENSION source_row;60,1895
+  JDIMENSION row_width;61,1952
+  int bits_per_pixel;63,2020
+} bmp_source_struct;64,2079
+LOCAL(67,2102
+LOCAL(80,2343
+METHODDEF(118,3431
+METHODDEF(149,4330
+METHODDEF(186,5405
+METHODDEF(240,7020
+#define GET_2B(246,7207
+#define GET_4B(248,7332
+METHODDEF(411,13072
+GLOBAL(422,13236
 
-jpeg-6b/jcmainct.c,227
-#define JPEG_INTERNALS13,413
-#undef FULL_MAIN_BUFFER_SUPPORTED23,806
-} my_main_controller;48,1714
-typedef my_main_controller * my_main_ptr;50,1737
-METHODDEF(54,1808
-METHODDEF(112,3278
-METHODDEF(168,5048
-GLOBAL(244,7548
+jpeg-6b/wle.c.c,372
+  Sorry,33,948
+#define CMAPBITS	50,1431
+#define CMAPLENGTH	51,1450
+  struct djpeg_dest_struct pub;54,1503
+  jvirt_sarray_ptr image;56,1556
+  rle_map *colormap;colormap57,1628
+  rle_pixel **rle_row;rle_row58,1694
+} rle_dest_struct;60,1754
+typedef rle_dest_struct * rle_dest_ptr;62,1774
+METHODDEF(65,1842
+METHODDEF(152,4497
+METHODDEF(171,4969
+GLOBAL(276,8199
 
-jpeg-6b/jcmarker.c,2953
+jpeg-6b/jctmgmgr.c,506
+#define JPEG_INTERNALS18,676
+  struct jpeg_inverse_dct pub;44,1769
+  int cur_method[cur_method51,2070
+} my_idct_controller;52,2104
+typedef my_idct_controller * my_idct_ptr;54,2127
+  ISLOW_MULT_TYPE islow_array[islow_array60,2260
+  IFAST_MULT_TYPE ifast_array[ifast_array62,2328
+  FLOAT_MULT_TYPE float_array[float_array65,2403
+} multiplier_table;67,2451
+#define PROVIDE_ISLOW_TABLES74,2655
+#define PROVIDE_ISLOW_TABLES77,2720
+METHODDEF(88,2907
+#define CONST_BITS 184,5825
+GLOBAL(246,7533
+
+jpeg-6b/jasteter.c,539
+#define JPEG_INTERNALS14,457
+	main_pass,22,585
+	huff_opt_pass,23,642
+	output_pass	24,696
+} c_pass_type;25,733
+  struct jpeg_comp_master pub;28,766
+  c_pass_type pass_type;30,818
+  int pass_number;32,879
+  int total_passes;33,927
+  int scan_number;35,980
+} my_comp_master;36,1035
+typedef my_comp_master * my_master_ptr;38,1054
+LOCAL(45,1164
+LOCAL(129,4633
+#define MAX_AH_AL 196,7143
+#define MAX_AH_AL 198,7170
+LOCAL(266,9408
+LOCAL(307,10621
+METHODDEF(400,14059
+METHODDEF(488,17185
+METHODDEF(502,17455
+GLOBAL(542,18464
+
+jpeg-6b/ai2knknr.c,396
+#  undef HAVE_ISASCII	294,12569
+#  define HAVE_ISASCII 295,12611
+#  define is_ascii(299,12683
+#  define is_ascii(301,12713
+#define is_space(304,12754
+#define is_alpha(305,12802
+#define is_alnum(306,12850
+#define isidchar(309,12921
+#define isidfirstchar(310,12972
+main(320,13149
+#define bufsize 324,13216
+skipspace(428,15831
+writeblanks(452,16324
+test1(476,17045
+convert1(528,18448
+
+jpeg-6b/jarkeker.c,3040
 #define JPEG_INTERNALS11,277
   M_SOF0 17,410
   M_SOF0  = 0xc0,xc017,410
@@ -316,6 +964,8 @@ jpeg-6b/jcmarker.c,2953
   M_ERROR 80,1379
   M_ERROR = 0x100x10080,1379
 } JPEG_MARKER;81,1397
+  struct jpeg_marker_writer pub;87,1452
+  unsigned int last_restart_interval;89,1506
 } my_marker_writer;90,1586
 typedef my_marker_writer * my_marker_ptr;92,1607
 LOCAL(107,2171
@@ -338,210 +988,22 @@ METHODDEF(601,15603
 METHODDEF(615,15960
 GLOBAL(644,16490
 
-jpeg-6b/jcmaster.c,390
-#define JPEG_INTERNALS14,457
-	main_pass,22,585
-	huff_opt_pass,23,642
-	output_pass	24,696
-} c_pass_type;25,733
-} my_comp_master;36,1035
-typedef my_comp_master * my_master_ptr;38,1054
-LOCAL(45,1164
-LOCAL(129,4633
-#define MAX_AH_AL 196,7143
-#define MAX_AH_AL 198,7170
-LOCAL(266,9408
-LOCAL(307,10621
-METHODDEF(400,14059
-METHODDEF(488,17185
-METHODDEF(502,17455
-GLOBAL(542,18464
-
-jpeg-6b/jcomapi.c,93
-#define JPEG_INTERNALS12,321
-GLOBAL(28,838
-GLOBAL(68,2066
-GLOBAL(85,2583
-GLOBAL(97,2862
-
-jpeg-6b/jcparam.c,278
-#define JPEG_INTERNALS13,422
-GLOBAL(22,559
-GLOBAL(63,1927
-GLOBAL(105,3621
-GLOBAL(131,4522
-LOCAL(151,5137
-LOCAL(181,6068
-GLOBAL(267,10001
-GLOBAL(358,13113
-GLOBAL(390,13828
-#define SET_COMP(396,13956
-LOCAL(474,16610
-LOCAL(489,16966
-LOCAL(508,17384
-GLOBAL(536,18123
-
-jpeg-6b/jcphuff.c,576
-#define JPEG_INTERNALS15,454
-} phuff_entropy_encoder;60,2281
-typedef phuff_entropy_encoder * phuff_entropy_ptr;62,2307
-#define MAX_CORR_BITS 70,2597
-#define ISHIFT_TEMPS	78,2875
-#define IRIGHT_SHIFT(79,2913
-#define ISHIFT_TEMPS84,3062
-#define IRIGHT_SHIFT(85,3083
-METHODDEF(89,3163
-#define emit_byte(198,6691
-LOCAL(204,6855
-LOCAL(227,7629
-LOCAL(266,8764
-LOCAL(280,9039
-LOCAL(296,9385
-LOCAL(315,9714
-LOCAL(346,10451
-METHODDEF(376,11113
-METHODDEF(463,13841
-METHODDEF(570,17187
-METHODDEF(617,18468
-METHODDEF(745,22732
-METHODDEF(766,23270
-GLOBAL(813,24542
-
-jpeg-6b/jcprepct.c,257
-#define JPEG_INTERNALS17,553
-#define CONTEXT_ROWS_SUPPORTED28,946
-} my_prep_controller;68,2570
-typedef my_prep_controller * my_prep_ptr;70,2593
-METHODDEF(77,2682
-LOCAL(105,3520
-METHODDEF(127,4090
-METHODDEF(194,6441
-LOCAL(266,8962
-GLOBAL(314,10714
-
-jpeg-6b/jcsample.c,349
-#define JPEG_INTERNALS48,2417
-typedef JMETHOD(void, downsample1_ptr,54,2567
-} my_downsampler;65,2908
-typedef my_downsampler * my_downsample_ptr;67,2927
-METHODDEF(74,3020
-LOCAL(86,3239
-METHODDEF(113,3883
-METHODDEF(139,4739
-METHODDEF(186,6210
-METHODDEF(211,7149
-METHODDEF(248,8281
-METHODDEF(291,9627
-METHODDEF(391,14121
-GLOBAL(463,16797
-
-jpeg-6b/jctrans.c,231
-#define JPEG_INTERNALS13,417
-LOCAL(19,536
-GLOBAL(62,2281
-LOCAL(157,6327
-} my_coef_controller;221,8485
-typedef my_coef_controller * my_coef_ptr;223,8508
-LOCAL(226,8552
-METHODDEF(254,9318
-METHODDEF(277,9970
-LOCAL(362,13149
-
-jpeg-6b/jdapimin.c,182
-#define JPEG_INTERNALS19,688
-GLOBAL(29,914
-GLOBAL(90,2825
-GLOBAL(102,3059
-LOCAL(113,3235
-GLOBAL(240,7824
-GLOBAL(286,9245
-GLOBAL(333,10627
-GLOBAL(348,10956
-GLOBAL(368,11505
-
-jpeg-6b/jdapistd.c,127
-#define JPEG_INTERNALS17,701
-LOCAL(23,820
-LOCAL(94,3332
-GLOBAL(151,5443
-GLOBAL(184,6365
-GLOBAL(227,7660
-GLOBAL(252,8436
-
-jpeg-6b/jdatadst.c,205
-} my_destination_mgr;31,1151
-typedef my_destination_mgr * my_dest_ptr;33,1174
-#define OUTPUT_BUF_SIZE 35,1217
-METHODDEF(43,1402
-METHODDEF(82,3050
-METHODDEF(109,3730
-GLOBAL(135,4424
-GLOBAL(161,5346
-
-jpeg-6b/jdatasrc.c,196
-} my_source_mgr;31,1110
-typedef my_source_mgr * my_src_ptr;33,1128
-#define INPUT_BUF_SIZE 35,1165
-METHODDEF(43,1337
-METHODDEF(89,3516
-METHODDEF(127,4688
-METHODDEF(168,6014
-GLOBAL(181,6273
-
-jpeg-6b/jdcoefct.c,510
-#define JPEG_INTERNALS17,643
-#undef BLOCK_SMOOTHING_SUPPORTED23,833
-#define SAVED_COEFS 63,2466
-} my_coef_controller;65,2527
-typedef my_coef_controller * my_coef_ptr;67,2550
-METHODDEF(70,2620
-METHODDEF(111,3822
-METHODDEF(123,3993
-METHODDEF(151,4899
-METHODDEF(232,7932
-METHODDEF(248,8396
-METHODDEF(319,10978
-#define Q01_POS 395,13817
-#define Q10_POS 396,13836
-#define Q20_POS 397,13855
-#define Q11_POS 398,13875
-#define Q02_POS 399,13894
-LOCAL(409,14235
-METHODDEF(465,15952
-GLOBAL(680,23218
-
-jpeg-6b/jdcolor.c,342
-#define JPEG_INTERNALS11,272
-} my_color_deconverter;26,742
-typedef my_color_deconverter * my_cconvert_ptr;28,767
-#define SCALEBITS	60,2281
-#define ONE_HALF	61,2347
-#define FIX(62,2393
-LOCAL(69,2516
-METHODDEF(119,4432
-METHODDEF(168,6026
-METHODDEF(200,6895
-METHODDEF(216,7340
-METHODDEF(244,8123
-METHODDEF(292,9750
-GLOBAL(303,9913
-
-jpeg-6b/jddctmgr.c,277
-#define JPEG_INTERNALS18,676
-} my_idct_controller;52,2104
-typedef my_idct_controller * my_idct_ptr;54,2127
-} multiplier_table;67,2451
-#define PROVIDE_ISLOW_TABLES74,2655
-#define PROVIDE_ISLOW_TABLES77,2720
-METHODDEF(88,2907
-#define CONST_BITS 184,5825
-GLOBAL(246,7533
-
-jpeg-6b/jdhuff.c,563
+jpeg-6b/juff.f.c,1051
 #define JPEG_INTERNALS17,620
+  int last_dc_val[last_dc_val31,999
 } savable_state;32,1075
 #define ASSIGN_STATE(40,1308
 #define ASSIGN_STATE(43,1390
+  struct jpeg_entropy_decoder pub;53,1655
+  bitread_perm_state bitstate;58,1848
+  savable_state saved;59,1912
+  unsigned int restarts_to_go;62,2033
+  d_derived_tbl * dc_derived_tbls[dc_derived_tbls65,2180
+  d_derived_tbl * ac_derived_tbls[ac_derived_tbls66,2230
+  d_derived_tbl * dc_cur_tbls[dc_cur_tbls71,2428
+  d_derived_tbl * ac_cur_tbls[ac_cur_tbls72,2480
+  boolean dc_needed[dc_needed74,2610
+  boolean ac_needed[ac_needed75,2652
 } huff_entropy_decoder;76,2694
 typedef huff_entropy_decoder * huff_entropy_ptr;78,2719
 METHODDEF(85,2823
@@ -558,37 +1020,654 @@ LOCAL(467,15552
 METHODDEF(516,17273
 GLOBAL(634,20358
 
-jpeg-6b/jdinput.c,264
-#define JPEG_INTERNALS14,488
-} my_input_controller;25,735
-typedef my_input_controller * my_inputctl_ptr;27,759
-METHODDEF(31,835
-LOCAL(120,4422
-LOCAL(219,8424
-METHODDEF(253,9536
-METHODDEF(270,9964
-METHODDEF(287,10499
-METHODDEF(338,11976
-GLOBAL(360,12666
+jpeg-6b/jmapipc.c,93
+#define JPEG_INTERNALS12,321
+GLOBAL(28,838
+GLOBAL(68,2066
+GLOBAL(85,2583
+GLOBAL(97,2862
 
-jpeg-6b/jdmainct.c,394
-#define JPEG_INTERNALS16,556
-} my_main_controller;132,6939
-typedef my_main_controller * my_main_ptr;134,6962
-#define CTX_PREPARE_FOR_IMCU	137,7033
-#define CTX_PROCESS_IMCU	138,7098
-#define CTX_POSTPONED_ROW	139,7161
-METHODDEF(143,7252
-LOCAL(194,9111
-LOCAL(237,10694
-LOCAL(265,11627
-METHODDEF(306,13120
-METHODDEF(344,14207
-METHODDEF(384,15578
-METHODDEF(458,18729
-GLOBAL(475,19125
+jpeg-6b/jctflflt.c,64
+#define JPEG_INTERNALS37,1800
+  Sorry,50,2064
+GLOBAL(58,2206
 
-jpeg-6b/jdmarker.c,3336
+jpeg-6b/jant2tc.c,2262
+#define JPEG_INTERNALS20,786
+#define R_SCALE 73,3464
+#define G_SCALE 74,3520
+#define B_SCALE 75,3576
+#define C0_SCALE 85,3997
+#define C0_SCALE 88,4047
+#define C1_SCALE 91,4098
+#define C2_SCALE 94,4147
+#define C2_SCALE 97,4197
+#define MAXNUMCOLORS 127,5811
+#define HIST_C0_BITS 132,6016
+#define HIST_C1_BITS 133,6082
+#define HIST_C2_BITS 134,6146
+#define HIST_C0_ELEMS 137,6260
+#define HIST_C1_ELEMS 138,6301
+#define HIST_C2_ELEMS 139,6342
+#define C0_SHIFT 142,6462
+#define C1_SHIFT 143,6511
+#define C2_SHIFT 144,6560
+typedef UINT16 histcell;147,6611
+typedef histcell FAR * histptr;149,6683
+typedef histcell hist1d[hist1d151,6754
+typedef hist1d FAR * hist2d;152,6823
+typedef hist2d * hist3d;153,6890
+typedef INT16 FSERROR;181,8171
+typedef int LOCFSERROR;182,8226
+typedef INT32 FSERROR;184,8295
+typedef INT32 LOCFSERROR;185,8352
+typedef FSERROR FAR *FSERRPTR;FSERRPTR188,8433
+  struct jpeg_color_quantizer pub;194,8555
+  JSAMPARRAY sv_colormap;197,8677
+  int desired;198,8741
+  hist3d histogram;201,8856
+  boolean needs_zeroed;203,8909
+  FSERRPTR fserrors;206,9027
+  boolean on_odd_row;207,9074
+  int * error_limiter;208,9140
+} my_cquantizer;209,9207
+typedef my_cquantizer * my_cquantize_ptr;211,9225
+METHODDEF(223,9593
+  int c0min,260,10740
+  int c0min, c0max;260,10740
+  int c1min,261,10760
+  int c1min, c1max;261,10760
+  int c2min,262,10780
+  int c2min, c2max;262,10780
+  INT32 volume;264,10848
+  long colorcount;266,10926
+} box;267,10945
+typedef box * boxptr;269,10953
+LOCAL(272,10977
+LOCAL(292,11449
+LOCAL(312,11890
+LOCAL(423,15153
+LOCAL(498,17522
+LOCAL(538,18870
+#define BOX_C0_LOG 624,23472
+#define BOX_C1_LOG 625,23509
+#define BOX_C2_LOG 626,23546
+#define BOX_C0_ELEMS 628,23584
+#define BOX_C1_ELEMS 629,23658
+#define BOX_C2_ELEMS 630,23696
+#define BOX_C0_SHIFT 632,23735
+#define BOX_C1_SHIFT 633,23781
+#define BOX_C2_SHIFT 634,23827
+LOCAL(645,24211
+LOCAL(774,28617
+#define STEP_C0 807,30119
+#define STEP_C1 808,30165
+#define STEP_C2 809,30211
+LOCAL(854,31533
+METHODDEF(914,33794
+METHODDEF(948,34879
+LOCAL(1107,41838
+#define STEPSIZE 1120,42269
+#undef STEPSIZE1134,42750
+METHODDEF(1142,42816
+METHODDEF(1155,43190
+METHODDEF(1166,43314
+METHODDEF(1229,45423
+GLOBAL(1243,45703
+
+jpeg-6b/jhufffc.c,826
+#define JPEG_INTERNALS17,642
+  unsigned int EOBRUN;33,1064
+  int last_dc_val[last_dc_val34,1120
+} savable_state;35,1196
+#define ASSIGN_STATE(43,1429
+#define ASSIGN_STATE(46,1511
+  struct jpeg_entropy_decoder pub;57,1810
+  bitread_perm_state bitstate;62,2003
+  savable_state saved;63,2067
+  unsigned int restarts_to_go;66,2188
+  d_derived_tbl * derived_tbls[derived_tbls69,2335
+  d_derived_tbl * ac_derived_tbl;71,2383
+} phuff_entropy_decoder;72,2454
+typedef phuff_entropy_decoder * phuff_entropy_ptr;74,2480
+METHODDEF(77,2559
+#define HUFF_EXTEND(203,6739
+#define HUFF_EXTEND(207,6826
+static const int extend_test[extend_test209,6907
+static const int extend_offset[extend_offset213,7104
+LOCAL(227,7550
+METHODDEF(285,9533
+METHODDEF(356,11574
+METHODDEF(441,13979
+METHODDEF(490,15317
+GLOBAL(640,19694
+
+jpeg-6b/jgtraran.c,227
+static const char * progname;38,1253
+static char * outfilename;39,1321
+static JCOPY_OPTION copyoption;40,1374
+static jpeg_transform_info transformoption;41,1425
+LOCAL(44,1506
+LOCAL(90,3507
+LOCAL(113,4065
+main 334,10841
+
+jpeg-6b/jasteter.c,466
+#define JPEG_INTERNALS14,442
+  struct jpeg_decomp_master pub;22,572
+  int pass_number;24,626
+  boolean using_merged_upsample;26,675
+  struct jpeg_color_quantizer * quantizer_1pass;31,854
+  struct jpeg_color_quantizer * quantizer_2pass;32,903
+} my_decomp_master;33,952
+typedef my_decomp_master * my_master_ptr;35,973
+LOCAL(43,1161
+GLOBAL(83,2740
+LOCAL(247,9324
+LOCAL(287,10889
+METHODDEF(437,16006
+METHODDEF(497,18077
+GLOBAL(514,18405
+GLOBAL(542,19272
+
+jpeg-6b/rif.c.c,16
+GLOBAL(30,1036
+
+jpeg-6b/jant1tc.c,1252
+#define JPEG_INTERNALS13,439
+#define ODITHER_SIZE 71,3433
+#define ODITHER_CELLS 73,3567
+#define ODITHER_MASK 74,3641
+typedef int ODITHER_MATRIX[ODITHER_MATRIX76,3721
+typedef int (*ODITHER_MATRIX_PTR)ODITHER_MATRIX_PTR77,3777
+static const UINT8 base_dither_matrix[base_dither_matrix79,3827
+typedef INT16 FSERROR;128,6456
+typedef int LOCFSERROR;129,6511
+typedef INT32 FSERROR;131,6580
+typedef INT32 LOCFSERROR;132,6637
+typedef FSERROR FAR *FSERRPTR;FSERRPTR135,6718
+#define MAX_Q_COMPS 140,6823
+  struct jpeg_color_quantizer pub;143,6898
+  JSAMPARRAY sv_colormap;146,7005
+  int sv_actual;147,7072
+  JSAMPARRAY colorindex;149,7122
+  boolean is_padded;154,7397
+  int Ncolors[Ncolors156,7464
+  int row_index;159,7577
+  ODITHER_MATRIX_PTR odither[odither160,7643
+  FSERRPTR fserrors[fserrors163,7772
+  boolean on_odd_row;164,7831
+} my_cquantizer;165,7897
+typedef my_cquantizer * my_cquantize_ptr;167,7915
+LOCAL(185,8583
+LOCAL(244,10681
+LOCAL(258,11232
+LOCAL(272,11631
+LOCAL(332,13770
+LOCAL(395,15835
+LOCAL(431,16978
+METHODDEF(458,17694
+METHODDEF(486,18462
+METHODDEF(514,19375
+METHODDEF(564,21143
+METHODDEF(609,22709
+LOCAL(721,27099
+METHODDEF(740,27562
+METHODDEF(797,29470
+METHODDEF(809,29669
+GLOBAL(820,29846
+
+jpeg-6b/rolmamap.c,95
+LOCAL(45,1657
+LOCAL(78,2524
+LOCAL(120,3540
+LOCAL(137,3841
+LOCAL(170,4656
+GLOBAL(230,6214
+
+jpeg-6b/jctfsfst.c,432
+#define JPEG_INTERNALS33,1631
+  Sorry,46,1895
+#define CONST_BITS 68,2948
+#define FIX_0_382683433 79,3349
+#define FIX_0_541196100 80,3413
+#define FIX_0_707106781 81,3477
+#define FIX_1_306562965 82,3541
+#define FIX_0_382683433 84,3611
+#define FIX_0_541196100 85,3653
+#define FIX_0_707106781 86,3695
+#define FIX_1_306562965 87,3737
+#undef DESCALE97,4011
+#define DESCALE(98,4026
+#define MULTIPLY(106,4187
+GLOBAL(113,4327
+
+jpeg-6b/rle.c.c,773
+  Sorry,36,1160
+  { GRAYSCALE,52,1596
+  { GRAYSCALE, MAPPEDGRAY,52,1596
+  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR,52,1596
+  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR,52,1596
+  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR, DIRECTCOLOR 52,1596
+  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR, DIRECTCOLOR } rle_kind;52,1596
+typedef struct _rle_source_struct * rle_source_ptr;62,1972
+typedef struct _rle_source_struct 64,2025
+  struct cjpeg_source_struct pub;65,2061
+  rle_kind visual;67,2116
+  jvirt_sarray_ptr image;68,2180
+  JDIMENSION row;69,2250
+  rle_hdr header;70,2310
+  rle_pixel** rle_row;71,2371
+} rle_source_struct;73,2447
+METHODDEF(80,2542
+METHODDEF(186,5938
+METHODDEF(204,6383
+METHODDEF(240,7593
+METHODDEF(359,10990
+GLOBAL(370,11154
+
+jpeg-6b/rpgcocom.c,1045
+#define JPEG_CJPEG_DJPEG	14,429
+#define READ_BINARY	35,1172
+#define READ_BINARY	38,1245
+#define READ_BINARY	40,1325
+#define EXIT_FAILURE 45,1429
+#define EXIT_SUCCESS 49,1492
+#define EXIT_SUCCESS 51,1553
+static FILE * infile;61,1728
+#define NEXTBYTE(64,1822
+#define ERREXIT(68,1882
+read_1_byte 73,2005
+read_2_bytes 86,2250
+#define M_SOF0 106,2726
+#define M_SOF1 107,2771
+#define M_SOF2 108,2837
+#define M_SOF3 109,2902
+#define M_SOF5 110,2923
+#define M_SOF6 111,2991
+#define M_SOF7 112,3012
+#define M_SOF9 113,3033
+#define M_SOF10 114,3054
+#define M_SOF11 115,3075
+#define M_SOF13 116,3096
+#define M_SOF14 117,3117
+#define M_SOF15 118,3138
+#define M_SOI 119,3159
+#define M_EOI 120,3228
+#define M_SOS 121,3289
+#define M_APP0	122,3356
+#define M_APP12	123,3419
+#define M_COM 124,3487
+next_marker 138,4003
+first_marker 173,4870
+skip_variable 195,5414
+process_COM 221,6024
+process_SOFn 266,6998
+scan_JPEG_header 324,9223
+static const char * progname;389,11105
+usage 393,11187
+keymatch 408,11563
+main 437,12376
+
+jpeg-6b/jamplple.c,431
+#define JPEG_INTERNALS48,2417
+typedef JMETHOD(void, downsample1_ptr,54,2567
+  struct jpeg_downsampler pub;61,2757
+  downsample1_ptr methods[methods64,2865
+} my_downsampler;65,2908
+typedef my_downsampler * my_downsample_ptr;67,2927
+METHODDEF(74,3020
+LOCAL(86,3239
+METHODDEF(113,3883
+METHODDEF(139,4739
+METHODDEF(186,6210
+METHODDEF(211,7149
+METHODDEF(248,8281
+METHODDEF(291,9627
+METHODDEF(391,14121
+GLOBAL(463,16797
+
+jpeg-6b/confifig.c,1175
+#define HAVE_STDDEF_H	35,1479
+#define HAVE_STDLIB_H	40,1648
+#undef NEED_BSD_STRINGS53,2056
+#undef NEED_SYS_TYPES_H	66,2366
+#undef NEED_SPECIAL_INCLUDE	84,3199
+typedef size_t my_size_t;90,3337
+#define HAVE_PROTOTYPES100,3750
+struct methods_struct 105,3863
+  int (*error_exit)error_exit106,3928
+  int (*trace_message)trace_message107,3965
+  int (*another_method)another_method108,4005
+int testfunction 111,4041
+int test2function 116,4131
+#define HAVE_UNSIGNED_CHAR128,4388
+unsigned char un_char;131,4442
+#define HAVE_UNSIGNED_SHORT140,4659
+unsigned short un_short;143,4715
+#define HAVE_VOID151,4884
+typedef void * void_ptr;155,4985
+typedef void (*void_func)void_func157,5096
+typedef void (*void_func)void_func159,5144
+void test3function 163,5239
+#define HAVE_CONST181,5670
+static const int carray[carray184,5708
+int test4function 187,5772
+#undef INCOMPLETE_TYPES_BROKEN202,6009
+typedef struct undefined_structure * undef_struct_ptr;205,6073
+#undef NEED_SHORT_EXTERNAL_NAMES213,6225
+int possibly_duplicate_function 217,6294
+int possibly_dupli_function 222,6346
+int is_char_signed 243,6953
+int is_shifting_signed 261,7435
+int main 286,8178
+
+jpeg-6b/jaincnct.c,489
+#define JPEG_INTERNALS13,413
+#undef FULL_MAIN_BUFFER_SUPPORTED23,806
+  struct jpeg_c_main_controller pub;29,899
+  JDIMENSION cur_iMCU_row;31,957
+  JDIMENSION rowgroup_ctr;32,1017
+  boolean suspended;33,1089
+  J_BUF_MODE pass_mode;34,1149
+  JSAMPARRAY buffer[buffer40,1429
+  jvirt_sarray_ptr whole_image[whole_image46,1659
+} my_main_controller;48,1714
+typedef my_main_controller * my_main_ptr;50,1737
+METHODDEF(54,1808
+METHODDEF(112,3278
+METHODDEF(168,5048
+GLOBAL(244,7548
+
+jpeg-6b/jmnobobs.c,159
+#define JPEG_INTERNALS18,711
+GLOBAL(34,1139
+GLOBAL(40,1256
+GLOBAL(54,1644
+GLOBAL(60,1769
+GLOBAL(72,2013
+GLOBAL(86,2341
+GLOBAL(99,2623
+GLOBAL(105,2728
+
+jpeg-6b/jnit.t.c,45
+#define JPEG_INTERNALS18,660
+GLOBAL(29,954
+
+jpeg-6b/jpiststd.c,79
+#define JPEG_INTERNALS17,691
+GLOBAL(37,1527
+GLOBAL(76,3015
+GLOBAL(119,4422
+
+jpeg-6b/jctmgmgr.c,486
+#define JPEG_INTERNALS14,419
+  struct jpeg_forward_dct pub;23,633
+  forward_DCT_method_ptr do_dct;26,736
+  DCTELEM * divisors[divisors32,966
+  float_DCT_method_ptr do_float_dct;36,1083
+  FAST_FLOAT * float_divisors[float_divisors37,1120
+} my_fdct_controller;39,1174
+typedef my_fdct_controller * my_fdct_ptr;41,1197
+METHODDEF(53,1587
+#define CONST_BITS 98,3180
+METHODDEF(179,5694
+#define DIVIDE_BY(247,8408
+#define DIVIDE_BY(249,8444
+METHODDEF(269,8780
+GLOBAL(344,11469
+
+jpeg-6b/wif.c.c,642
+  struct djpeg_dest_struct pub;48,1947
+  j_decompress_ptr cinfo;50,2000
+  int n_bits;53,2135
+  int maxcode;54,2185
+  INT32 cur_accum;55,2235
+  int cur_bits;56,2287
+  int ClearCode;59,2373
+  int EOFCode;60,2425
+  int code_counter;61,2465
+  int bytesinpkt;64,2559
+  char packetbuf[packetbuf65,2613
+} gif_dest_struct;67,2678
+typedef gif_dest_struct * gif_dest_ptr;69,2698
+#define MAXCODE(72,2783
+LOCAL(80,2980
+#define CHAR_OUT(95,3441
+LOCAL(104,3674
+LOCAL(142,5257
+LOCAL(161,5778
+LOCAL(181,6304
+LOCAL(199,6640
+LOCAL(208,6831
+LOCAL(218,7081
+METHODDEF(301,10150
+METHODDEF(318,10521
+METHODDEF(337,10906
+GLOBAL(359,11480
+
+jpeg-6b/jergegc.c,603
+#define JPEG_INTERNALS35,1457
+  struct jpeg_upsampler pub;45,1626
+  JMETHOD(48,1755
+  int * Cr_r_tab;53,1941
+  int * Cb_b_tab;54,1998
+  INT32 * Cr_g_tab;55,2055
+  INT32 * Cb_g_tab;56,2114
+  JSAMPROW spare_row;63,2455
+  boolean spare_full;64,2477
+  JDIMENSION out_row_width;66,2537
+  JDIMENSION rows_to_go;67,2594
+} my_upsampler;68,2656
+typedef my_upsampler * my_upsample_ptr;70,2673
+#define SCALEBITS	72,2714
+#define ONE_HALF	73,2780
+#define FIX(74,2826
+LOCAL(82,3020
+METHODDEF(125,4549
+METHODDEF(143,5014
+METHODDEF(192,6732
+METHODDEF(225,7741
+METHODDEF(287,9864
+GLOBAL(369,12903
+
+jpeg-6b/rwitctch.c,140
+LOCAL(20,698
+LOCAL(37,1013
+GLOBAL(72,1718
+LOCAL(128,3406
+GLOBAL(157,4144
+#define MAX_SCANS 179,5169
+GLOBAL(265,7596
+GLOBAL(300,8584
+
+jpeg-6b/tnsupupp.c,285
+#define JPEG_INTERNALS18,669
+LOCAL(65,2848
+LOCAL(114,4525
+LOCAL(185,7134
+LOCAL(229,8776
+LOCAL(293,11091
+LOCAL(357,13392
+LOCAL(458,17120
+GLOBAL(567,20937
+LOCAL(639,23451
+LOCAL(679,24530
+LOCAL(699,25200
+GLOBAL(731,26284
+GLOBAL(818,29090
+GLOBAL(860,30292
+GLOBAL(885,31053
+
+jpeg-6b/ceg.c.c,274
+#define JMESSAGE(42,1583
+static const char * const cdjpeg_message_table[cdjpeg_message_table44,1623
+static boolean is_targa;76,3179
+LOCAL(79,3239
+static const char * progname;136,4444
+static char * outfilename;137,4512
+LOCAL(140,4567
+LOCAL(198,6963
+main 461,15470
+
+jpeg-6b/jostctct.c,420
+#define JPEG_INTERNALS19,738
+  struct jpeg_d_post_controller pub;27,887
+  jvirt_sarray_ptr whole_image;34,1215
+  JSAMPARRAY buffer;35,1288
+  JDIMENSION strip_height;36,1358
+  JDIMENSION starting_row;38,1443
+  JDIMENSION next_row;39,1512
+} my_post_controller;40,1583
+typedef my_post_controller * my_post_ptr;42,1606
+METHODDEF(46,1677
+METHODDEF(125,4247
+METHODDEF(157,5246
+METHODDEF(201,6673
+GLOBAL(249,8128
+
+jpeg-6b/jmnamame.c,615
+#define JPEG_INTERNALS15,511
+#define SEEK_SET 26,888
+#define READ_BINARY	30,1016
+#define RW_BINARY	31,1040
+#define READ_BINARY	34,1112
+#define RW_BINARY	35,1148
+#define READ_BINARY	37,1227
+#define RW_BINARY	38,1252
+#define TEMP_DIRECTORY 70,2645
+static int next_file_num;73,2724
+#define TEMP_FILE_NAME 78,2885
+LOCAL(94,3269
+#define TEMP_FILE_NAME 122,4114
+LOCAL(125,4162
+GLOBAL(142,4588
+GLOBAL(148,4705
+GLOBAL(162,5093
+GLOBAL(168,5218
+#define DEFAULT_MAX_MEM	184,5725
+GLOBAL(187,5795
+METHODDEF(203,6265
+METHODDEF(216,6640
+METHODDEF(229,7020
+GLOBAL(246,7504
+GLOBAL(265,8091
+GLOBAL(272,8270
+
+jpeg-6b/jctinint.c,1069
+#define JPEG_INTERNALS28,1345
+  Sorry,41,1609
+#define CONST_BITS 78,3428
+#define PASS1_BITS 79,3451
+#define CONST_BITS 81,3479
+#define PASS1_BITS 82,3502
+#define FIX_0_298631336 93,3959
+#define FIX_0_390180644 94,4023
+#define FIX_0_541196100 95,4087
+#define FIX_0_765366865 96,4151
+#define FIX_0_899976223 97,4215
+#define FIX_1_175875602 98,4279
+#define FIX_1_501321110 99,4343
+#define FIX_1_847759065 100,4408
+#define FIX_1_961570560 101,4473
+#define FIX_2_053119869 102,4538
+#define FIX_2_562915447 103,4603
+#define FIX_3_072711026 104,4668
+#define FIX_0_298631336 106,4739
+#define FIX_0_390180644 107,4781
+#define FIX_0_541196100 108,4823
+#define FIX_0_765366865 109,4865
+#define FIX_0_899976223 110,4907
+#define FIX_1_175875602 111,4949
+#define FIX_1_501321110 112,4991
+#define FIX_1_847759065 113,5033
+#define FIX_1_961570560 114,5075
+#define FIX_2_053119869 115,5117
+#define FIX_2_562915447 116,5159
+#define FIX_3_072711026 117,5201
+#define MULTIPLY(129,5635
+#define MULTIPLY(131,5695
+#define DEQUANTIZE(140,5966
+GLOBAL(147,6125
+
+jpeg-6b/jctflflt.c,92
+#define JPEG_INTERNALS39,1967
+  Sorry,52,2231
+#define DEQUANTIZE(60,2422
+GLOBAL(67,2576
+
+jpeg-6b/jamplple.c,641
+#define JPEG_INTERNALS21,784
+typedef JMETHOD(void, upsample1_ptr,27,932
+  struct jpeg_upsampler pub;34,1128
+  JSAMPARRAY color_buf[color_buf43,1602
+  upsample1_ptr methods[methods46,1692
+  int next_row_out;48,1734
+  JDIMENSION rows_to_go;49,1796
+  int rowgroup_height[rowgroup_height52,1916
+  UINT8 h_expand[h_expand57,2115
+  UINT8 v_expand[v_expand58,2149
+} my_upsampler;59,2183
+typedef my_upsampler * my_upsample_ptr;61,2200
+METHODDEF(68,2288
+METHODDEF(88,2868
+METHODDEF(156,5212
+METHODDEF(169,5535
+METHODDEF(188,6259
+METHODDEF(232,7557
+METHODDEF(260,8287
+METHODDEF(303,9771
+METHODDEF(344,11208
+GLOBAL(398,13128
+
+jpeg-6b/jror.r.c,285
+#define EXIT_FAILURE 32,1172
+#define jpeg_std_message_table	45,1521
+#define JMESSAGE(48,1570
+const char * const jpeg_std_message_table[jpeg_std_message_table50,1610
+METHODDEF(69,2260
+METHODDEF(97,3114
+METHODDEF(127,3985
+METHODDEF(156,4927
+METHODDEF(211,6591
+GLOBAL(230,7110
+
+jpeg-6b/joloroc.c,490
+#define JPEG_INTERNALS11,272
+  struct jpeg_color_deconverter pub;19,406
+  int * Cr_r_tab;22,510
+  int * Cb_b_tab;23,567
+  INT32 * Cr_g_tab;24,624
+  INT32 * Cb_g_tab;25,683
+} my_color_deconverter;26,742
+typedef my_color_deconverter * my_cconvert_ptr;28,767
+#define SCALEBITS	60,2281
+#define ONE_HALF	61,2347
+#define FIX(62,2393
+LOCAL(69,2516
+METHODDEF(119,4432
+METHODDEF(168,6026
+METHODDEF(200,6895
+METHODDEF(216,7340
+METHODDEF(244,8123
+METHODDEF(292,9750
+GLOBAL(303,9913
+
+jpeg-6b/jtadsdst.c,322
+  struct jpeg_destination_mgr pub;26,933
+  long length;27,988
+  FILE * outfile;29,1070
+  JOCTET * buffer;30,1109
+} my_destination_mgr;31,1151
+typedef my_destination_mgr * my_dest_ptr;33,1174
+#define OUTPUT_BUF_SIZE 35,1217
+METHODDEF(43,1402
+METHODDEF(82,3050
+METHODDEF(109,3730
+GLOBAL(135,4424
+GLOBAL(161,5346
+
+jpeg-6b/jarkeker.c,3671
 #define JPEG_INTERNALS15,494
   M_SOF0 21,627
   M_SOF0  = 0xc0,xc021,627
@@ -697,6 +1776,13 @@ jpeg-6b/jdmarker.c,3336
   M_ERROR 84,1596
   M_ERROR = 0x100x10084,1596
 } JPEG_MARKER;85,1614
+  struct jpeg_marker_reader pub;91,1669
+  jpeg_marker_parser_method process_COM;94,1781
+  jpeg_marker_parser_method process_APPn[process_APPn95,1822
+  unsigned int length_limit_COM;98,1934
+  unsigned int length_limit_APPn[length_limit_APPn99,1967
+  jpeg_saved_marker_ptr cur_marker;102,2047
+  unsigned int bytes_read;103,2121
 } my_marker_reader;105,2265
 typedef my_marker_reader * my_marker_ptr;107,2286
 #define INPUT_VARS(119,2664
@@ -731,226 +1817,256 @@ GLOBAL(1261,37876
 GLOBAL(1299,39008
 GLOBAL(1348,40692
 
-jpeg-6b/jdmaster.c,248
-#define JPEG_INTERNALS14,442
-} my_decomp_master;33,952
-typedef my_decomp_master * my_master_ptr;35,973
-LOCAL(43,1161
-GLOBAL(83,2740
-LOCAL(247,9324
-LOCAL(287,10889
-METHODDEF(437,16006
-METHODDEF(497,18077
-GLOBAL(514,18405
-GLOBAL(542,19272
+jpeg-6b/jmdosoc.c,1925
+#define XMS_SUPPORTED 35,1499
+#define EMS_SUPPORTED 38,1553
+#define JPEG_INTERNALS42,1587
+#define far_malloc(58,2090
+#define far_free(59,2125
+#define far_malloc(63,2285
+#define far_free(64,2319
+#define far_malloc(69,2392
+#define far_free(70,2424
+#define READ_BINARY	75,2550
+#define READ_BINARY	77,2580
+typedef void far * XMSDRIVER;97,3226
+	unsigned short ax,99,3346
+	unsigned short ax, dx,99,3346
+	unsigned short ax, dx, bx;99,3346
+	void far * ds_si;100,3374
+      } XMScontext;101,3393
+	unsigned short ax,103,3470
+	unsigned short ax, dx,103,3470
+	unsigned short ax, dx, bx;103,3470
+	void far * ds_si;104,3498
+      } EMScontext;105,3517
+static int next_file_num;125,4266
+LOCAL(127,4339
+GLOBAL(165,5457
+GLOBAL(171,5574
+GLOBAL(182,5750
+GLOBAL(188,5879
+#define DEFAULT_MAX_MEM	204,6390
+GLOBAL(207,6464
+METHODDEF(242,7755
+METHODDEF(258,8286
+METHODDEF(274,8823
+LOCAL(287,9251
+static XMSDRIVER xms_driver;314,9977
+	long offset;317,10105
+	void far * ptr;318,10119
+      } XMSPTR;319,10136
+	long length;322,10210
+	XMSH src_handle;323,10224
+	XMSPTR src;324,10242
+	XMSH dst_handle;325,10255
+	XMSPTR dst;326,10273
+      } XMSspec;327,10286
+#define ODD(329,10304
+METHODDEF(332,10339
+METHODDEF(365,11247
+METHODDEF(400,12256
+LOCAL(413,12584
+typedef void far * EMSPTR;464,14185
+	long length;467,14270
+	char bytes[bytes468,14325
+      } EMSspec;469,14376
+#define FIELD_AT(472,14439
+#define SRC_TYPE(473,14511
+#define SRC_HANDLE(474,14557
+#define SRC_OFFSET(475,14604
+#define SRC_PAGE(476,14661
+#define SRC_PTR(477,14717
+#define DST_TYPE(478,14764
+#define DST_HANDLE(479,14811
+#define DST_OFFSET(480,14859
+#define DST_PAGE(481,14917
+#define DST_PTR(482,14974
+#define EMSPAGESIZE	484,15023
+#define HIBYTE(486,15083
+#define LOBYTE(487,15122
+METHODDEF(490,15156
+METHODDEF(515,15842
+METHODDEF(540,16532
+LOCAL(553,16848
+GLOBAL(598,17988
+GLOBAL(622,18569
+GLOBAL(629,18748
 
-jpeg-6b/jdmerge.c,310
-#define JPEG_INTERNALS35,1457
-} my_upsampler;68,2656
-typedef my_upsampler * my_upsample_ptr;70,2673
-#define SCALEBITS	72,2714
-#define ONE_HALF	73,2780
-#define FIX(74,2826
-LOCAL(82,3020
-METHODDEF(125,4549
-METHODDEF(143,5014
-METHODDEF(192,6732
-METHODDEF(225,7741
-METHODDEF(287,9864
-GLOBAL(369,12903
+jpeg-6b/jtasrsrc.c,317
+  struct jpeg_source_mgr pub;26,919
+  FILE * infile;28,970
+  JOCTET * buffer;29,1008
+  boolean start_of_file;30,1050
+} my_source_mgr;31,1110
+typedef my_source_mgr * my_src_ptr;33,1128
+#define INPUT_BUF_SIZE 35,1165
+METHODDEF(43,1337
+METHODDEF(89,3516
+METHODDEF(127,4688
+METHODDEF(168,6014
+GLOBAL(181,6273
 
-jpeg-6b/jdphuff.c,509
-#define JPEG_INTERNALS17,642
-} savable_state;35,1196
-#define ASSIGN_STATE(43,1429
-#define ASSIGN_STATE(46,1511
-} phuff_entropy_decoder;72,2454
-typedef phuff_entropy_decoder * phuff_entropy_ptr;74,2480
-METHODDEF(77,2559
-#define HUFF_EXTEND(203,6739
-#define HUFF_EXTEND(207,6826
-static const int extend_test[extend_test209,6907
-static const int extend_offset[extend_offset213,7104
-LOCAL(227,7550
-METHODDEF(285,9533
-METHODDEF(356,11574
-METHODDEF(441,13979
-METHODDEF(490,15317
-GLOBAL(640,19694
+jpeg-6b/jmmgrgc.c,2451
+#define JPEG_INTERNALS27,1249
+#define AM_MEMORY_MANAGER	28,1272
+#define ALIGN_TYPE 73,3264
+typedef union small_pool_struct * small_pool_ptr;89,3913
+typedef union small_pool_struct 91,3964
+    small_pool_ptr next;93,4009
+    size_t bytes_used;94,4062
+    size_t bytes_left;95,4132
+  } hdr;96,4197
+  ALIGN_TYPE dummy;97,4206
+} small_pool_hdr;98,4271
+typedef union large_pool_struct FAR * large_pool_ptr;100,4290
+typedef union large_pool_struct 102,4345
+    large_pool_ptr next;104,4390
+    size_t bytes_used;105,4443
+    size_t bytes_left;106,4513
+  } hdr;107,4578
+  ALIGN_TYPE dummy;108,4587
+} large_pool_hdr;109,4652
+  struct jpeg_memory_mgr pub;117,4756
+  small_pool_ptr small_list[small_list120,4883
+  large_pool_ptr large_list[large_list121,4928
+  jvirt_sarray_ptr virt_sarray_list;128,5232
+  jvirt_barray_ptr virt_barray_list;129,5269
+  long total_space_allocated;132,5374
+  JDIMENSION last_rowsperchunk;137,5501
+} my_memory_mgr;138,5576
+typedef my_memory_mgr * my_mem_ptr;140,5594
+struct jvirt_sarray_control 150,5866
+  JSAMPARRAY mem_buffer;151,5896
+  JDIMENSION rows_in_array;152,5951
+  JDIMENSION samplesperrow;153,6012
+  JDIMENSION maxaccess;154,6084
+  JDIMENSION rows_in_mem;155,6155
+  JDIMENSION rowsperchunk;156,6211
+  JDIMENSION cur_start_row;157,6280
+  JDIMENSION first_undef_row;158,6348
+  boolean pre_zero;159,6417
+  boolean dirty;160,6469
+  boolean b_s_open;161,6534
+  jvirt_sarray_ptr next;162,6590
+  backing_store_info b_s_info;163,6663
+struct jvirt_barray_control 166,6734
+  JBLOCKARRAY mem_buffer;167,6764
+  JDIMENSION rows_in_array;168,6820
+  JDIMENSION blocksperrow;169,6881
+  JDIMENSION maxaccess;170,6952
+  JDIMENSION rows_in_mem;171,7023
+  JDIMENSION rowsperchunk;172,7079
+  JDIMENSION cur_start_row;173,7148
+  JDIMENSION first_undef_row;174,7216
+  boolean pre_zero;175,7285
+  boolean dirty;176,7337
+  boolean b_s_open;177,7402
+  jvirt_barray_ptr next;178,7458
+  backing_store_info b_s_info;179,7531
+LOCAL(185,7664
+LOCAL(216,8608
+static const size_t first_pool_slop[first_pool_slop241,9557
+static const size_t extra_pool_slop[extra_pool_slop247,9686
+#define MIN_SLOP 253,9823
+METHODDEF(256,9892
+METHODDEF(341,13163
+METHODDEF(394,15211
+METHODDEF(442,16578
+METHODDEF(522,19830
+METHODDEF(552,20827
+METHODDEF(582,21832
+LOCAL(689,25820
+LOCAL(722,27144
+METHODDEF(755,28477
+METHODDEF(840,31720
+METHODDEF(929,35023
+METHODDEF(1001,37226
+GLOBAL(1027,37930
 
-jpeg-6b/jdpostct.c,206
-#define JPEG_INTERNALS19,738
-} my_post_controller;40,1583
-typedef my_post_controller * my_post_ptr;42,1606
-METHODDEF(46,1677
-METHODDEF(125,4247
-METHODDEF(157,5246
-METHODDEF(201,6673
-GLOBAL(249,8128
+jpeg-6b/jhufffc.c,1122
+#define JPEG_INTERNALS15,454
+  struct jpeg_entropy_encoder pub;25,728
+  boolean gather_statistics;28,855
+  JOCTET * next_output_byte;33,998
+  size_t free_in_buffer;34,1065
+  INT32 put_buffer;35,1133
+  int put_bits;36,1192
+  j_compress_ptr cinfo;37,1236
+  int last_dc_val[last_dc_val40,1347
+  int ac_tbl_no;43,1464
+  unsigned int EOBRUN;44,1529
+  unsigned int BE;45,1578
+  char * bit_buffer;46,1645
+  unsigned int restarts_to_go;49,1793
+  int next_restart_num;50,1865
+  c_derived_tbl * derived_tbls[derived_tbls56,2128
+  long * count_ptrs[count_ptrs59,2245
+} phuff_entropy_encoder;60,2281
+typedef phuff_entropy_encoder * phuff_entropy_ptr;62,2307
+#define MAX_CORR_BITS 70,2597
+#define ISHIFT_TEMPS	78,2875
+#define IRIGHT_SHIFT(79,2913
+#define ISHIFT_TEMPS84,3062
+#define IRIGHT_SHIFT(85,3083
+METHODDEF(89,3163
+#define emit_byte(198,6691
+LOCAL(204,6855
+LOCAL(227,7629
+LOCAL(266,8764
+LOCAL(280,9039
+LOCAL(296,9385
+LOCAL(315,9714
+LOCAL(346,10451
+METHODDEF(376,11113
+METHODDEF(463,13841
+METHODDEF(570,17187
+METHODDEF(617,18468
+METHODDEF(745,22732
+METHODDEF(766,23270
+GLOBAL(813,24542
 
-jpeg-6b/jdsample.c,343
-#define JPEG_INTERNALS21,784
-typedef JMETHOD(void, upsample1_ptr,27,932
-} my_upsampler;59,2183
-typedef my_upsampler * my_upsample_ptr;61,2200
-METHODDEF(68,2288
-METHODDEF(88,2868
-METHODDEF(156,5212
-METHODDEF(169,5535
-METHODDEF(188,6259
-METHODDEF(232,7557
-METHODDEF(260,8287
-METHODDEF(303,9771
-METHODDEF(344,11208
-GLOBAL(398,13128
+jpeg-6b/juff.f.c,1118
+#define JPEG_INTERNALS17,631
+  INT32 put_buffer;30,1007
+  int put_bits;31,1066
+  int last_dc_val[last_dc_val32,1110
+} savable_state;33,1186
+#define ASSIGN_STATE(41,1419
+#define ASSIGN_STATE(44,1501
+  struct jpeg_entropy_encoder pub;56,1846
+  savable_state saved;58,1902
+  unsigned int restarts_to_go;61,2033
+  int next_restart_num;62,2105
+  c_derived_tbl * dc_derived_tbls[dc_derived_tbls65,2246
+  c_derived_tbl * ac_derived_tbls[ac_derived_tbls66,2296
+  long * dc_count_ptrs[dc_count_ptrs69,2417
+  long * ac_count_ptrs[ac_count_ptrs70,2456
+} huff_entropy_encoder;72,2502
+typedef huff_entropy_encoder * huff_entropy_ptr;74,2527
+  JOCTET * next_output_byte;81,2709
+  size_t free_in_buffer;82,2776
+  savable_state cur;83,2844
+  j_compress_ptr cinfo;84,2902
+} working_state;85,2966
+METHODDEF(89,3012
+GLOBAL(178,6060
+#define emit_byte(270,8838
+LOCAL(277,9029
+LOCAL(301,9783
+LOCAL(339,10897
+LOCAL(352,11204
+LOCAL(450,14067
+METHODDEF(475,14610
+METHODDEF(532,16259
+LOCAL(571,17436
+METHODDEF(644,19350
+GLOBAL(704,22034
+#define MAX_CLEN 707,22126
+METHODDEF(845,26361
+GLOBAL(890,27662
 
-jpeg-6b/jdtrans.c,59
-#define JPEG_INTERNALS13,420
-LOCAL(19,539
-LOCAL(96,3554
-
-jpeg-6b/jerror.c,285
-#define EXIT_FAILURE 32,1172
-#define jpeg_std_message_table	45,1521
-#define JMESSAGE(48,1570
-const char * const jpeg_std_message_table[jpeg_std_message_table50,1610
-METHODDEF(69,2260
-METHODDEF(97,3114
-METHODDEF(127,3985
-METHODDEF(156,4927
-METHODDEF(211,6591
-GLOBAL(230,7110
-
-jpeg-6b/jfdctflt.c,64
-#define JPEG_INTERNALS37,1800
-  Sorry,50,2064
-GLOBAL(58,2206
-
-jpeg-6b/jfdctfst.c,432
-#define JPEG_INTERNALS33,1631
-  Sorry,46,1895
-#define CONST_BITS 68,2948
-#define FIX_0_382683433 79,3349
-#define FIX_0_541196100 80,3413
-#define FIX_0_707106781 81,3477
-#define FIX_1_306562965 82,3541
-#define FIX_0_382683433 84,3611
-#define FIX_0_541196100 85,3653
-#define FIX_0_707106781 86,3695
-#define FIX_1_306562965 87,3737
-#undef DESCALE97,4011
-#define DESCALE(98,4026
-#define MULTIPLY(106,4187
-GLOBAL(113,4327
-
-jpeg-6b/jfdctint.c,1040
-#define JPEG_INTERNALS26,1179
-  Sorry,39,1443
-#define CONST_BITS 78,3352
-#define PASS1_BITS 79,3375
-#define CONST_BITS 81,3403
-#define PASS1_BITS 82,3426
-#define FIX_0_298631336 93,3883
-#define FIX_0_390180644 94,3947
-#define FIX_0_541196100 95,4011
-#define FIX_0_765366865 96,4075
-#define FIX_0_899976223 97,4139
-#define FIX_1_175875602 98,4203
-#define FIX_1_501321110 99,4267
-#define FIX_1_847759065 100,4332
-#define FIX_1_961570560 101,4397
-#define FIX_2_053119869 102,4462
-#define FIX_2_562915447 103,4527
-#define FIX_3_072711026 104,4592
-#define FIX_0_298631336 106,4663
-#define FIX_0_390180644 107,4705
-#define FIX_0_541196100 108,4747
-#define FIX_0_765366865 109,4789
-#define FIX_0_899976223 110,4831
-#define FIX_1_175875602 111,4873
-#define FIX_1_501321110 112,4915
-#define FIX_1_847759065 113,4957
-#define FIX_1_961570560 114,4999
-#define FIX_2_053119869 115,5041
-#define FIX_2_562915447 116,5083
-#define FIX_3_072711026 117,5125
-#define MULTIPLY(129,5559
-#define MULTIPLY(131,5619
-GLOBAL(139,5735
-
-jpeg-6b/jidctflt.c,92
-#define JPEG_INTERNALS39,1967
-  Sorry,52,2231
-#define DEQUANTIZE(60,2422
-GLOBAL(67,2576
-
-jpeg-6b/jidctfst.c,814
-#define JPEG_INTERNALS35,1797
-  Sorry,48,2061
-#define CONST_BITS 77,3568
-#define PASS1_BITS 78,3590
-#define CONST_BITS 80,3618
-#define PASS1_BITS 81,3640
-#define FIX_1_082392200 92,4096
-#define FIX_1_414213562 93,4160
-#define FIX_1_847759065 94,4224
-#define FIX_2_613125930 95,4288
-#define FIX_1_082392200 97,4358
-#define FIX_1_414213562 98,4400
-#define FIX_1_847759065 99,4442
-#define FIX_2_613125930 100,4484
-#undef DESCALE110,4758
-#define DESCALE(111,4773
-#define MULTIPLY(119,4934
-#define DEQUANTIZE(129,5301
-#define DEQUANTIZE(131,5384
-#define ISHIFT_TEMPS	141,5657
-#define DCTELEMBITS 143,5724
-#define DCTELEMBITS 145,5790
-#define IRIGHT_SHIFT(147,5852
-#define ISHIFT_TEMPS152,6031
-#define IRIGHT_SHIFT(153,6052
-#define IDESCALE(157,6134
-#define IDESCALE(159,6209
-GLOBAL(167,6348
-
-jpeg-6b/jidctint.c,1069
-#define JPEG_INTERNALS28,1345
-  Sorry,41,1609
-#define CONST_BITS 78,3428
-#define PASS1_BITS 79,3451
-#define CONST_BITS 81,3479
-#define PASS1_BITS 82,3502
-#define FIX_0_298631336 93,3959
-#define FIX_0_390180644 94,4023
-#define FIX_0_541196100 95,4087
-#define FIX_0_765366865 96,4151
-#define FIX_0_899976223 97,4215
-#define FIX_1_175875602 98,4279
-#define FIX_1_501321110 99,4343
-#define FIX_1_847759065 100,4408
-#define FIX_1_961570560 101,4473
-#define FIX_2_053119869 102,4538
-#define FIX_2_562915447 103,4603
-#define FIX_3_072711026 104,4668
-#define FIX_0_298631336 106,4739
-#define FIX_0_390180644 107,4781
-#define FIX_0_541196100 108,4823
-#define FIX_0_765366865 109,4865
-#define FIX_0_899976223 110,4907
-#define FIX_1_175875602 111,4949
-#define FIX_1_501321110 112,4991
-#define FIX_1_847759065 113,5033
-#define FIX_1_961570560 114,5075
-#define FIX_2_053119869 115,5117
-#define FIX_2_562915447 116,5159
-#define FIX_3_072711026 117,5201
-#define MULTIPLY(129,5635
-#define MULTIPLY(131,5695
-#define DEQUANTIZE(140,5966
-GLOBAL(147,6125
-
-jpeg-6b/jidctred.c,1217
+jpeg-6b/jctrered.c,1217
 #define JPEG_INTERNALS23,918
   Sorry,36,1185
 #define CONST_BITS 43,1337
@@ -992,704 +2108,39 @@ GLOBAL(117,4292
 GLOBAL(270,9341
 GLOBAL(378,12885
 
-jpeg-6b/jmemansi.c,278
-#define JPEG_INTERNALS15,516
-#define SEEK_SET 26,893
-GLOBAL(35,1069
-GLOBAL(41,1186
-GLOBAL(55,1574
-GLOBAL(61,1699
-#define DEFAULT_MAX_MEM	77,2206
-GLOBAL(80,2276
-METHODDEF(96,2746
-METHODDEF(109,3121
-METHODDEF(122,3501
-GLOBAL(140,3994
-GLOBAL(157,4451
-GLOBAL(163,4566
+jpeg-6b/joefcfct.c,583
+#define JPEG_INTERNALS13,431
+#define FULL_COEF_BUFFER_SUPPORTED24,809
+#define FULL_COEF_BUFFER_SUPPORTED27,885
+  struct jpeg_c_coef_controller pub;35,993
+  JDIMENSION iMCU_row_num;37,1051
+  JDIMENSION mcu_ctr;38,1108
+  int MCU_vert_offset;39,1174
+  int MCU_rows_per_iMCU_row;40,1236
+  JBLOCKROW MCU_buffer[MCU_buffer51,1839
+  jvirt_barray_ptr whole_image[whole_image54,1964
+} my_coef_controller;55,2012
+typedef my_coef_controller * my_coef_ptr;57,2035
+METHODDEF(61,2106
+METHODDEF(99,3187
+METHODDEF(142,4396
+METHODDEF(244,8829
+METHODDEF(340,12704
+GLOBAL(404,14918
 
-jpeg-6b/jmemdos.c,1444
-#define XMS_SUPPORTED 35,1499
-#define EMS_SUPPORTED 38,1553
-#define JPEG_INTERNALS42,1587
-#define far_malloc(58,2090
-#define far_free(59,2125
-#define far_malloc(63,2285
-#define far_free(64,2319
-#define far_malloc(69,2392
-#define far_free(70,2424
-#define READ_BINARY	75,2550
-#define READ_BINARY	77,2580
-typedef void far * XMSDRIVER;97,3226
-      } XMScontext;101,3393
-      } EMScontext;105,3517
-static int next_file_num;125,4266
-LOCAL(127,4339
-GLOBAL(165,5457
-GLOBAL(171,5574
-GLOBAL(182,5750
-GLOBAL(188,5879
-#define DEFAULT_MAX_MEM	204,6390
-GLOBAL(207,6464
-METHODDEF(242,7755
-METHODDEF(258,8286
-METHODDEF(274,8823
-LOCAL(287,9251
-static XMSDRIVER xms_driver;314,9977
-      } XMSPTR;319,10136
-      } XMSspec;327,10286
-#define ODD(329,10304
-METHODDEF(332,10339
-METHODDEF(365,11247
-METHODDEF(400,12256
-LOCAL(413,12584
-typedef void far * EMSPTR;464,14185
-      } EMSspec;469,14376
-#define FIELD_AT(472,14439
-#define SRC_TYPE(473,14511
-#define SRC_HANDLE(474,14557
-#define SRC_OFFSET(475,14604
-#define SRC_PAGE(476,14661
-#define SRC_PTR(477,14717
-#define DST_TYPE(478,14764
-#define DST_HANDLE(479,14811
-#define DST_OFFSET(480,14859
-#define DST_PAGE(481,14917
-#define DST_PTR(482,14974
-#define EMSPAGESIZE	484,15023
-#define HIBYTE(486,15083
-#define LOBYTE(487,15122
-METHODDEF(490,15156
-METHODDEF(515,15842
-METHODDEF(540,16532
-LOCAL(553,16848
-GLOBAL(598,17988
-GLOBAL(622,18569
-GLOBAL(629,18748
+rscode/cren.c.c,49
+BIT16 crc_ccitt(49,1706
+BIT16 crchware(62,1962
 
-jpeg-6b/jmemmac.c,291
-#define JPEG_INTERNALS52,2315
-#define TEMP_FILE_NAME 68,3012
-static int next_file_num;71,3058
-GLOBAL(81,3377
-GLOBAL(87,3494
-GLOBAL(101,3865
-GLOBAL(107,3990
-GLOBAL(118,4196
-METHODDEF(153,5459
-METHODDEF(171,5944
-METHODDEF(189,6435
-GLOBAL(204,6754
-GLOBAL(271,9048
-GLOBAL(285,9463
+rscode/exple.e.c,147
+unsigned char msg[msg58,2216
+unsigned char codeword[codeword60,2308
+byte_err 68,2467
+byte_erasure 78,2719
+main 86,2880
+#define ML 103,3201
 
-jpeg-6b/jmemmgr.c,965
-#define JPEG_INTERNALS27,1249
-#define AM_MEMORY_MANAGER	28,1272
-#define ALIGN_TYPE 73,3264
-typedef union small_pool_struct * small_pool_ptr;89,3913
-typedef union small_pool_struct 91,3964
-} small_pool_hdr;98,4271
-typedef union large_pool_struct FAR * large_pool_ptr;100,4290
-typedef union large_pool_struct 102,4345
-} large_pool_hdr;109,4652
-} my_memory_mgr;138,5576
-typedef my_memory_mgr * my_mem_ptr;140,5594
-struct jvirt_sarray_control 150,5866
-struct jvirt_barray_control 166,6734
-LOCAL(185,7664
-LOCAL(216,8608
-static const size_t first_pool_slop[first_pool_slop241,9557
-static const size_t extra_pool_slop[extra_pool_slop247,9686
-#define MIN_SLOP 253,9823
-METHODDEF(256,9892
-METHODDEF(341,13163
-METHODDEF(394,15211
-METHODDEF(442,16578
-METHODDEF(522,19830
-METHODDEF(552,20827
-METHODDEF(582,21832
-LOCAL(689,25820
-LOCAL(722,27144
-METHODDEF(755,28477
-METHODDEF(840,31720
-METHODDEF(929,35023
-METHODDEF(1001,37226
-GLOBAL(1027,37930
-
-jpeg-6b/jmemname.c,615
-#define JPEG_INTERNALS15,511
-#define SEEK_SET 26,888
-#define READ_BINARY	30,1016
-#define RW_BINARY	31,1040
-#define READ_BINARY	34,1112
-#define RW_BINARY	35,1148
-#define READ_BINARY	37,1227
-#define RW_BINARY	38,1252
-#define TEMP_DIRECTORY 70,2645
-static int next_file_num;73,2724
-#define TEMP_FILE_NAME 78,2885
-LOCAL(94,3269
-#define TEMP_FILE_NAME 122,4114
-LOCAL(125,4162
-GLOBAL(142,4588
-GLOBAL(148,4705
-GLOBAL(162,5093
-GLOBAL(168,5218
-#define DEFAULT_MAX_MEM	184,5725
-GLOBAL(187,5795
-METHODDEF(203,6265
-METHODDEF(216,6640
-METHODDEF(229,7020
-GLOBAL(246,7504
-GLOBAL(265,8091
-GLOBAL(272,8270
-
-jpeg-6b/jmemnobs.c,159
-#define JPEG_INTERNALS18,711
-GLOBAL(34,1139
-GLOBAL(40,1256
-GLOBAL(54,1644
-GLOBAL(60,1769
-GLOBAL(72,2013
-GLOBAL(86,2341
-GLOBAL(99,2623
-GLOBAL(105,2728
-
-jpeg-6b/jpegtran.c,227
-static const char * progname;38,1253
-static char * outfilename;39,1321
-static JCOPY_OPTION copyoption;40,1374
-static jpeg_transform_info transformoption;41,1425
-LOCAL(44,1506
-LOCAL(90,3507
-LOCAL(113,4065
-main 334,10841
-
-jpeg-6b/jquant1.c,908
-#define JPEG_INTERNALS13,439
-#define ODITHER_SIZE 71,3433
-#define ODITHER_CELLS 73,3567
-#define ODITHER_MASK 74,3641
-typedef int ODITHER_MATRIX[ODITHER_MATRIX76,3721
-typedef int (*ODITHER_MATRIX_PTR)ODITHER_MATRIX_PTR77,3777
-static const UINT8 base_dither_matrix[base_dither_matrix79,3827
-typedef INT16 FSERROR;128,6456
-typedef int LOCFSERROR;129,6511
-typedef INT32 FSERROR;131,6580
-typedef INT32 LOCFSERROR;132,6637
-typedef FSERROR FAR *FSERRPTR;FSERRPTR135,6718
-#define MAX_Q_COMPS 140,6823
-} my_cquantizer;165,7897
-typedef my_cquantizer * my_cquantize_ptr;167,7915
-LOCAL(185,8583
-LOCAL(244,10681
-LOCAL(258,11232
-LOCAL(272,11631
-LOCAL(332,13770
-LOCAL(395,15835
-LOCAL(431,16978
-METHODDEF(458,17694
-METHODDEF(486,18462
-METHODDEF(514,19375
-METHODDEF(564,21143
-METHODDEF(609,22709
-LOCAL(721,27099
-METHODDEF(740,27562
-METHODDEF(797,29470
-METHODDEF(809,29669
-GLOBAL(820,29846
-
-jpeg-6b/jquant2.c,1790
-#define JPEG_INTERNALS20,786
-#define R_SCALE 73,3464
-#define G_SCALE 74,3520
-#define B_SCALE 75,3576
-#define C0_SCALE 85,3997
-#define C0_SCALE 88,4047
-#define C1_SCALE 91,4098
-#define C2_SCALE 94,4147
-#define C2_SCALE 97,4197
-#define MAXNUMCOLORS 127,5811
-#define HIST_C0_BITS 132,6016
-#define HIST_C1_BITS 133,6082
-#define HIST_C2_BITS 134,6146
-#define HIST_C0_ELEMS 137,6260
-#define HIST_C1_ELEMS 138,6301
-#define HIST_C2_ELEMS 139,6342
-#define C0_SHIFT 142,6462
-#define C1_SHIFT 143,6511
-#define C2_SHIFT 144,6560
-typedef UINT16 histcell;147,6611
-typedef histcell FAR * histptr;149,6683
-typedef histcell hist1d[hist1d151,6754
-typedef hist1d FAR * hist2d;152,6823
-typedef hist2d * hist3d;153,6890
-typedef INT16 FSERROR;181,8171
-typedef int LOCFSERROR;182,8226
-typedef INT32 FSERROR;184,8295
-typedef INT32 LOCFSERROR;185,8352
-typedef FSERROR FAR *FSERRPTR;FSERRPTR188,8433
-} my_cquantizer;209,9207
-typedef my_cquantizer * my_cquantize_ptr;211,9225
-METHODDEF(223,9593
-} box;267,10945
-typedef box * boxptr;269,10953
-LOCAL(272,10977
-LOCAL(292,11449
-LOCAL(312,11890
-LOCAL(423,15153
-LOCAL(498,17522
-LOCAL(538,18870
-#define BOX_C0_LOG 624,23472
-#define BOX_C1_LOG 625,23509
-#define BOX_C2_LOG 626,23546
-#define BOX_C0_ELEMS 628,23584
-#define BOX_C1_ELEMS 629,23658
-#define BOX_C2_ELEMS 630,23696
-#define BOX_C0_SHIFT 632,23735
-#define BOX_C1_SHIFT 633,23781
-#define BOX_C2_SHIFT 634,23827
-LOCAL(645,24211
-LOCAL(774,28617
-#define STEP_C0 807,30119
-#define STEP_C1 808,30165
-#define STEP_C2 809,30211
-LOCAL(854,31533
-METHODDEF(914,33794
-METHODDEF(948,34879
-LOCAL(1107,41838
-#define STEPSIZE 1120,42269
-#undef STEPSIZE1134,42750
-METHODDEF(1142,42816
-METHODDEF(1155,43190
-METHODDEF(1166,43314
-METHODDEF(1229,45423
-GLOBAL(1243,45703
-
-jpeg-6b/jutils.c,332
-#define JPEG_INTERNALS14,425
-const int jpeg_zigzag_order[jpeg_zigzag_order26,727
-const int jpeg_natural_order[jpeg_natural_order53,1656
-GLOBAL(71,2110
-GLOBAL(80,2275
-#define FMEMCOPY(100,3059
-#define FMEMZERO(101,3114
-#define FMEMCOPY(104,3225
-#define FMEMZERO(105,3327
-GLOBAL(110,3423
-GLOBAL(144,4376
-GLOBAL(164,4874
-
-jpeg-6b/rdbmp.c,514
-typedef unsigned char U_CHAR;32,1158
-#define UCH(33,1188
-typedef char U_CHAR;36,1271
-#define UCH(37,1292
-typedef char U_CHAR;39,1325
-#define UCH(40,1346
-#define	ReadOK(45,1421
-typedef struct _bmp_source_struct * bmp_source_ptr;50,1546
-typedef struct _bmp_source_struct 52,1599
-} bmp_source_struct;64,2079
-LOCAL(67,2102
-LOCAL(80,2343
-METHODDEF(118,3431
-METHODDEF(149,4330
-METHODDEF(186,5405
-METHODDEF(240,7020
-#define GET_2B(246,7207
-#define GET_4B(248,7332
-METHODDEF(411,13072
-GLOBAL(422,13236
-
-jpeg-6b/rdcolmap.c,95
-LOCAL(45,1657
-LOCAL(78,2524
-LOCAL(120,3540
-LOCAL(137,3841
-LOCAL(170,4656
-GLOBAL(230,6214
-
-jpeg-6b/rdgif.c,16
-GLOBAL(30,1036
-
-jpeg-6b/rdjpgcom.c,1045
-#define JPEG_CJPEG_DJPEG	14,429
-#define READ_BINARY	35,1172
-#define READ_BINARY	38,1245
-#define READ_BINARY	40,1325
-#define EXIT_FAILURE 45,1429
-#define EXIT_SUCCESS 49,1492
-#define EXIT_SUCCESS 51,1553
-static FILE * infile;61,1728
-#define NEXTBYTE(64,1822
-#define ERREXIT(68,1882
-read_1_byte 73,2005
-read_2_bytes 86,2250
-#define M_SOF0 106,2726
-#define M_SOF1 107,2771
-#define M_SOF2 108,2837
-#define M_SOF3 109,2902
-#define M_SOF5 110,2923
-#define M_SOF6 111,2991
-#define M_SOF7 112,3012
-#define M_SOF9 113,3033
-#define M_SOF10 114,3054
-#define M_SOF11 115,3075
-#define M_SOF13 116,3096
-#define M_SOF14 117,3117
-#define M_SOF15 118,3138
-#define M_SOI 119,3159
-#define M_EOI 120,3228
-#define M_SOS 121,3289
-#define M_APP0	122,3356
-#define M_APP12	123,3419
-#define M_COM 124,3487
-next_marker 138,4003
-first_marker 173,4870
-skip_variable 195,5414
-process_COM 221,6024
-process_SOFn 266,6998
-scan_JPEG_header 324,9223
-static const char * progname;389,11105
-usage 393,11187
-keymatch 408,11563
-main 437,12376
-
-jpeg-6b/rdppm.c,494
-typedef unsigned char U_CHAR;42,1565
-#define UCH(43,1595
-typedef char U_CHAR;46,1678
-#define UCH(47,1699
-typedef char U_CHAR;49,1732
-#define UCH(50,1753
-#define	ReadOK(55,1828
-} ppm_source_struct;78,2718
-typedef ppm_source_struct * ppm_source_ptr;80,2740
-LOCAL(83,2786
-LOCAL(100,3085
-METHODDEF(140,4153
-METHODDEF(158,4654
-METHODDEF(178,5264
-METHODDEF(199,5894
-METHODDEF(222,6605
-METHODDEF(237,7066
-METHODDEF(261,7771
-METHODDEF(295,8737
-METHODDEF(431,13366
-GLOBAL(442,13530
-
-jpeg-6b/rdrle.c,587
-  Sorry,36,1160
-  { GRAYSCALE,52,1596
-  { GRAYSCALE, MAPPEDGRAY,52,1596
-  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR,52,1596
-  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR,52,1596
-  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR, DIRECTCOLOR 52,1596
-  { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR, DIRECTCOLOR } rle_kind;52,1596
-typedef struct _rle_source_struct * rle_source_ptr;62,1972
-typedef struct _rle_source_struct 64,2025
-} rle_source_struct;73,2447
-METHODDEF(80,2542
-METHODDEF(186,5938
-METHODDEF(204,6383
-METHODDEF(240,7593
-METHODDEF(359,10990
-GLOBAL(370,11154
-
-jpeg-6b/rdswitch.c,140
-LOCAL(20,698
-LOCAL(37,1013
-GLOBAL(72,1718
-LOCAL(128,3406
-GLOBAL(157,4144
-#define MAX_SCANS 179,5169
-GLOBAL(265,7596
-GLOBAL(300,8584
-
-jpeg-6b/rdtarga.c,668
-typedef unsigned char U_CHAR;28,911
-#define UCH(29,941
-typedef char U_CHAR;32,1024
-#define UCH(33,1045
-typedef char U_CHAR;35,1078
-#define UCH(36,1099
-#define	ReadOK(41,1174
-typedef struct _tga_source_struct * tga_source_ptr;46,1299
-typedef struct _tga_source_struct 48,1352
-} tga_source_struct;73,2360
-static const UINT8 c5to8bits[c5to8bits78,2451
-LOCAL(87,2661
-LOCAL(100,2904
-METHODDEF(122,3452
-METHODDEF(135,3746
-METHODDEF(173,4747
-METHODDEF(189,5222
-METHODDEF(210,5831
-METHODDEF(238,6654
-#define get_32bit_row 263,7518
-METHODDEF(272,7779
-METHODDEF(299,8609
-METHODDEF(332,9692
-#define GET_2B(341,9979
-METHODDEF(472,14241
-GLOBAL(483,14407
-
-jpeg-6b/transupp.c,285
-#define JPEG_INTERNALS18,669
-LOCAL(65,2848
-LOCAL(114,4525
-LOCAL(185,7134
-LOCAL(229,8776
-LOCAL(293,11091
-LOCAL(357,13392
-LOCAL(458,17120
-GLOBAL(567,20937
-LOCAL(639,23451
-LOCAL(679,24530
-LOCAL(699,25200
-GLOBAL(731,26284
-GLOBAL(818,29090
-GLOBAL(860,30292
-GLOBAL(885,31053
-
-jpeg-6b/wrbmp.c,283
-  Sorry,31,888
-} bmp_dest_struct;54,1862
-typedef bmp_dest_struct * bmp_dest_ptr;56,1882
-LOCAL(60,1951
-METHODDEF(105,3145
-METHODDEF(141,4099
-LOCAL(156,4383
-#define PUT_2B(162,4584
-#define PUT_4B(165,4719
-LOCAL(229,7168
-LOCAL(291,9214
-METHODDEF(343,10688
-GLOBAL(389,12039
-
-jpeg-6b/wrgif.c,334
-} gif_dest_struct;67,2678
-typedef gif_dest_struct * gif_dest_ptr;69,2698
-#define MAXCODE(72,2783
-LOCAL(80,2980
-#define CHAR_OUT(95,3441
-LOCAL(104,3674
-LOCAL(142,5257
-LOCAL(161,5778
-LOCAL(181,6304
-LOCAL(199,6640
-LOCAL(208,6831
-LOCAL(218,7081
-METHODDEF(301,10150
-METHODDEF(318,10521
-METHODDEF(337,10906
-GLOBAL(359,11480
-
-jpeg-6b/wrjpgcom.c,1248
-#define JPEG_CJPEG_DJPEG	14,439
-#define READ_BINARY	38,1278
-#define WRITE_BINARY	39,1302
-#define READ_BINARY	42,1376
-#define WRITE_BINARY	43,1412
-#define READ_BINARY	45,1493
-#define WRITE_BINARY	46,1518
-#define EXIT_FAILURE 51,1623
-#define EXIT_SUCCESS 55,1686
-#define EXIT_SUCCESS 57,1747
-#define MAX_COM_LENGTH 66,1951
-static FILE * infile;75,2186
-#define NEXTBYTE(78,2280
-static FILE * outfile;80,2314
-#define PUTBYTE(83,2388
-#define ERREXIT(87,2454
-read_1_byte 92,2577
-read_2_bytes 105,2822
-write_1_byte 122,3137
-write_2_bytes 128,3189
-write_marker 135,3292
-copy_rest_of_file 142,3371
-#define M_SOF0 157,3680
-#define M_SOF1 158,3725
-#define M_SOF2 159,3791
-#define M_SOF3 160,3856
-#define M_SOF5 161,3877
-#define M_SOF6 162,3945
-#define M_SOF7 163,3966
-#define M_SOF9 164,3987
-#define M_SOF10 165,4008
-#define M_SOF11 166,4029
-#define M_SOF13 167,4050
-#define M_SOF14 168,4071
-#define M_SOF15 169,4092
-#define M_SOI 170,4113
-#define M_EOI 171,4182
-#define M_SOS 172,4243
-#define M_COM 173,4310
-next_marker 187,4884
-first_marker 222,5751
-copy_variable 244,6295
-skip_variable 264,6761
-scan_JPEG_header 289,7335
-static const char * progname;347,9087
-usage 351,9169
-keymatch 384,10446
-main 413,11259
-
-jpeg-6b/wrppm.c,481
-#define PUTPPMSAMPLE(34,1189
-#define BYTESPERSAMPLE 35,1238
-#define PPM_MAXVAL 36,1263
-#define PUTPPMSAMPLE(39,1313
-#define BYTESPERSAMPLE 40,1387
-#define PPM_MAXVAL 41,1412
-#define PUTPPMSAMPLE(44,1501
-#define BYTESPERSAMPLE 49,1644
-#define PPM_MAXVAL 50,1669
-} ppm_dest_struct;76,2607
-typedef ppm_dest_struct * ppm_dest_ptr;78,2627
-METHODDEF(89,2891
-METHODDEF(104,3270
-METHODDEF(127,3885
-METHODDEF(152,4717
-METHODDEF(175,5320
-METHODDEF(204,6027
-GLOBAL(218,6324
-
-jpeg-6b/wrrle.c,221
-  Sorry,33,948
-#define CMAPBITS	50,1431
-#define CMAPLENGTH	51,1450
-} rle_dest_struct;60,1754
-typedef rle_dest_struct * rle_dest_ptr;62,1774
-METHODDEF(65,1842
-METHODDEF(152,4497
-METHODDEF(171,4969
-GLOBAL(276,8199
-
-jpeg-6b/wrtarga.c,222
-  Sorry,28,739
-} tga_dest_struct;48,1441
-typedef tga_dest_struct * tga_dest_ptr;50,1461
-LOCAL(53,1503
-METHODDEF(98,2868
-METHODDEF(119,3527
-METHODDEF(143,4190
-METHODDEF(166,4789
-METHODDEF(210,6204
-GLOBAL(224,6503
-
-libjel/ijel-ecc.c,599
-#define BLOCKLEN 11,213
-#define ML 14,305
-static int init 20,477
-static int block_len 21,498
-static int max_mlen 22,531
-int ijel_set_ecc_blocklen(26,615
-int ijel_get_ecc_blocklen(33,733
-unsigned char *ijel_encode_ecc(ijel_encode_ecc59,1560
-unsigned char *ijel_decode_ecc(ijel_decode_ecc140,4310
-int ijel_capacity_ecc(222,6665
-int ijel_message_ecc_length(238,7021
-int ijel_ecc_block_length(256,7710
-int ijel_ecc_sanity_check(270,7930
-unsigned char *ijel_encode_ecc_nolength(ijel_encode_ecc_nolength303,8784
-unsigned char *ijel_decode_ecc_nolength(ijel_decode_ecc_nolength377,11135
-
-libjel/ijel.c,340
-int ijel_find_freqs(39,1100
-int * ijel_get_quanta(65,1635
-static void insert_byte(79,1895
-static unsigned char extract_byte(87,2115
-int ijel_stuff_message(109,2778
-int ijel_unstuff_message(270,7904
-void ijel_print_qtable(430,13250
-void ijel_log_qtables(442,13457
-void ijel_log_hufftables(475,14195
-void ijel_buffer_dump(480,14251
-
-libjel/jel.c,1029
-#define WEDGEDEBUG 14,160
-#define UNWEDGEDEBUG 15,181
-char* jel_error_strings[jel_error_strings39,702
-char *jel_version_string(jel_version_string51,1011
-jel_config * jel_init(60,1171
-void jel_free(140,3548
-void jel_describe(151,3781
-typedef struct jel_error_mgr 176,4828
-} *jel_error_ptr;jel_error_ptr179,4909
-static void jel_error_exit 183,5001
-static int ijel_open_source(197,5256
-int jel_set_fp_source(243,6910
-int jel_set_fp_dest(258,7155
-int jel_set_mem_source(274,7389
-int jel_set_mem_dest(290,7748
-int jel_set_file_source(303,7951
-int jel_set_file_dest(315,8185
-int jel_getprop(329,8562
-int jel_setprop(360,9161
-int jel_open_log(401,10040
-int jel_close_log(417,10354
-int jel_log(435,10728
-int    jel_error_code(451,11095
-char * jel_error_string(456,11211
-int    jel_capacity(470,11551
-int jel_raw_capacity(521,12957
-static void ijel_set_message(535,13259
-static void ijel_set_buffer(543,13448
-static size_t ijel_get_jpeg_length(550,13590
-int jel_embed(567,13937
-int jel_extract(638,15921
-
-libjel/jpeg-fd-dst.c,183
-} fd_destination_mgr;23,602
-typedef fd_destination_mgr * fd_dest_ptr;25,625
-#define OUTPUT_BUF_SIZE 27,668
-METHODDEF(35,853
-METHODDEF(73,2481
-METHODDEF(98,3130
-GLOBAL(121,3813
-
-libjel/jpeg-fd-src.c,197
-} my_source_mgr;34,1155
-typedef my_source_mgr * my_src_ptr;36,1173
-#define INPUT_BUF_SIZE 38,1210
-METHODDEF(46,1382
-METHODDEF(103,3690
-METHODDEF(148,5098
-METHODDEF(189,6424
-GLOBAL(202,6684
-
-libjel/jpeg-mem-dst.c,321
-} mem_destination_mgr;20,523
-typedef mem_destination_mgr * mem_dest_ptr;22,547
-#define OUTPUT_BUF_SIZE 24,592
-static int judp_errno 26,668
-#define JUDP_ERR_CANTEMPTY 28,696
-#define JUDP_ERR_TOOMUCHDATA 29,729
-GLOBAL(31,763
-METHODDEF(41,927
-METHODDEF(82,2513
-METHODDEF(117,3367
-GLOBAL(145,4109
-GLOBAL(171,5066
-
-libjel/jpeg-mem-src.c,192
-} my_source_mgr;27,696
-typedef my_source_mgr * my_src_ptr;29,714
-#define INPUT_BUF_SIZE 31,751
-METHODDEF(39,923
-METHODDEF(85,3102
-METHODDEF(134,4557
-METHODDEF(175,5883
-GLOBAL(188,6144
-
-libjel/misc.c,43
-int fullread(13,230
-int fullwrite(38,718
-
-rscode/berlekamp.c,566
+rscode/beekamamp.c,566
 static int Lambda[Lambda50,2006
 static int Omega[Omega53,2071
 static int ErrorLocs[ErrorLocs62,2362
@@ -1710,28 +2161,7 @@ static void mul_z_poly 229,5562
 Find_Roots 245,5889
 correct_errors_erasures 278,6646
 
-rscode/crcgen.c,49
-BIT16 crc_ccitt(49,1706
-BIT16 crchware(62,1962
-
-rscode/example.c,147
-unsigned char msg[msg58,2216
-unsigned char codeword[codeword60,2308
-byte_err 68,2467
-byte_erasure 78,2719
-main 86,2880
-#define ML 103,3201
-
-rscode/galois.c,160
-#define PPOLY 51,1845
-int gexp[gexp54,1867
-int glog[glog55,1882
-init_galois_tables 62,1941
-init_exp_table 70,2054
-int gmult(107,2732
-int ginv 117,2861
-
-rscode/rs.c,350
+rsco/e/rs.c,350
 int pBytes[pBytes41,1513
 int synBytes[synBytes44,1563
 int genPoly[genPoly47,1613
@@ -1747,123 +2177,11 @@ debug_check_syndrome 144,3289
 compute_genpoly 162,3684
 encode_data 190,4292
 
-stegtester/images.cc,617
-#define EMBED_LENGTH 14,234
-#define IMAGES_LOG 15,257
-static image_p *the_images the_images17,302
-static int      the_images_length 18,337
-static int      the_images_offset 19,376
-static int      the_images_max_payload 21,416
-static image_p alloc_image(24,491
-void free_image(28,570
-static bool grow_the_images(37,710
-bool file2bytes(53,1169
-static int capacity(73,1761
-static image_p load_image(94,2351
-int load_images(134,3686
-int unload_images(164,4508
-static image_p get_cover_image(178,4773
-static image_p embed_message_aux(206,5813
-image_p embed_message(259,7719
-int extract_message(285,8700
-
-stegtester/main.cc,139
-static int verbose 4,42
-static unsigned int construct_jpeg_body(6,67
-static unsigned int deconstruct_jpeg_body(24,570
-int main(43,1027
-
-utils/jblock.c,229
-} myimage;11,140
-struct my_error_mgr 15,154
-typedef struct my_error_mgr * my_error_ptr;21,284
-METHODDEF(27,375
-myimage * read_jpeg_file 42,784
-int save_pnm_file(148,4024
-double image_blockiness(168,4404
-int main(193,4968
-
-utils/jhist.c,290
-#define JHIST_VERSION 23,658
-static const char * progname;25,687
-static char * outfilename 26,756
-static int symmetry 27,816
-LOCAL(29,842
-keymatch 44,1075
-parse_switches 66,1679
-#define HSIZE 107,2924
-int ijel_print_hist(111,2993
-static int jel_print_hist(205,5750
-main 221,5968
-
-utils/jquant.c,396
-static int nfreqs 10,278
-static int nlevels 11,301
-static int quality 15,384
-static int verbose 16,409
-static int print_quanta 17,433
-static int print_bits 18,462
-static int print_huff 19,489
-static int usage 21,517
-static int parse_switches 48,1679
-void print_qtable(84,2608
-} JHUFF_TBL;108,3439
-void print_huffman_table(111,3460
-void print_huffman_info(130,3888
-int main(144,4319
-
-utils/unwedge.c,538
-#define UNWEDGE_VERSION 19,660
-static const char * progname;30,1020
-static char * outfilename 31,1089
-static unsigned char * message 32,1149
-static int freq[freq33,1188
-static int nfreq 34,1209
-static int msglen 35,1231
-static int embed_length 36,1255
-static int ecc 37,1284
-static int ecclen 38,1304
-LOCAL(41,1329
-keymatch 65,2416
-LOCAL(87,3010
-LOCAL(171,5550
-METHODDEF(186,5894
-static int ijel_printf_message(236,7145
-static void ijel_describe_message(240,7243
-static int ijel_fprintf_message(255,7706
-main 275,7990
-
-utils/wcap.c,202
-static const char * progname;18,449
-static char * outfilename;19,517
-static char * msgfilename;20,570
-static char * message 21,622
-static int freq[freq22,652
-static int nfreq 23,673
-main 31,736
-
-utils/wedge.c,641
-#define WEDGE_VERSION 26,890
-#define PriSize_t 29,937
-#define PriSSize_t 30,961
-#define PriSize_t 32,992
-#define PriSSize_t 33,1017
-static const char * progname;45,1375
-static char * outfilename 46,1444
-static char * msgfilename 47,1504
-static unsigned char * message 48,1564
-static int freq[freq49,1603
-static int nfreq 50,1624
-static int embed_length 52,1672
-static int message_length;53,1733
-static int quality 54,1819
-static int ecc 55,1918
-static int ecclen 56,1938
-LOCAL(58,1962
-keymatch 84,3523
-LOCAL(104,4115
-LOCAL(124,4383
-LOCAL(205,6823
-METHODDEF(219,7166
-static size_t read_message(274,8518
-main 309,9230
+rscode/gais.c.c,160
+#define PPOLY 51,1845
+int gexp[gexp54,1867
+int glog[glog55,1882
+init_galois_tables 62,1941
+init_exp_table 70,2054
+int gmult(107,2732
+int ginv 117,2861
