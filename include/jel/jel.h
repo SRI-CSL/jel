@@ -35,7 +35,9 @@ extern "C" {
   typedef struct {
     int nfreqs;
     int nlevels;
-    int freqs[DCTSIZE2];
+    unsigned int seed;
+    int freqs[DCTSIZE2]; /* List of admissible frequency indices. */
+    int in_use[DCTSIZE2];   /* List of frequency indices that we will use. */
   } jel_freq_spec;
 
 
@@ -114,7 +116,8 @@ typedef enum {
   JEL_PROP_QUALITY,
   JEL_PROP_EMBED_LENGTH,
   JEL_PROP_ECC_METHOD,
-  JEL_PROP_ECC_BLOCKLEN
+  JEL_PROP_ECC_BLOCKLEN,
+  JEL_PROP_FREQ_SEED
 } jel_property;
 
 
