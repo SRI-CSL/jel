@@ -417,7 +417,7 @@ main (int argc, char **argv)
   jel_log(jel,"Message length is %d.\n", message_length);
   jel_embed(jel, message, message_length);
 
-  max_bytes = jel_capacity(jel);
+  //max_bytes = jel_capacity(jel);
 
   jel_log(jel, "%s: JPEG compressed to %d bytes.\n", progname, jel->jpeglen);
   jel_close_log(jel);

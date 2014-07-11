@@ -144,6 +144,17 @@ myimage * read_jpeg_file (char *filename) {
   return im;
 }
 
+void free_myimage(myimage* im){
+  if(im != NULL){
+    if(im->pixels != NULL){
+      int i; 
+      for(i = 0; i < im->ydim; i++) free(im->pixels[i]);
+      free(im->pixels);
+    }
+    free(im);
+  }
+}
+
 
 int save_pnm_file(myimage *im, FILE *f) {
   int i, j, k;
@@ -192,7 +203,7 @@ double image_blockiness(myimage *im) {
 
 int main(int argc, char **argv) {
   //int i, k;
-  myimage *image;
+  myimage *image = NULL;
 
   if ( argc != 2 ) {
     printf("Usage: %s <filename>\n", argv[0]);
@@ -207,6 +218,8 @@ int main(int argc, char **argv) {
   // save_pnm_file(image, stdout);
 
   printf("%f\n", image_blockiness(image));
-  
+
+  free_myimage(image);
+
   return 0;
 }

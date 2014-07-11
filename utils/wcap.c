@@ -43,6 +43,10 @@ main (int argc, char **argv)
   jel = jel_init(JEL_NLEVELS);
 
   ret = jel_open_log(jel, "/tmp/wcap.log");
+  if(ret != 0){
+    fprintf(stderr, "Error - exiting (can't open log file)\n");
+    exit(EXIT_FAILURE);
+  }
 
   input_file = fopen(argv[1], "rb");
   ret = jel_set_fp_source(jel, input_file);
@@ -56,7 +60,8 @@ main (int argc, char **argv)
   else ecc_method = JEL_ECC_RSCODE;
 
   jel_setprop(jel, JEL_PROP_ECC_METHOD, ecc_method );
-  ecc_method = jel_getprop(jel, JEL_PROP_ECC_METHOD);
+
+  //ecc_method = jel_getprop(jel, JEL_PROP_ECC_METHOD);
 
   max_bytes = jel_capacity(jel);
 
