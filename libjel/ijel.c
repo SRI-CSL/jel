@@ -77,12 +77,21 @@ int * ijel_get_quanta(JQUANT_TBL *q, int *quanta) {
  * Returns an array containing the frequency indices to use for embedding.
  */
 int *ijel_freqs( jel_config *cfg ) {
+  int i;
   jel_freq_spec *fspec = &(cfg->freqs);
 
   if (!fspec->seed) {
-    int i;
     for (i = 0; i < fspec->nfreqs; i++)
       fspec->in_use[i] = fspec->freqs[i];
+  } else {
+    int j, n;
+    n = fspec->nfreqs;
+    /* Fisher-Yates */
+    for (i = 0; i < n; i++) {
+      j = rand() % (n+1);
+      if (j != i) fspec->in_use[i] = fspec->in_use[j];
+      fspec->in_use[j] = fspec->freqs[i];
+    }
   }
   return fspec->in_use;
 }
