@@ -36,6 +36,7 @@ static int msglen = -1;
 static int embed_length = 1;
 static int ecc = 1;
 static int ecclen = 0;
+static int seed = 0;
 
 
 LOCAL(void)
@@ -56,6 +57,7 @@ usage (void)
   fprintf(stderr, "  -freq a,b,c,d  Decode message using specified freq. component indices.\n");
   fprintf(stderr, "                 If this is specified, -quanta is ignored.\n");
   fprintf(stderr, "                 NOTE: The same values must used for extraction!\n");
+  fprintf(stderr, "  -seed <n>      Seed (shared secret) for random frequency selection.\n");
   fprintf(stderr, "  -verbose  or  -debug   Emit debug output\n");
   exit(EXIT_FAILURE);
 }
@@ -142,6 +144,11 @@ parse_switches (jel_config *cfg, int argc, char **argv)
       if (++argn >= argc)
 	usage();
       cfg->freqs.nlevels = strtol(argv[argn], NULL, 10);
+    } else if (keymatch(arg, "seed", 4)) {
+      /* Start block */
+      if (++argn >= argc)
+	usage();
+      seed = strtol(argv[argn], NULL, 10);
     } else if (keymatch(arg, "noecc", 5)) {
       /* Whether to assume error correction */
       ecc = 0;
@@ -352,6 +359,12 @@ main (int argc, char **argv)
   /* Set up the buffer for receiving the incoming message.  Internals
    * are handled by jel_extract: */
   message = malloc(max_bytes*2);
+
+  if ( seed > 0 ) {
+    jel_log(jel, "%s: Setting frequency generation seed to %d\n", progname, seed);
+    if ( jel_setprop( jel, JEL_PROP_FREQ_SEED, seed ) != seed )
+      jel_log(jel, "Failed to set frequency generation seed.\n");
+  }
 
   if (embed_length) jel_log(jel, "%s: Length is embedded.\n", progname);
   else jel_log(jel, "%s: Length is NOT embedded.\n", progname);

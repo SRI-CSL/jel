@@ -54,6 +54,7 @@ static int message_length;     /* Could be strlen, but not if we read from a fil
 static int quality = 0;        /* If 0, do nothing.  If >0, then set the output quality factor. */
 static int ecc = 1;
 static int ecclen = 0;
+static int seed = 0;
 
 LOCAL(void)
 usage (void)
@@ -75,6 +76,7 @@ usage (void)
   fprintf(stderr, "                  NOTE: The same values must used for extraction!\n");
   fprintf(stderr, "  -data    <file> Use the contents of the file as the message (alternative to stdin).\n");
   fprintf(stderr, "  -outfile <file> Filename for output image.\n");
+  fprintf(stderr, "  -seed <n>       Seed (shared secret) for random frequency selection.\n");
   fprintf(stderr, "  -verbose  or  -debug   Emit debug output\n");
   fprintf(stderr, "  -version        Print version info and exit.\n");
   exit(EXIT_FAILURE);
@@ -180,6 +182,11 @@ parse_switches (jel_config *cfg, int argc, char **argv)
       if (++argn >= argc)
 	usage();
       quality = strtol(argv[argn], NULL, 10);
+    } else if (keymatch(arg, "seed", 4)) {
+      /* Start block */
+      if (++argn >= argc)
+	usage();
+      seed = strtol(argv[argn], NULL, 10);
     } else if (keymatch(arg, "version", 7)) {
       fprintf(stderr, "wedge version %s (libjel version %s)\n",
 	      WEDGE_VERSION, jel_version_string());
@@ -394,6 +401,12 @@ main (int argc, char **argv)
     jel_log(jel, "%s: Setting output quality to %d\n", progname, quality);
     if ( jel_setprop( jel, JEL_PROP_QUALITY, quality ) != quality )
       jel_log(jel, "Failed to set output quality.\n");
+  }
+
+  if ( seed > 0 ) {
+    jel_log(jel, "%s: Setting frequency generation seed to %d\n", progname, seed);
+    if ( jel_setprop( jel, JEL_PROP_FREQ_SEED, seed ) != seed )
+      jel_log(jel, "Failed to set frequency generation seed.\n");
   }
   
   jel_setprop(jel, JEL_PROP_EMBED_LENGTH, embed_length);

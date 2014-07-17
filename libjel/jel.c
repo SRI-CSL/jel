@@ -349,6 +349,9 @@ int jel_getprop( jel_config *cfg, jel_property prop ) {
   case JEL_PROP_FREQ_SEED:
     return cfg->freqs.seed;
 
+  case JEL_PROP_NFREQS:
+    return cfg->freqs.nfreqs;
+
   }
 
   cfg->jel_errno = JEL_ERR_NOSUCHPROP;
@@ -397,6 +400,10 @@ int jel_setprop( jel_config *cfg, jel_property prop, int value ) {
   case JEL_PROP_FREQ_SEED:
     cfg->freqs.seed = value;  /* Redundant. */
     srand(value);
+    return value;
+
+  case JEL_PROP_NFREQS:
+    cfg->freqs.nfreqs = value;
     return value;
 
   }
