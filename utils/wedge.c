@@ -407,6 +407,9 @@ main (int argc, char **argv)
     jel_log(jel, "%s: Setting frequency generation seed to %d\n", progname, seed);
     if ( jel_setprop( jel, JEL_PROP_FREQ_SEED, seed ) != seed )
       jel_log(jel, "Failed to set frequency generation seed.\n");
+    jel_log(jel, "%s:      also setting nfreqs to 8\n", progname);
+    if ( jel_setprop( jel, JEL_PROP_NFREQS, 8 ) != 8 )
+      jel_log(jel, "Failed to set frequency generation seed.\n");
   }
   
   jel_setprop(jel, JEL_PROP_EMBED_LENGTH, embed_length);

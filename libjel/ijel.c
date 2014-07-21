@@ -81,6 +81,7 @@ int *ijel_freqs( jel_config *cfg ) {
   jel_freq_spec *fspec = &(cfg->freqs);
 
   if (!fspec->seed) {
+    /* We should not be recomputing this each time!! */
     for (i = 0; i < fspec->nfreqs; i++)
       fspec->in_use[i] = fspec->freqs[i];
   } else {
@@ -88,10 +89,13 @@ int *ijel_freqs( jel_config *cfg ) {
     n = fspec->nfreqs;
     /* Fisher-Yates */
     for (i = 0; i < n; i++) {
-      j = rand() % (n+1);
+      if (i > 0) j = rand() % i;
+      else j = 0;
       if (j != i) fspec->in_use[i] = fspec->in_use[j];
       fspec->in_use[j] = fspec->freqs[i];
     }
+    jel_log(cfg, "ijel_freqs selected frequencies: %d %d %d %d\n",
+	    fspec->in_use[0], fspec->in_use[1], fspec->in_use[2], fspec->in_use[3]);
   }
   return fspec->in_use;
 }
@@ -138,6 +142,7 @@ int ijel_stuff_message(jel_config *cfg) {
   jvirt_barray_ptr *coef_arrays = cfg->coefs;
   FILE *logger = cfg->logger;
   jel_freq_spec *fspec = &(cfg->freqs);
+  int *flist;
   unsigned char *message = cfg->data;
   int msglen = cfg->len;
 
@@ -259,14 +264,17 @@ int ijel_stuff_message(jel_config *cfg) {
       for (blocknum=0; blocknum < bwidth && k < msglen; blocknum++) {
 	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
 
+	flist = ijel_freqs(cfg);
 	if (embed_k > 0) {  /* Message length goes first: */
 	  byte = (unsigned char) (0xFF & length_in);
-	  insert_byte( byte, fspec->freqs, mcu );
+	  //	  insert_byte( byte, fspec->freqs, mcu );
+	  insert_byte( byte, flist, mcu );
 	  length_in = length_in >> 8;
 	  embed_k--;
 	} else {            /* Bytes of the message: */
 	  if (echo) printf("%c", message[k]);
-	  insert_byte( (unsigned char) (message[k] & 0xFF), fspec->freqs, mcu );
+	  //	  insert_byte( (unsigned char) (message[k] & 0xFF), fspec->freqs, mcu );
+	  insert_byte( (unsigned char) (message[k] & 0xFF), flist, mcu );
 	  k++;
 	}
       }
@@ -298,6 +306,7 @@ int ijel_unstuff_message(jel_config *cfg) {
   jvirt_barray_ptr *coef_arrays = cfg->coefs;
   FILE *logger = cfg->logger;
   jel_freq_spec *fspec = &(cfg->freqs);
+  int *flist;
   unsigned char *message = cfg->data;
 
   static int compnum = 0;  /* static?  Really?  This is the component number, 0=luminance.  */
@@ -384,7 +393,9 @@ int ijel_unstuff_message(jel_config *cfg) {
       for (blocknum=0; blocknum < bwidth && k < msglen;  blocknum++) {
 	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
 
-	v = extract_byte(fspec->freqs, mcu);
+	flist = ijel_freqs(cfg);
+	//	v = extract_byte(fspec->freqs, mcu);
+	v = extract_byte(flist, mcu);
 
 	if (embed_k <= 0) {
 	  message[k++] = v;

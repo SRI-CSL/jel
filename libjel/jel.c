@@ -368,7 +368,12 @@ int jel_getprop( jel_config *cfg, jel_property prop ) {
  * property is not recognized, return the NOSUCHPROP error code.
  */
 int jel_setprop( jel_config *cfg, jel_property prop, int value ) {
-
+  /* What a mess.  Stuff this into an ijel function, or change the
+   * freq selection API!! */
+  struct jpeg_decompress_struct *cinfo = &(cfg->srcinfo);
+  struct jpeg_compress_struct *dinfo = &(cfg->dstinfo);
+  JQUANT_TBL *qtable;
+  int ijel_find_freqs(JQUANT_TBL *, int *, int, int);
   switch( prop ) {
 
   case JEL_PROP_QUALITY:
@@ -404,6 +409,9 @@ int jel_setprop( jel_config *cfg, jel_property prop, int value ) {
 
   case JEL_PROP_NFREQS:
     cfg->freqs.nfreqs = value;
+    qtable = dinfo->quant_tbl_ptrs[0];
+    if (!qtable) qtable = cinfo->quant_tbl_ptrs[0];
+    ijel_find_freqs(qtable, cfg->freqs.freqs, value, cfg->freqs.nlevels);
     return value;
 
   }
