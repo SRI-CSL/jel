@@ -9,3 +9,11 @@ compression process.  As a result, embedded bit strings are preserved
 under a number of different transformations, including transcoding to
 higher quality, DC or low frequency shifts in pixel value, and limited
 image rescaling.
+
+Please see *"TRIST: Circumventing Censorship with
+Transcoding-Resistant Image Steganography"*
+for a detailed explanation on what this tool does and how it does it.
+A copy can be found here: 
+```
+https://github.com/SRI-CSL/jel/blob/master/doc/jpegsteg.pdf?raw=true
+```

@@ -11,10 +11,10 @@
 typedef struct image *image_p;
 
 typedef struct image {
-  size_t size;    /* size of the cover image           */
-  char* path;     /* from whence it came               */
+  size_t size;             /* size of the cover image           */
+  char* path;              /* from whence it came               */
   unsigned char* bytes;    /* the actual image                  */
-  int capacity;   /* how much jel reckons it can carry */
+  int capacity;            /* how much jel reckons it can carry */
 } image_t;
 
 

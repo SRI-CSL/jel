@@ -1,6 +1,28 @@
 #include <jel/jel.h>
 #include "images.h"
 
+
+typedef struct jel_knobs {
+  bool use_cookie;          /* use a cookie to pass the message length      default = true  */
+  int32_t ecc_blocklen;     /* ecc block length                             default = 20    */
+  int32_t freq_pool;        /* size of the frquency pool                    default = 16    */
+  int32_t quality_out;      /* the quality of the resulting jpeg            default = 75?   */
+} jel_knobs_t;
+
+
+static jel_knobs_t knobs;
+
+void set_defaults(jel_knobs_t* knobs){
+  if(knobs != NULL){
+    knobs->use_cookie = true;
+    knobs->ecc_blocklen = 20;     //see  ijel_get_ecc_blocklen() and ijel_set_ecc_blocklen()
+    knobs->freq_pool = 16;
+    knobs->quality_out = 75;
+  }
+}
+
+
+
 static int verbose = 0;
 
 static unsigned int construct_jpeg_body(unsigned char* data,  unsigned int data_length, unsigned char**bodyp){
