@@ -1,6 +1,5 @@
-libjel
-
-JPEG Embedding Library
+libjel -- JPEG Embedding Library
+==========
 
 This library supplies an API for embedding and extracting bit strings
 into / from JPEG images.  The library uses heavily quantized frequency
@@ -17,3 +16,27 @@ A copy can be found here:
 ```
 https://github.com/SRI-CSL/jel/blob/master/doc/jpegsteg.pdf?raw=true
 ```
+
+General Compilation
+-------------------
+
+
+Prepare the raw git repository first and generate configure and Makefile:
+```
+autoreconf -i
+./configure --enable-silent-rules
+```
+
+To compile manually:
+```
+make
+```
+
+Debian
+------
+
+To make a Debian package:
+```
+make deb
+```
+
