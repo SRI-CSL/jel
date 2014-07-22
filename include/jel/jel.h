@@ -75,6 +75,9 @@ typedef struct {
 
   FILE * logger;       /* FILE pointer for logging */
 
+  int verbose;         /* Decide how much to spew out in the
+                        * log. Default is 1.  3 is pretty chatty. */
+
   int quality;         /* Base JPEG quality.  If -1, then the
 			* destination preserves the source quality
 			* level.  Is set through the jel_setprop call,

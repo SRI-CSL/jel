@@ -30,10 +30,8 @@ void jpeg_mem_dest (j_compress_ptr cinfo, unsigned char* data, int size);
 int ijel_stuff_message(jel_config *cfg);
 int ijel_unstuff_message(jel_config *cfg);
 
-#if ECC
 int ijel_capacity_ecc(int);
 int ijel_set_ecc_blocklen(int);
-#endif
 
 
 char* jel_error_strings[] = {
@@ -81,6 +79,8 @@ jel_config * jel_init( int nlevels ) {
   /* This is the output quality.  A quality of -1 means that the same
    * quant tables are used for input and output.  */
 
+  result->verbose = 1;  /* "Normal" logging.  */
+
   result->quality = -1;
 
   /* Set up the decompression object: */
@@ -125,11 +125,10 @@ jel_config * jel_init( int nlevels ) {
   result->embed_length = 1;  /* Embed message length by default.  What about ECC? */
   result->jpeglen = 0;
 
-#if ECC
+  /* Should this be the default? */
   result->ecc_method = JEL_ECC_RSCODE;
   // result->ecc_method = JEL_ECC_NONE;
   result->ecc_blocklen = ijel_get_ecc_blocklen();
-#endif
   
   //  ijel_init_freq_spec(result->freqs);
 
@@ -528,13 +527,11 @@ int    jel_capacity( jel_config * cfg ) {
   jel_log(cfg, "jel_capacity returns %d (bwidth=%d, bheight=%d, image dimension says %d)\n",
 	  cap1, bwidth, bheight, cap2);
 
-#if ECC
   /* If ECC is requested, compute capacity subject to ECC overhead: */
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     cap1 = ijel_capacity_ecc(cap1);
     jel_log(cfg, "jel_capacity assuming ECC returns %d\n", cap1);
   }
-#endif
 
   cfg->jel_errno = JEL_SUCCESS;
   return cap1;
