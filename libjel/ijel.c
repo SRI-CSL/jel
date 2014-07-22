@@ -15,7 +15,8 @@
 #include "jel/jpeg-6b/jpeglib.h"
 #include "jel/jel.h"
 
-#ifdef ECC
+/* ECC-related prototypes: */
+
 unsigned char *ijel_encode_ecc(unsigned char *, int, int *);
 unsigned char *ijel_decode_ecc(unsigned char *, int, int *);
 unsigned char *ijel_encode_ecc_nolength(unsigned char *, int, int *);
@@ -25,7 +26,9 @@ int ijel_message_ecc_length(int);
 int ijel_ecc_block_length(int);
 int ijel_set_ecc_blocklen(int);
 int ijel_get_ecc_blocklen();
-#endif
+
+
+
 
 /*
  * findFreqs: Given a quant table, find frequencies that have at
@@ -146,11 +149,10 @@ int ijel_stuff_message(jel_config *cfg) {
   unsigned char *message = cfg->data;
   int msglen = cfg->len;
 
-#ifdef ECC
+  /* ECC variables: */
   unsigned char *raw = cfg->data;
   int ecc = 0;
   int plain_len = 0;
-#endif
 
   /* This could use some cleanup to make sure that we really need all
    * these variables! */
@@ -174,9 +176,9 @@ int ijel_stuff_message(jel_config *cfg) {
   jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
 	  raw[0], raw[1], raw[2], raw[3], raw[4]);
 
-#if ECC
   plain_len = msglen; /* Save the plaintext length */
 
+  /* Check to see if we want ECC turned on: */
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
 
     if (ijel_ecc_sanity_check(raw, msglen))
@@ -185,8 +187,9 @@ int ijel_stuff_message(jel_config *cfg) {
     if (!cfg->embed_length) message = ijel_encode_ecc_nolength(raw, msglen, &i);
     else message = ijel_encode_ecc(raw,  msglen, &i);
 
-    jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
-	    message[0], message[1], message[2], message[3], message[4]);
+    if (cfg->verbose > 1)
+      jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
+              message[0], message[1], message[2], message[3], message[4]);
 
     if (!message) message = raw; /* No ecc */
     else {
@@ -195,7 +198,7 @@ int ijel_stuff_message(jel_config *cfg) {
       ecc = 1;
     }
   }
-#endif
+
 
   /* If not already specified, find a set of frequencies suitable for
      embedding 8 bits per MCU.  Use the destination object, NOT cinfo,
@@ -248,6 +251,7 @@ int ijel_stuff_message(jel_config *cfg) {
   if (!cfg->embed_length) embed_k = 0;
   else jel_log(cfg, "ijel_stuff_message: embedded length = %d bytes\n", length_in);
 
+  /* Now we walk through the MCUs of the JPEG image. */
   for (blk_y = 0; blk_y < bheight && k < msglen;
        blk_y += compptr->v_samp_factor) {
 
@@ -262,6 +266,8 @@ int ijel_stuff_message(jel_config *cfg) {
 	 offset_y++) {
 
       for (blocknum=0; blocknum < bwidth && k < msglen; blocknum++) {
+        /* Grab the next MCU, get the frequencies to use, and insert a
+         * byte: */
 	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
 
 	flist = ijel_freqs(cfg);
@@ -281,9 +287,8 @@ int ijel_stuff_message(jel_config *cfg) {
     }
   }
 
-#if ECC
-  /* If we call */
   if (ecc) {
+    /* ECC sets up a temporary buffer for decoding, so free it: */
     free(message);
     /* If we got here, we were successful and should set the return
      * value to be the number of bytes of plaintext that were
@@ -291,8 +296,6 @@ int ijel_stuff_message(jel_config *cfg) {
     k = plain_len;
   }
   
-#endif
-
   return k;
 }
 
@@ -363,7 +366,7 @@ int ijel_unstuff_message(jel_config *cfg) {
      */
     embed_k = 0;
     msglen = length_in = cfg->len;
-#if ECC
+
     plain_len = msglen;
     /* If ECC is in use, then we need to adjust msglen, since it will
      * be the length in bytes of the original message. */
@@ -373,7 +376,7 @@ int ijel_unstuff_message(jel_config *cfg) {
       jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
 	      msglen, length_in, cfg->len);
     }
-#endif    
+
   }
 
   jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
@@ -416,7 +419,7 @@ int ijel_unstuff_message(jel_config *cfg) {
 
   if (cfg->embed_length) jel_log(cfg, "ijel_unstuff_message: embedded length = %d bytes\n", length_in);
 
-#if ECC
+
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     /* If we have reached here, we are using rscode for Reed-Solomon
      * error correction.  The codeword is in 'message', obtained from
@@ -458,9 +461,7 @@ int ijel_unstuff_message(jel_config *cfg) {
       free(raw);
 
    }
-
   }
-#endif
 
   cfg->len = k;
   jel_log(cfg, "ijel_unstuff_message: k=%d\n", k);
