@@ -37,6 +37,6 @@ Debian
 
 To make a Debian package:
 ```
-make deb
+dpkg-buildpackage -b -us -uc
 ```
 
