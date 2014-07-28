@@ -23,8 +23,8 @@ General Compilation
 
 Prepare the raw git repository first and generate configure and Makefile:
 ```
-autoreconf -i
-./configure --enable-silent-rules
+autoreconf -fvi
+./configure
 ```
 
 To compile manually:
