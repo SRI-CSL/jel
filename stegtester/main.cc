@@ -2,35 +2,15 @@
 #include "images.h"
 
 
-typedef struct jel_knobs {
-  bool use_cookie;          /* use a cookie to pass the message length      default = true  */
-  int32_t ecc_blocklen;     /* ecc block length                             default = 20    */
-  int32_t freq_pool;        /* size of the frquency pool                    default = 16    */
-  int32_t quality_out;      /* the quality of the resulting jpeg            default = 75?   */
-} jel_knobs_t;
-
-
-static jel_knobs_t knobs;
-
-void set_defaults(jel_knobs_t* knobs){
-  if(knobs != NULL){
-    knobs->use_cookie = true;
-    knobs->ecc_blocklen = 20;     //see  ijel_get_ecc_blocklen() and ijel_set_ecc_blocklen()
-    knobs->freq_pool = 16;
-    knobs->quality_out = 75;
-  }
-}
-
-
-
 static int verbose = 0;
 
-static unsigned int construct_jpeg_body(unsigned char* data,  unsigned int data_length, unsigned char**bodyp){
-  if(bodyp != NULL){
+static unsigned int construct_jpeg_body(unsigned char* data,  unsigned int data_length, unsigned char**bodyp, int* message_lengthp){
+  if((bodyp != NULL) && (message_lengthp != NULL)){
     image_p cover = embed_message(data, data_length);
     if(cover != NULL){
       unsigned int body_length = (unsigned int)cover->size;
       *bodyp = cover->bytes;
+      *message_lengthp = cover->message_length;
       /* steal ownership of the bytes */
       cover->bytes = NULL;
       free_image(cover);
@@ -43,11 +23,11 @@ static unsigned int construct_jpeg_body(unsigned char* data,  unsigned int data_
 }
 
 
-static unsigned int deconstruct_jpeg_body(unsigned char *body, unsigned int body_length, unsigned char** datap){
+static unsigned int deconstruct_jpeg_body(unsigned char *body, unsigned int body_length, unsigned char** datap, int message_length){
   size_t rval = 0;
   if(datap != NULL){
     unsigned char *message = NULL;
-    int message_size = extract_message(&message, body, body_length);
+    int message_size = extract_message(&message, message_length, body, body_length);
     if(message != NULL){
       *datap = message;
       rval = (unsigned int) message_size;
@@ -63,22 +43,32 @@ static unsigned int deconstruct_jpeg_body(unsigned char *body, unsigned int body
 
 
 int main(int argc, char** argv){
+  bool embed_length;
+  
   if(argc > 1){
-    verbose = 1;
+    embed_length = true;
+    fprintf(stderr, "embed_length: %d\n", embed_length);
+  } else {
+    embed_length = false;
+    fprintf(stderr, "embed_length: %d\n", embed_length);
   }
-  int inM = load_images("data/images");
+
+  int inM = load_images("data/jpegs");
+    
+  set_jel_embed_length(embed_length);
+
   unsigned int data_length = 16416, body_length, message_length;
   unsigned char* data = (unsigned char*)malloc(data_length), *body = NULL, *message = NULL;
   bool ok = file2bytes("data/onion.bin", data, data_length);
-  int diff;
+  int emessage_length = 0, diff;
   
   if(!ok){  fprintf(stderr, "loading payload failed\n");  goto clean_up; }
 
-  body_length = construct_jpeg_body(data, data_length, &body);
+  body_length = construct_jpeg_body(data, data_length, &body, &emessage_length);
 
-  fprintf(stderr, "construct_jpeg_body: cover image plus message is %u bytes\n", body_length); 
+  fprintf(stderr, "construct_jpeg_body: cover image plus message is %u bytes, emessage_length = %d\n", body_length, emessage_length); 
 
-  message_length =  deconstruct_jpeg_body(body, body_length, &message);
+  message_length =  deconstruct_jpeg_body(body, body_length, &message, embed_length ? 0 : emessage_length);
 
   fprintf(stderr, "deconstruct_jpeg_body: extracted a message of length %u bytes\n", message_length);
 

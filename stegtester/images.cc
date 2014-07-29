@@ -11,7 +11,23 @@
 
 #include <jel/jel.h>
 
-#define EMBED_LENGTH 1
+static jel_knobs_t knobs;
+static bool jel_ok = false;
+
+/* needs an API once the dust has settled. */
+void set_jel_defaults(){
+  knobs.embed_length  = true;
+  knobs.ecc_blocklen  = 20;     //see  ijel_get_ecc_blocklen() and ijel_set_ecc_blocklen()
+  knobs.freq_pool     = 16;
+  knobs.quality_out   = 75;
+  knobs.random_seed   = 0;
+  jel_ok = true;
+}
+
+void set_jel_embed_length(bool value){
+  knobs.embed_length  = value;
+}
+
 #define IMAGES_LOG   "/tmp/stegotester.log"
 
 static image_p *the_images = NULL;
@@ -110,6 +126,7 @@ static image_p load_image(const char* path, char* basename){
         image->path = strdup(name);
         image->size = statbuff.st_size;
         image->bytes = (unsigned char *)malloc(image->size);
+        image->message_length = 0;
         if(image->bytes != NULL){
           int success = file2bytes(image->path, image->bytes, image->size);
           if(success){
@@ -137,6 +154,8 @@ int load_images(const char* path){
   struct dirent *direntp;
   DIR *dirp;
 
+  if(!jel_ok){ set_jel_defaults(); }
+  
   if((path == NULL) || ((dirp = opendir(path)) == NULL)){
     fprintf(stderr, "load_images could not open %s\n", path);
     return retval;
@@ -224,10 +243,12 @@ static image_p embed_message_aux(image_p cover, unsigned char* message, int mess
       fprintf(stderr, "jel: error - setting dest memory!");
       return NULL;
     } 
-   jel_setprop(jel, JEL_PROP_EMBED_LENGTH, EMBED_LENGTH);
 
-   jel_log(jel, "In embed_message_aux:\n");
-   jel_describe(jel);
+    jel_setprop(jel, JEL_PROP_EMBED_LENGTH, knobs.embed_length);
+    fprintf(stderr, "embed_length: %d\n", knobs.embed_length);
+    
+    jel_log(jel, "In embed_message_aux:\n");
+    jel_describe(jel);
 
    /* insert the message */
    jel_log(jel, "Before call to jel_embed, message[0] = %d\n", message[0]);
@@ -237,11 +258,12 @@ static image_p embed_message_aux(image_p cover, unsigned char* message, int mess
    fprintf(stderr, "jel_embed: bytes_embedded = %d message_length = %d\n", bytes_embedded, message_length);
  
    /* figure out the real size of destination */
-   if(bytes_embedded >= message_length){ 
+   if(bytes_embedded == message_length){ 
      if(jel->jpeglen > 0){
        retval = alloc_image();
        retval->bytes = destination;
        retval->size = jel->jpeglen;
+       retval->message_length = message_length;
      }
    } else {
      int  errcode = jel_error_code(jel);    /* Returns the most recent error code. */
@@ -283,7 +305,48 @@ image_p embed_message(unsigned char* message, int message_length){
   return retval;
 }
 
-int extract_message(unsigned char** messagep, unsigned char* jpeg_data, unsigned int jpeg_data_length){
+/* if the message_length is not zero, then the message has been embedded without its length, use this one */
+int extract_message(unsigned char** messagep, int message_length, unsigned char* jpeg_data, unsigned int jpeg_data_length){
+  bool embed_length = (message_length == 0);
+  int msglen;
+  
+  if((messagep != NULL) && (jpeg_data != NULL)){
+    fprintf(stderr, "extract_message:  %u\n", jpeg_data_length);
+    jel_config *jel = jel_init(JEL_NLEVELS);
+    int ret = jel_open_log(jel, (char *)IMAGES_LOG);
+    if (ret == JEL_ERR_CANTOPENLOG) {
+      fprintf(stderr, "extract_message: can't open %s!\n", IMAGES_LOG);
+      jel->logger = stderr;
+    }
+    ret = jel_set_mem_source(jel, jpeg_data, jpeg_data_length);
+
+    fprintf(stderr, "embed_length: %d\n", embed_length);
+
+    if(embed_length){
+      msglen = jel_capacity(jel);
+      fprintf(stderr, "extract_message: capacity = %d\n", msglen);
+    } else {
+      msglen = message_length;
+    }
+  
+    unsigned char* message = (unsigned char*)calloc(msglen+1, sizeof(unsigned char));
+    jel_setprop(jel, JEL_PROP_EMBED_LENGTH, embed_length);
+
+    jel_log(jel, "In extract_message:\n");
+    jel_describe(jel);
+
+    msglen = jel_extract(jel, message, msglen);
+    jel_log(jel, "After call to jel_extract, message[0] = %d; jel->data[0] = %d\n", message[0], jel->data[0]);
+    jel_log(jel, "extract_message: %d bytes extracted\n", msglen);
+    jel_close_log(jel);
+    jel_free(jel);
+    *messagep = message;
+    return msglen;
+  }
+  return 0;
+}
+
+int extract_message_orig(unsigned char** messagep, unsigned char* jpeg_data, unsigned int jpeg_data_length){
   if((messagep != NULL) && (jpeg_data != NULL)){
     fprintf(stderr, "extract_message:  %u\n", jpeg_data_length);
     jel_config *jel = jel_init(JEL_NLEVELS);
@@ -296,7 +359,7 @@ int extract_message(unsigned char** messagep, unsigned char* jpeg_data, unsigned
     int msglen = jel_capacity(jel);
     fprintf(stderr, "extract_message: capacity = %d\n", msglen);
     unsigned char* message = (unsigned char*)calloc(msglen+1, sizeof(unsigned char));
-    jel_setprop(jel, JEL_PROP_EMBED_LENGTH, EMBED_LENGTH);
+    jel_setprop(jel, JEL_PROP_EMBED_LENGTH, knobs.embed_length);
 
     jel_log(jel, "In extract_message:\n");
     jel_describe(jel);
