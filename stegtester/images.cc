@@ -321,6 +321,7 @@ int extract_message(unsigned char** messagep, int message_length, unsigned char*
     ret = jel_set_mem_source(jel, jpeg_data, jpeg_data_length);
 
     fprintf(stderr, "embed_length: %d\n", embed_length);
+    fprintf(stderr, "message_length: %d\n", message_length);
 
     if(embed_length){
       msglen = jel_capacity(jel);
