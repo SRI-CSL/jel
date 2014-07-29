@@ -23,8 +23,8 @@ General Compilation
 
 Prepare the raw git repository first and generate configure and Makefile:
 ```
-autoreconf -i
-./configure --enable-silent-rules
+autoreconf -fvi
+./configure
 ```
 
 To compile manually:
@@ -37,6 +37,6 @@ Debian
 
 To make a Debian package:
 ```
-make deb
+dpkg-buildpackage -b -us -uc
 ```
 
