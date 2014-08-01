@@ -40,7 +40,7 @@ void print_huffman_table(111,3460
 void print_huffman_info(130,3888
 int main(144,4319
 
-utils/wedge.c,641
+utils/wedge.c,666
 #define WEDGE_VERSION 26,890
 #define PriSize_t 29,937
 #define PriSSize_t 30,961
@@ -57,16 +57,17 @@ static int message_length;53,1733
 static int quality 54,1819
 static int ecc 55,1918
 static int ecclen 56,1938
-LOCAL(58,1962
-keymatch 84,3523
-LOCAL(104,4115
-LOCAL(124,4383
-LOCAL(205,6823
-METHODDEF(219,7166
-static size_t read_message(274,8518
-main 309,9230
+static int seed 57,1961
+LOCAL(59,1983
+keymatch 86,3639
+LOCAL(106,4231
+LOCAL(126,4499
+LOCAL(212,7085
+METHODDEF(226,7428
+static size_t read_message(281,8780
+main 316,9492
 
-utils/unwge.c.c,538
+utils/unwge.c.c,563
 #define UNWEDGE_VERSION 19,660
 static const char * progname;30,1020
 static char * outfilename 31,1089
@@ -77,17 +78,18 @@ static int msglen 35,1231
 static int embed_length 36,1255
 static int ecc 37,1284
 static int ecclen 38,1304
-LOCAL(41,1329
-keymatch 65,2416
-LOCAL(87,3010
-LOCAL(171,5550
-METHODDEF(186,5894
-static int ijel_printf_message(236,7145
-static void ijel_describe_message(240,7243
-static int ijel_fprintf_message(255,7706
-main 275,7990
+static int seed 39,1327
+LOCAL(42,1350
+keymatch 67,2531
+LOCAL(89,3125
+LOCAL(178,5811
+METHODDEF(193,6155
+static int ijel_printf_message(243,7406
+static void ijel_describe_message(247,7504
+static int ijel_fprintf_message(262,7967
+main 282,8251
 
-utils/jblock.c,388
+utils/jblock.c,416
   int xdim;7,79
   int ydim;8,91
   int bpp;9,103
@@ -99,9 +101,10 @@ struct my_error_mgr 15,154
 typedef struct my_error_mgr * my_error_ptr;21,284
 METHODDEF(27,375
 myimage * read_jpeg_file 42,784
-int save_pnm_file(148,4024
-double image_blockiness(168,4404
-int main(193,4968
+void free_myimage(147,4023
+int save_pnm_file(159,4224
+double image_blockiness(179,4604
+int main(204,5168
 
 libjel/jp-memed-dst.c,472
   struct jpeg_destination_mgr pub;14,283
@@ -143,61 +146,61 @@ static int max_mlen 22,531
 int ijel_set_ecc_blocklen(26,615
 int ijel_get_ecc_blocklen(33,733
 unsigned char *ijel_encode_ecc(ijel_encode_ecc59,1560
-unsigned char *ijel_decode_ecc(ijel_decode_ecc144,4383
-int ijel_capacity_ecc(226,6738
-int ijel_message_ecc_length(242,7094
-int ijel_ecc_block_length(260,7783
-int ijel_ecc_sanity_check(274,8003
-unsigned char *ijel_encode_ecc_nolength(ijel_encode_ecc_nolength307,8857
-unsigned char *ijel_decode_ecc_nolength(ijel_decode_ecc_nolength381,11208
+unsigned char *ijel_decode_ecc(ijel_decode_ecc136,3964
+int ijel_capacity_ecc(216,6214
+int ijel_message_ecc_length(232,6570
+int ijel_ecc_block_length(250,7259
+int ijel_ecc_sanity_check(264,7479
+unsigned char *ijel_encode_ecc_nolength(ijel_encode_ecc_nolength297,8333
+unsigned char *ijel_decode_ecc_nolength(ijel_decode_ecc_nolength371,10684
 
-libjel/jel.c,1095
+libjel/jel.c,1094
 #define WEDGEDEBUG 14,160
 #define UNWEDGEDEBUG 15,181
-char* jel_error_strings[jel_error_strings39,702
-char *jel_version_string(jel_version_string51,1011
-jel_config * jel_init(60,1171
-void jel_free(144,3694
-void jel_describe(155,3927
-typedef struct jel_error_mgr 180,4974
-  struct jpeg_error_mgr mgr;181,5005
-  jmp_buf jmpbuff;182,5035
-} *jel_error_ptr;jel_error_ptr183,5055
-static void jel_error_exit 187,5147
-static int ijel_open_source(201,5402
-int jel_set_fp_source(247,7056
-int jel_set_fp_dest(262,7301
-int jel_set_mem_source(278,7535
-int jel_set_mem_dest(294,7894
-int jel_set_file_source(307,8097
-int jel_set_file_dest(319,8331
-int jel_getprop(333,8708
-int jel_setprop(367,9363
-int jel_open_log(413,10318
-int jel_close_log(429,10632
-int jel_log(447,11006
-int    jel_error_code(463,11373
-char * jel_error_string(468,11489
-int    jel_capacity(482,11829
-int jel_raw_capacity(533,13235
-static void ijel_set_message(547,13537
-static void ijel_set_buffer(555,13726
-static size_t ijel_get_jpeg_length(562,13868
-int jel_embed(579,14215
-int jel_extract(650,16199
+char* jel_error_strings[jel_error_strings37,687
+char *jel_version_string(jel_version_string49,996
+jel_config * jel_init(58,1156
+void jel_free(143,3750
+void jel_describe(154,3983
+typedef struct jel_error_mgr 179,5030
+  struct jpeg_error_mgr mgr;180,5061
+  jmp_buf jmpbuff;181,5091
+} *jel_error_ptr;jel_error_ptr182,5111
+static void jel_error_exit 186,5203
+static int ijel_open_source(200,5458
+int jel_set_fp_source(246,7112
+int jel_set_fp_dest(261,7357
+int jel_set_mem_source(277,7591
+int jel_set_mem_dest(293,7950
+int jel_set_file_source(306,8153
+int jel_set_file_dest(318,8387
+int jel_getprop(332,8764
+int jel_setprop(369,9474
+int jel_open_log(428,10989
+int jel_close_log(444,11303
+int jel_log(462,11677
+int    jel_error_code(478,12044
+char * jel_error_string(483,12160
+int    jel_capacity(497,12500
+int jel_raw_capacity(546,13891
+static void ijel_set_message(560,14193
+static void ijel_set_buffer(568,14382
+static size_t ijel_get_jpeg_length(575,14524
+int jel_embed(592,14871
+int jel_extract(663,16855
 
-libjel/ijel.c,365
-int ijel_find_freqs(39,1100
-int * ijel_get_quanta(66,1636
-int ijel_freqs(79,1876
-static void insert_byte(95,2194
-static unsigned char extract_byte(103,2414
-int ijel_stuff_message(125,3077
-int ijel_unstuff_message(286,8203
-void ijel_print_qtable(453,13685
-void ijel_log_qtables(465,13892
-void ijel_log_hufftables(498,14630
-void ijel_buffer_dump(503,14686
+libjel/ijel.c,378
+int ijel_find_freqs(42,1116
+int * ijel_get_quanta(69,1652
+int *ijel_freqs(ijel_freqs82,1892
+static void insert_byte(111,2673
+static unsigned char extract_byte(119,2893
+int ijel_stuff_message(141,3556
+int ijel_unstuff_message(306,9089
+void ijel_print_qtable(474,14613
+void ijel_log_qtables(486,14820
+void ijel_log_hufftables(519,15558
+void ijel_buffer_dump(524,15614
 
 libjel/jp-memes-src.c,345
   struct jpeg_source_mgr pub;21,477
@@ -2183,5 +2186,5 @@ int gexp[gexp54,1867
 int glog[glog55,1882
 init_galois_tables 62,1941
 init_exp_table 70,2054
-int gmult(107,2732
-int ginv 117,2861
+int gmult(107,2780
+int ginv 117,2909

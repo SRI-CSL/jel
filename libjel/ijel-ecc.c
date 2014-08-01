@@ -229,9 +229,16 @@ int ijel_capacity_ecc(int nbytes) {
  *
  * was ijel_ecc_length
  */
-int ijel_message_ecc_length(int msglen) {
-  int block_text_length = max_mlen-1;                   /* Subtract 1 for the length byte. */
-  int nblocks = (msglen / block_text_length) + 1; /* Number of chunks of original message */
+
+int ijel_message_ecc_length(int msglen, int embed_len) {
+  assert( embed_len == 0 || embed_len == 1 );
+  /* If embed_len is 1, then we are embedding length in each block.
+   * If 0, then we are not embedding the length.  */
+
+  int block_text_length = max_mlen-embed_len;    /* (maybe) Subtract 1 for the length byte. */
+  int nblocks = (msglen / block_text_length);    /* Number of chunks of original message */
+
+  if (msglen % block_text_length != 0) nblocks++;
 
   /* Note that we add 1 above to account for a "remainder" block that
      has less than max_mlen bytes.  We always encode such a block, even if
@@ -371,10 +378,9 @@ unsigned char *ijel_encode_ecc_nolength(unsigned char *msg, int msglen, int *out
 unsigned char *ijel_decode_ecc_nolength(unsigned char *ecc, int ecclen, int length) {
   int nblocks, in_len, i, k; //n_out, 
   int msgchunk;
-  int msglen;
+  int plain_len;
   unsigned char *out, *next_out;
   unsigned char *in;
-  int done = 0;
 
   if (init) {
     /* make the race as short as possible */
@@ -399,14 +405,19 @@ unsigned char *ijel_decode_ecc_nolength(unsigned char *ecc, int ecclen, int leng
 
   //n_out = nblocks * max_mlen;   /* Maximum number of bytes we need for decoded output */
 
-  out = malloc(nblocks * block_len);  /* Allocate buffer */
+  out = calloc(nblocks, block_len);  /* Allocate buffer */
   next_out = out;                    /* Initialize the output buffer position */
 
   in = ecc;         /* Pointer to unfinished business */
   in_len = ecclen;  /* Remaining message length */
 
-  msglen = 0;
-  for (i = 0; i < nblocks && !done; i++) {
+  /* Since we are already given the plaintext length, make sure it's
+   * consistent with the ecc length: */
+  assert(length == nblocks*msgchunk);
+
+  plain_len = 0;
+
+  for (i = 0; i < nblocks; i++) {
     assert(in_len >= 0);
 
     /* Decoding happens in-place, always of length max_mlen (message without
@@ -418,19 +429,17 @@ unsigned char *ijel_decode_ecc_nolength(unsigned char *ecc, int ecclen, int leng
       correct_errors_erasures (in, block_len, 0, 0);
     }
 
-    // if (mlen < max_mlen-1) done = 1;
-    if (msglen >= length) done = 1;
-
     memcpy(next_out, in, msgchunk); 
 
-    next_out += msgchunk;
-    msglen += msgchunk;
-
-    in += block_len;
+    next_out  += msgchunk;
+    plain_len += msgchunk;
+      
+    in     += block_len;
     in_len -= block_len;
   }
 
-  //  printf("ijel_decode_ecc_nolength: ECC length is %d => Outgoing length is %d\n", ecclen, msglen);
+  /* If plain_len is not equal to length, then something's wrong: */
+  assert(plain_len == length);
 
   return(out);
 }

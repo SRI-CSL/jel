@@ -22,7 +22,7 @@ unsigned char *ijel_decode_ecc(unsigned char *, int, int *);
 unsigned char *ijel_encode_ecc_nolength(unsigned char *, int, int *);
 unsigned char *ijel_decode_ecc_nolength(unsigned char *, int, int);
 int ijel_ecc_sanity_check(unsigned char *, int);
-int ijel_message_ecc_length(int);
+int ijel_message_ecc_length(int, int);
 int ijel_ecc_block_length(int);
 int ijel_set_ecc_blocklen(int);
 int ijel_get_ecc_blocklen();
@@ -372,7 +372,7 @@ int ijel_unstuff_message(jel_config *cfg) {
      * be the length in bytes of the original message. */
     if (cfg->ecc_method == JEL_ECC_RSCODE) {
       //      msglen = length_in = ijel_ecc_length(msglen);
-      msglen = length_in = ijel_message_ecc_length(msglen);
+      msglen = length_in = ijel_message_ecc_length(msglen, 0);
       jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
 	      msglen, length_in, cfg->len);
     }
