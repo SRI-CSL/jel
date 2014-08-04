@@ -520,7 +520,7 @@ int    jel_capacity( jel_config * cfg ) {
     return cfg->jel_errno;
   }
 
-  cap1 = bwidth * bheight;
+  cap1 = (bwidth * bheight);
   cap2 = (cinfo->output_width / 8) * (cinfo->output_height / 8);
 
   /* cap2 is consistently 0 */
@@ -531,6 +531,11 @@ int    jel_capacity( jel_config * cfg ) {
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     cap1 = ijel_capacity_ecc(cap1);
     jel_log(cfg, "jel_capacity assuming ECC returns %d\n", cap1);
+  }
+
+  if (jel_getprop(cfg, JEL_PROP_EMBED_LENGTH) == 1) {
+    cap1 = cap1 - 4;
+    jel_log(cfg, "jel_capacity assuming embedded length returns %d\n", cap1);
   }
 
   cfg->jel_errno = JEL_SUCCESS;

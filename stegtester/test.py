@@ -130,8 +130,11 @@ flist_set = [None]
 
 ################################################################
 
-def wedge(before, after, msgfile, flist=None, quality=None, seed=None):
-    cmd_arglist = ["-nolength", "-data", msgfile, before, after]
+def wedge(before, after, msgfile, flist=None, quality=None, seed=None, embed_length=False):
+    cmd_arglist = ["-data", msgfile, before, after]
+
+    if (not embed_length):
+        cmd_arglist = ["-nolength"] + cmd_arglist
 
     if (flist != None):
         cmd_arglist = ["-freq", flist] + cmd_arglist
@@ -146,8 +149,12 @@ def wedge(before, after, msgfile, flist=None, quality=None, seed=None):
 
 
 
-def unwedge(imagefile, msgfile, nbytes, flist=None, seed=None):
-    cmd_arglist = ["-length", str(nbytes), imagefile, msgfile]
+def unwedge(imagefile, msgfile, nbytes, flist=None, seed=None, embed_length=False):
+    cmd_arglist = [imagefile, msgfile]
+
+    if (not embed_length):
+        cmd_arglist = ["-length", str(nbytes)] + cmd_arglist
+
     if (flist != None):
         cmd_arglist = ["-freq", flist] + cmd_arglist
 
@@ -185,6 +192,7 @@ for flist in flist_set:
     cover_high = filename_for_quality("tmp/raw/tree640", qhi)
     pnm_to_jpeg(qhi, "data/images/tree640.pnm", cover_high)
 
+    print "Fixed frequencies, no length embedding:"
     for q in range(baseq,100):
         cover = filename_for_quality("tmp/raw/tree640", q)
         pnm_to_jpeg(q, "data/images/tree640.pnm", cover)
@@ -209,9 +217,36 @@ for flist in flist_set:
         toterr += nb
 
     print " "
-    seed = int(time.time())
-    print "With PRN seed: ", seed
 
+    print "Fixed frequencies, with length embedded:"
+    for q in range(baseq,100):
+        cover = filename_for_quality("tmp/raw/tree640", q)
+        pnm_to_jpeg(q, "data/images/tree640.pnm", cover)
+        base_mfile = filename_for_quality("tmp/msg/tree640", q)
+        wedge(cover, base_mfile, msgfile, flist, embed_length=True)
+
+        msgout = "tmp/msg/msgout-"+str(q)+".dat"
+        unwedge(base_mfile, msgout, msglen, embed_length=True)
+        nb, total = hamming_files(msgout, msgfile)
+        print "{0}:{1} ".format(q,nb),
+        sys.stdout.flush()
+        toterr += nb
+
+        base_mfile = filename_for_quality("tmp/msg/tree640a", q)
+        wedge(cover_high, base_mfile, msgfile, flist, q, embed_length=True)
+
+        msgout = "tmp/msg/msgout-"+str(q)+".dat"
+        unwedge(base_mfile, msgout, msglen, embed_length=True)
+        nb, total = hamming_files(msgout, msgfile)
+        print "{0}:{1} ".format(q,nb),
+        sys.stdout.flush()
+        toterr += nb
+
+    print " "
+    seed = int(time.time())
+
+
+    print "With PRN seed: ", seed
     for q in range(baseq,100):
         cover = filename_for_quality("tmp/raw/tree640", q)
         pnm_to_jpeg(q, "data/images/tree640.pnm", cover)
