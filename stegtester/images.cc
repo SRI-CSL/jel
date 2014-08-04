@@ -11,11 +11,6 @@
 
 #include <jel/jel.h>
 
-extern "C" {
-  int ijel_message_ecc_length(int, int);
-}
-
-
 static jel_knobs_t knobs;
 static bool jel_ok = false;
 
