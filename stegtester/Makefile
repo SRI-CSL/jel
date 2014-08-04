@@ -1,6 +1,6 @@
 CC = g++
 
-CFLAGS = -Wall  $(shell pkg-config --cflags jel) 
+CFLAGS = -ggdb -Wall  $(shell pkg-config --cflags jel) 
 
 LINK = $(shell pkg-config --libs jel)
 
