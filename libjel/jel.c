@@ -127,6 +127,7 @@ jel_config * jel_init( int nlevels ) {
 
   /* Should this be the default? */
   result->ecc_method = JEL_ECC_RSCODE;
+
   // result->ecc_method = JEL_ECC_NONE;
   result->ecc_blocklen = ijel_get_ecc_blocklen();
   
@@ -134,6 +135,10 @@ jel_config * jel_init( int nlevels ) {
 
   /* Be careful.  We need to check error conditions. */
   result->jel_errno = 0;
+
+  /* How to pack: */
+  result->bits_per_freq = 2;
+  result->bytes_per_mcu = 1;
 
   return result;
 }
@@ -351,6 +356,12 @@ int jel_getprop( jel_config *cfg, jel_property prop ) {
   case JEL_PROP_NFREQS:
     return cfg->freqs.nfreqs;
 
+  case JEL_PROP_BYTES_PER_MCU:
+    return cfg->bytes_per_mcu;
+
+  case JEL_PROP_BITS_PER_FREQ:
+    return cfg->bits_per_freq;
+
   }
 
   cfg->jel_errno = JEL_ERR_NOSUCHPROP;
@@ -411,6 +422,14 @@ int jel_setprop( jel_config *cfg, jel_property prop, int value ) {
     qtable = dinfo->quant_tbl_ptrs[0];
     if (!qtable) qtable = cinfo->quant_tbl_ptrs[0];
     ijel_find_freqs(qtable, cfg->freqs.freqs, value, cfg->freqs.nlevels);
+    return value;
+
+  case JEL_PROP_BYTES_PER_MCU:
+    cfg->bytes_per_mcu = value;
+    return value;
+
+  case JEL_PROP_BITS_PER_FREQ:
+    cfg->bits_per_freq = value;
     return value;
 
   }
@@ -544,6 +563,7 @@ int    jel_capacity( jel_config * cfg ) {
 }
 
 
+
 /*
  * Raw capacity - regardless of ECC, this is how many bytes we can
  * store in the image:
@@ -555,6 +575,14 @@ int jel_raw_capacity(jel_config *cfg) {
   ret = jel_capacity(cfg);
   jel_setprop(cfg, JEL_PROP_ECC_METHOD, prop);
   return ret;
+}
+
+/* Return a buffer that holds anything up to the capacity of the source: */
+void * jel_alloc_buffer( jel_config *cfg ) {
+  int k = jel_raw_capacity( cfg );
+
+  if (k > 0) return calloc(k, 1);
+  else return NULL;
 }
 
 

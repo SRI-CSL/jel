@@ -335,24 +335,21 @@ int extract_message(unsigned char** messagep, int message_length, unsigned char*
       msglen = message_length;
     }
   
-    /* Need to allocate enough message to account for ECC as well!
-     * Here's where things get confusing.  We have a number of options
-     * that change the buffer size requirements.  Is it simpler to ask
-     * the config object to allocate a buffer with "enough space" to
-     * hold whatever is expected?  Or for that matter just hide buffer
-     * allocation from the caller?
+    /* 
+     * Here, we use 'jel_alloc_buffer( jel )' to let the jel object
+     * figure out how big the buffer (message) should be and allocate
+     * it.  Caller must explicitly free() this buffer.
      */
 
-    int buflen = ijel_message_ecc_length(msglen, embed_length);
-    //    unsigned char* message = (unsigned char*)calloc(msglen+1, sizeof(unsigned char));
-    unsigned char* message = (unsigned char*)calloc(buflen+1, sizeof(unsigned char));
+    // unsigned char* message = (unsigned char*)calloc(msglen+1, sizeof(unsigned char));
+    unsigned char* message = (unsigned char*) jel_alloc_buffer( jel );
     jel_setprop(jel, JEL_PROP_EMBED_LENGTH, embed_length);
 
     jel_log(jel, "In extract_message:\n");
     jel_describe(jel);
 
     //    msglen = jel_extract(jel, message, msglen);
-    msglen = jel_extract(jel, message, buflen);
+    msglen = jel_extract(jel, message, msglen);
     jel_log(jel, "After call to jel_extract, message[0] = %d; jel->data[0] = %d\n", message[0], jel->data[0]);
     jel_log(jel, "extract_message: %d bytes extracted\n", msglen);
     jel_close_log(jel);
@@ -362,6 +359,7 @@ int extract_message(unsigned char** messagep, int message_length, unsigned char*
   }
   return 0;
 }
+
 
 int extract_message_orig(unsigned char** messagep, unsigned char* jpeg_data, unsigned int jpeg_data_length){
   if((messagep != NULL) && (jpeg_data != NULL)){

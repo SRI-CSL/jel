@@ -107,6 +107,8 @@ typedef struct {
   int jel_errno;
   int ecc_method;
   int ecc_blocklen;
+  int bits_per_freq;
+  int bytes_per_mcu;
 
 } jel_config;
 
@@ -121,7 +123,9 @@ typedef enum {
   JEL_PROP_ECC_METHOD,
   JEL_PROP_ECC_BLOCKLEN,
   JEL_PROP_FREQ_SEED,
-  JEL_PROP_NFREQS
+  JEL_PROP_NFREQS,
+  JEL_PROP_BYTES_PER_MCU,
+  JEL_PROP_BITS_PER_FREQ,
 } jel_property;
 
 
@@ -188,6 +192,12 @@ char * jel_error_string( jel_config * cfg );  /* Returns the most recent error s
  */
 int    jel_capacity( jel_config * cfg );      /* Returns the capacity in bytes of the source. */
 int    jel_raw_capacity( jel_config * cfg );  /* Returns the "raw" capacity in bytes of the source. */
+
+/* Allocates a buffer that is sufficient to hold any message
+ * (per-frame) in the source.  Any such buffer can be passed to
+ * free().
+ */
+void * jel_alloc_buffer( jel_config * cfg );
 
 /*  Embed a message in an image: */
 

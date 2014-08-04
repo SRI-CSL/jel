@@ -417,8 +417,9 @@ int ijel_unstuff_message(jel_config *cfg) {
     }
   }
 
-  if (cfg->embed_length) jel_log(cfg, "ijel_unstuff_message: embedded length = %d bytes\n", length_in);
+  //  printf ("k = %d, msglen = %d\n", k, msglen);
 
+  if (cfg->embed_length) jel_log(cfg, "ijel_unstuff_message: embedded length = %d bytes\n", length_in);
 
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     /* If we have reached here, we are using rscode for Reed-Solomon
