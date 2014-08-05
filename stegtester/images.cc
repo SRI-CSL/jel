@@ -24,8 +24,13 @@ void set_jel_defaults(){
   jel_ok = true;
 }
 
-void set_jel_embed_length(bool value){
-  knobs.embed_length  = value;
+void set_jel_preferences(jel_knobs_t &knobs_in){
+  knobs.embed_length  = knobs_in.embed_length;
+  knobs.ecc_blocklen  = knobs_in.ecc_blocklen;    
+  knobs.freq_pool     = knobs_in.freq_pool;
+  knobs.quality_out   = knobs_in.quality_out;
+  knobs.random_seed   = knobs_in.random_seed;
+  jel_ok = true;
 }
 
 #define IMAGES_LOG   "/tmp/stegotester.log"

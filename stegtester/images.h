@@ -30,6 +30,8 @@ typedef struct jel_knobs {
 
 void set_jel_defaults();
 
+void set_jel_preferences(jel_knobs_t &knobs);
+
 /* need to do this after loading the images (since that sets the defaults) */
 void set_jel_embed_length(bool value);
 
