@@ -33,6 +33,10 @@ void set_jel_preferences(jel_knobs_t &knobs_in){
   jel_ok = true;
 }
 
+void set_jel_embed_length(bool value){
+  knobs.embed_length  = value;
+}
+
 #define IMAGES_LOG   "/tmp/stegotester.log"
 
 static image_p *the_images = NULL;
