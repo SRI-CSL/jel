@@ -345,7 +345,9 @@ unsigned char *ijel_encode_ecc_nolength(unsigned char *msg, int msglen, int *out
 
     memset(message, 0, 256);
 
-    if (in_len > 0) memcpy(message, in, msgchunk);
+    if (in_len > 0){
+      memcpy(message, in, msgchunk > in_len ? in_len : msgchunk);
+    }
 
     /* Add 1 to msgchunk to account for the length byte at message[0]: */
     encode_data(message, msgchunk, next_out);

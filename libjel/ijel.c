@@ -184,8 +184,11 @@ int ijel_stuff_message(jel_config *cfg) {
     if (ijel_ecc_sanity_check(raw, msglen))
       jel_log(cfg, "ijel_stuff_message: FYI, sanity check failed.\n");
 
-    if (!cfg->embed_length) message = ijel_encode_ecc_nolength(raw, msglen, &i);
-    else message = ijel_encode_ecc(raw,  msglen, &i);
+    if (!cfg->embed_length){
+      message = ijel_encode_ecc_nolength(raw, msglen, &i);
+    } else {
+      message = ijel_encode_ecc(raw,  msglen, &i);
+    }
 
     if (cfg->verbose > 1)
       jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
