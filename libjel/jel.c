@@ -640,9 +640,8 @@ int jel_embed( jel_config * cfg, unsigned char * msg, int len) {
 
   /* If message is NULL, shouldn't we punt? */
   if ( !msg ) {
-    fprintf( cfg->logger, "No message provided!  Exiting.\n" );
-    fflush( cfg->logger );
-    fclose( cfg->logger );
+    jel_log(cfg, "No message provided!  Exiting.\n" );
+    jel_close_log(cfg);
     cfg->jel_errno = JEL_ERR_NOMSG;
     return cfg->jel_errno;
   }
@@ -670,7 +669,7 @@ int jel_embed( jel_config * cfg, unsigned char * msg, int len) {
   jpeg_finish_compress(&cfg->dstinfo);
 
   cfg->jpeglen = ijel_get_jpeg_length(cfg);
-  fprintf(cfg->logger, "jel_embed: JPEG compressed output size is %d.\n", cfg->jpeglen);
+  jel_log(cfg, "jel_embed: JPEG compressed output size is %d.\n", cfg->jpeglen);
 
   //ian moved this to jel_free
   //jpeg_destroy_compress(&cfg->dstinfo);
@@ -718,10 +717,9 @@ int jel_extract( jel_config * cfg, unsigned char * msg, int maxlen) {
   ijel_set_buffer(cfg, msg, maxlen);
   cfg->len = maxlen;
   msglen = ijel_unstuff_message(cfg);
-
+  
   if(UNWEDGEDEBUG){
-    fprintf(cfg->logger, "jel_extract: %d bytes extracted\n", msglen);
-    fflush(cfg->logger);
+    jel_log(cfg, "jel_extract: %d bytes extracted\n", msglen);
   }    
 
   (void) jpeg_finish_decompress(&(cfg->srcinfo));

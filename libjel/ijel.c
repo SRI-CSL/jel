@@ -143,7 +143,6 @@ int ijel_stuff_message(jel_config *cfg) {
   struct jpeg_decompress_struct *cinfo = &(cfg->srcinfo);
   struct jpeg_compress_struct *dinfo = &(cfg->dstinfo);
   jvirt_barray_ptr *coef_arrays = cfg->coefs;
-  FILE *logger = cfg->logger;
   jel_freq_spec *fspec = &(cfg->freqs);
   int *flist;
   unsigned char *message = cfg->data;
@@ -161,7 +160,7 @@ int ijel_stuff_message(jel_config *cfg) {
   int compnum = 0; /* Component (0 = luminance, 1 = U, 2 = V) */
   int length_in;
   /* need to be able to know what went wrong in deployments */
-  int debug = (logger != NULL);
+  int debug = (cfg->logger != NULL);
   unsigned char byte;
   int blk_y, bheight, bwidth, offset_y, i, k;
   //  JDIMENSION blocknum, MCU_cols;
@@ -222,7 +221,6 @@ int ijel_stuff_message(jel_config *cfg) {
   if (fspec->nfreqs < 4) {
     if( debug ) {
       jel_log(cfg, "ijel_stuff_message: Sorry - not enough good frequencies at this quality factor.\n");
-      fflush(logger);
     }
     return 0;
   }
@@ -310,7 +308,6 @@ int ijel_unstuff_message(jel_config *cfg) {
 
   struct jpeg_decompress_struct *cinfo = &(cfg->srcinfo);
   jvirt_barray_ptr *coef_arrays = cfg->coefs;
-  FILE *logger = cfg->logger;
   jel_freq_spec *fspec = &(cfg->freqs);
   int *flist;
   unsigned char *message = cfg->data;
@@ -331,7 +328,7 @@ int ijel_unstuff_message(jel_config *cfg) {
   JBLOCKARRAY row_ptrs;
 
   /* need to be able to know what went wrong in deployments */
-  int debug = (logger != NULL);
+  int debug = (cfg->logger != NULL);
   //size_t block_row_size = (size_t) SIZEOF(JCOEF)*DCTSIZE2*cinfo->comp_info[compnum].width_in_blocks;
 
   /* This uses the source quant tables, which is fine: */
