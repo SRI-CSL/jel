@@ -1,6 +1,6 @@
-#include "jel/jpeg-6b/jinclude.h"
-#include "jel/jpeg-6b/jpeglib.h"
-#include "jel/jpeg-6b/jerror.h"
+#include "jpeg-9a/jinclude.h"
+#include "jpeg-9a/jpeglib.h"
+#include "jpeg-9a/jerror.h"
 
 /*
  * This output manager interfaces jpeg I/O with memory buffers.
@@ -142,8 +142,10 @@ term_destination (j_compress_ptr cinfo)
  * for closing it after finishing compression.
  */
 
+// Incompatible collision with jpeg_mem_dest in jpeg-9a/jdatadst.c
+// How to resolve?
 GLOBAL(void)
-jpeg_mem_dest (j_compress_ptr cinfo, unsigned char* data, int size)
+jpeg_memory_dest (j_compress_ptr cinfo, unsigned char* data, int size)
 {
   mem_dest_ptr dest;
 

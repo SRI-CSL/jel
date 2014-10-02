@@ -10,9 +10,9 @@
  */
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-#include "jel/jpeg-6b/jinclude.h"
-#include "jel/jpeg-6b/jpeglib.h"
-#include "jel/jpeg-6b/jerror.h"
+#include "jpeg-9a/jinclude.h"
+#include "jpeg-9a/jpeglib.h"
+#include "jpeg-9a/jerror.h"
 
 
 /* Expanded data source object for mem input */
@@ -186,7 +186,7 @@ term_source (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_mem_src (j_decompress_ptr cinfo, unsigned char *data, int size)
+jpeg_memory_src (j_decompress_ptr cinfo, unsigned char *data, int size)
 {
   my_src_ptr src;
 

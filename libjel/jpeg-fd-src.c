@@ -16,9 +16,9 @@
 
 /* this is not a core library module, so it doesn't define JPEG_INTERNALS */
 #include "unistd.h"
-#include "jel/jpeg-6b/jinclude.h"
-#include "jel/jpeg-6b/jpeglib.h"
-#include "jel/jpeg-6b/jerror.h"
+#include "jpeg-9a/jinclude.h"
+#include "jpeg-9a/jpeglib.h"
+#include "jpeg-9a/jerror.h"
 
 #include "misc.h"
 
