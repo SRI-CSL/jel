@@ -7,5 +7,5 @@ Name: JEL
 Description: JPEG Embedding Library
 Version: @VERSION@
 Libs: -L${libdir} -ljel
-Cflags: -I${includedir} -I${includedir}/jel -I${includedir}/jel/jpeg-6b
+Cflags: -I${includedir} -I${includedir}/jel -I${includedir}/jel/jpeg-9a
 
