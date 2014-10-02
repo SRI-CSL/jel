@@ -22,8 +22,8 @@
 #include <setjmp.h>
 
 
-void jpeg_mem_src (j_decompress_ptr cinfo, unsigned char *data, int size);
-void jpeg_mem_dest (j_compress_ptr cinfo, unsigned char* data, int size);
+void jpeg_memory_src (j_decompress_ptr cinfo, unsigned char *data, int size);
+void jpeg_memory_dest (j_compress_ptr cinfo, unsigned char* data, int size);
 
 
 
@@ -289,7 +289,7 @@ int jel_set_mem_source( jel_config *cfg, unsigned char *mem, int size ) {
 
   if (setjmp(jerr.jmpbuff)) { return -1; }
 
-  jpeg_mem_src( &(cfg->srcinfo), mem, size );
+  jpeg_memory_src( &(cfg->srcinfo), mem, size );
 
   return ijel_open_source( cfg );
 }
@@ -297,7 +297,7 @@ int jel_set_mem_source( jel_config *cfg, unsigned char *mem, int size ) {
 
 int jel_set_mem_dest( jel_config *cfg, unsigned char *mem, int size) {
 
-  jpeg_mem_dest( &(cfg->dstinfo), mem, size );
+  jpeg_memory_dest( &(cfg->dstinfo), mem, size );
   cfg->jel_errno = 0;
 
   return 0;

@@ -20,8 +20,7 @@ jeldir = $(prefix)/lib
 jel_LIBRARIES = libjel.a
 
 SYSDEPSOURCES = \
-	jpeg-6b/jmemansi.c \
-	jpeg-6b/jdatadst.c 
+	jpeg-9a/jmemansi.c  #jpeg-9a/jdatadst.c 
 
 bindir =  $(exec_prefix)/bin
 bin_PROGRAMS = jpegtran wedge unwedge jblock jhist jquant wcap 
@@ -32,12 +31,12 @@ pkgconfig_DATA = jel.pc
 includedir = $(prefix)
 nobase_include_HEADERS = \
 	include/jel/jel.h \
-	include/jel/jpeg-6b/jconfig.h \
-	include/jel/jpeg-6b/jerror.h \
-	include/jel/jpeg-6b/jinclude.h \
-	include/jel/jpeg-6b/jmorecfg.h \
-	include/jel/jpeg-6b/jpegint.h \
-	include/jel/jpeg-6b/jpeglib.h
+	include/jel/jpeg-9a/jconfig.h \
+	include/jel/jpeg-9a/jerror.h \
+	include/jel/jpeg-9a/jinclude.h \
+	include/jel/jpeg-9a/jmorecfg.h \
+	include/jel/jpeg-9a/jpegint.h \
+	include/jel/jpeg-9a/jpeglib.h
 
 
 JEL_LIBS = $(jel_LIBRARIES)
@@ -67,60 +66,63 @@ wcap_SOURCES = utils/wcap.c $(SYSDEPSOURCES)
 wcap_LDADD = $(JEL_LIBS)
 
 jpegtran_SOURCES = \
-	jpeg-6b/jpegtran.c \
-	jpeg-6b/transupp.c \
-	jpeg-6b/cdjpeg.c \
-	jpeg-6b/rdswitch.c \
+	jpeg-9a/jpegtran.c \
+	jpeg-9a/transupp.c \
+	jpeg-9a/cdjpeg.c \
+	jpeg-9a/rdswitch.c \
+	libjel/jpeg-stdio-src.c \
+	libjel/jpeg-stdio-dst.c \
 	$(SYSDEPSOURCES)
 
 jpegtran_LDADD = libjpeg.a
 
 libjpeg_a_SOURCES = \
-	jpeg-6b/jcapimin.c \
-	jpeg-6b/jcapistd.c \
-	jpeg-6b/jccoefct.c \
-	jpeg-6b/jccolor.c \
-	jpeg-6b/jcdctmgr.c \
-	jpeg-6b/jchuff.c \
-	jpeg-6b/jcinit.c \
-	jpeg-6b/jcmainct.c \
-	jpeg-6b/jcmarker.c \
-	jpeg-6b/jcmaster.c \
-	jpeg-6b/jcomapi.c \
-	jpeg-6b/jcparam.c \
-	jpeg-6b/jcphuff.c \
-	jpeg-6b/jcprepct.c \
-	jpeg-6b/jcsample.c \
-	jpeg-6b/jctrans.c \
-	jpeg-6b/jdapimin.c \
-	jpeg-6b/jdapistd.c \
-	jpeg-6b/jdatadst.c \
-	jpeg-6b/jdatasrc.c \
-	jpeg-6b/jdcoefct.c \
-	jpeg-6b/jdcolor.c \
-	jpeg-6b/jddctmgr.c \
-	jpeg-6b/jdhuff.c \
-  jpeg-6b/jdinput.c \
-	jpeg-6b/jdmainct.c \
-	jpeg-6b/jdmarker.c \
-	jpeg-6b/jdmaster.c \
-	jpeg-6b/jdmerge.c \
-	jpeg-6b/jdphuff.c \
-	jpeg-6b/jdpostct.c \
-	jpeg-6b/jdsample.c \
-	jpeg-6b/jdtrans.c \
-	jpeg-6b/jerror.c \
-	jpeg-6b/jfdctflt.c \
-	jpeg-6b/jfdctfst.c \
-	jpeg-6b/jfdctint.c \
-	jpeg-6b/jidctflt.c \
-	jpeg-6b/jidctfst.c \
-	jpeg-6b/jidctint.c \
-	jpeg-6b/jidctred.c \
-	jpeg-6b/jquant1.c \
-	jpeg-6b/jquant2.c \
-	jpeg-6b/jutils.c \
-	jpeg-6b/jmemmgr.c
+	jpeg-9a/jaricom.c \
+	jpeg-9a/jcapimin.c \
+	jpeg-9a/jcapistd.c \
+	jpeg-9a/jcarith.c \
+	jpeg-9a/jccoefct.c \
+	jpeg-9a/jccolor.c \
+	jpeg-9a/jcdctmgr.c \
+	jpeg-9a/jchuff.c \
+	jpeg-9a/jcinit.c \
+	jpeg-9a/jcmainct.c \
+	jpeg-9a/jcmarker.c \
+	jpeg-9a/jcmaster.c \
+	jpeg-9a/jcomapi.c \
+	jpeg-9a/jcparam.c \
+	jpeg-9a/jcprepct.c \
+	jpeg-9a/jcsample.c \
+	jpeg-9a/jctrans.c \
+	jpeg-9a/jdapimin.c \
+	jpeg-9a/jdapistd.c \
+	jpeg-9a/jdarith.c \
+	jpeg-9a/jdcoefct.c \
+	jpeg-9a/jdcolor.c \
+	jpeg-9a/jddctmgr.c \
+	jpeg-9a/jdhuff.c \
+	jpeg-9a/jdinput.c \
+	jpeg-9a/jdmainct.c \
+	jpeg-9a/jdmarker.c \
+	jpeg-9a/jdmaster.c \
+	jpeg-9a/jdmerge.c \
+	jpeg-9a/jdpostct.c \
+	jpeg-9a/jdsample.c \
+	jpeg-9a/jdtrans.c \
+	jpeg-9a/jerror.c \
+	jpeg-9a/jfdctflt.c \
+	jpeg-9a/jfdctfst.c \
+	jpeg-9a/jfdctint.c \
+	jpeg-9a/jidctflt.c \
+	jpeg-9a/jidctfst.c \
+	jpeg-9a/jidctint.c \
+	jpeg-9a/jquant1.c \
+	jpeg-9a/jquant2.c \
+	jpeg-9a/jutils.c \
+	jpeg-9a/jmemmgr.c
+
+#	jpeg-9a/jdatadst.c	jpeg-9a/jdatasrc.c
+
 
 RSCODE_SOURCES = \
 	rscode/rs.c  \
@@ -135,6 +137,8 @@ libjel_a_SOURCES = \
 	libjel/jpeg-fd-src.c \
 	libjel/jpeg-mem-dst.c \
 	libjel/jpeg-mem-src.c \
+	libjel/jpeg-stdio-dst.c \
+	libjel/jpeg-stdio-src.c \
 	libjel/jel.c \
 	$(SYSDEPSOURCES) \
 	$(RSCODE_SOURCES) \

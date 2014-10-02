@@ -12,10 +12,10 @@
 #ifndef __JEL_H__
 
 #include <string.h>
-#include <jel/jpeg-6b/jinclude.h>
-#include <jel/jpeg-6b/jpeglib.h>
-#include <jel/jpeg-6b/jerror.h>
-#include <jel/jpeg-6b/jpegint.h>
+#include <jel/jpeg-9a/jinclude.h>
+#include <jel/jpeg-9a/jpeglib.h>
+#include <jel/jpeg-9a/jerror.h>
+#include <jel/jpeg-9a/jpegint.h>
 #include <stdarg.h>
 
 #ifdef __cplusplus
