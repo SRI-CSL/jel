@@ -1,9 +1,8 @@
-#include "jpeg-9a/jinclude.h"
-#include "jpeg-9a/jpeglib.h"
-#include "jpeg-9a/jerror.h"
+#include <jel/jel.h>
 
 #include "misc.h"
 
+#include "unistd.h"
 
 /*
  * This output manager interfaces jpeg I/O with file descriptors and
@@ -74,8 +73,8 @@ METHODDEF(boolean)
 empty_output_buffer (j_compress_ptr cinfo)
 {
   fd_dest_ptr dest = (fd_dest_ptr) cinfo->dest;
-
-  if (fullwrite(dest->fd, (char*) dest->buffer, OUTPUT_BUF_SIZE) !=
+  //iam: this was a fullwrite
+  if (write(dest->fd, (char*) dest->buffer, OUTPUT_BUF_SIZE) !=
       (size_t) OUTPUT_BUF_SIZE)
     ERREXIT(cinfo, JERR_FILE_WRITE);
 
@@ -103,7 +102,8 @@ term_destination (j_compress_ptr cinfo)
 
   /* Write any data remaining in the buffer */
   if (datacount > 0) {
-    if (fullwrite(dest->fd, (char*) dest->buffer, datacount) != datacount)
+    //iam: this was a fullwrite
+    if (write(dest->fd, (char*) dest->buffer, datacount) != datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
   /* Make sure we wrote the output file OK */

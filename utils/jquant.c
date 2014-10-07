@@ -6,6 +6,7 @@
  * use of N bits (where N is presented on the command line).
  */
 #include <jel/jel.h>
+#include <stdlib.h>
 
 static int nfreqs = 4;
 static int nlevels = 8;

@@ -1,6 +1,7 @@
 #include <jel/jel.h>
 #include <setjmp.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 
 typedef struct {

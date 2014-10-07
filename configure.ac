@@ -11,7 +11,9 @@ AC_PROG_CC
 
 AC_PROG_RANLIB
 
-#PKG_PROG_PKG_CONFIG
+AC_CHECK_HEADER(jpeglib.h)
+
+AC_CHECK_LIB(jpeg, main)
 
 AC_CONFIG_FILES([Makefile jel.pc])
 

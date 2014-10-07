@@ -14,11 +14,9 @@
  * than 8 bits on your machine, you may need to do some tweaking.
  */
 
-/* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-#include "jel/jpeg-9a/jinclude.h"
-#include "jel/jpeg-9a/jpeglib.h"
-#include "jel/jpeg-9a/jerror.h"
+#include <jel/jel.h>
 
+#include "misc.h"
 
 /* Expanded data source object for stdio input */
 
@@ -92,7 +90,7 @@ fill_input_buffer (j_decompress_ptr cinfo)
   my_src_ptr src = (my_src_ptr) cinfo->src;
   size_t nbytes;
 
-  nbytes = JFREAD(src->infile, src->buffer, INPUT_BUF_SIZE);
+  nbytes = fread(src->buffer, 1, INPUT_BUF_SIZE, src->infile);
 
   if (nbytes <= 0) {
     if (src->start_of_file)	/* Treat empty input file as fatal error */

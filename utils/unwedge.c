@@ -16,6 +16,8 @@
 #include <jel/jel.h>
 #include <ctype.h>		/* to declare isprint() */
 
+#include <stdlib.h>
+
 #define UNWEDGE_VERSION "1.0.0.4"
 
 /*

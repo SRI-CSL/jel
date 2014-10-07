@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <jel/jel.h>
+#include <stdlib.h>
 
 /*
  * Argument-parsing code.

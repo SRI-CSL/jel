@@ -14,10 +14,9 @@
  * than 8 bits on your machine, you may need to do some tweaking.
  */
 
-/* this is not a core library module, so it doesn't define JPEG_INTERNALS */
-#include "jpeg-9a/jinclude.h"
-#include "jpeg-9a/jpeglib.h"
-#include "jpeg-9a/jerror.h"
+#include <jel/jel.h>
+
+#include "misc.h"
 
 
 /* Expanded data destination object for stdio output */
@@ -85,8 +84,7 @@ empty_output_buffer (j_compress_ptr cinfo)
 
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
 
-  if (JFWRITE(dest->outfile, dest->buffer, OUTPUT_BUF_SIZE)
-      != (size_t) OUTPUT_BUF_SIZE)
+  if (fwrite(dest->buffer, 1, OUTPUT_BUF_SIZE, dest->outfile) != (size_t) OUTPUT_BUF_SIZE)
     ERREXIT(cinfo, JERR_FILE_WRITE);
 
   dest->length += OUTPUT_BUF_SIZE;
@@ -114,7 +112,7 @@ term_destination (j_compress_ptr cinfo)
 
   /* Write any data remaining in the buffer */
   if (datacount > 0) {
-    if (JFWRITE(dest->outfile, dest->buffer, datacount) != datacount)
+    if (fwrite(dest->buffer, 1, datacount, dest->outfile) != datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
     dest->length += datacount;
   }

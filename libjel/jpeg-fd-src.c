@@ -14,11 +14,9 @@
  * bits on your machine, you may need to do some tweaking.
  */
 
-/* this is not a core library module, so it doesn't define JPEG_INTERNALS */
+#include <jel/jel.h>
+
 #include "unistd.h"
-#include "jpeg-9a/jinclude.h"
-#include "jpeg-9a/jpeglib.h"
-#include "jpeg-9a/jerror.h"
 
 #include "misc.h"
 

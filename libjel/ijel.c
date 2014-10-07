@@ -11,8 +11,6 @@
  */
 
 #include <math.h>
-#include "jel/jpeg-9a/jinclude.h"
-#include "jel/jpeg-9a/jpeglib.h"
 #include "jel/jel.h"
 
 /* ECC-related prototypes: */

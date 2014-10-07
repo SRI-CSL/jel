@@ -11,6 +11,8 @@
 
 #include <jel/jel.h>
 
+#include "misc.h"
+
 #define WEDGEDEBUG 0
 #define UNWEDGEDEBUG 0
 
@@ -221,9 +223,9 @@ static int ijel_open_source(jel_config *cfg) {
     compptr = srcinfo->comp_info + ci;
     coef_arrays[ci] = (*dstinfo->mem->request_virt_barray)
       ((j_common_ptr) dstinfo, JPOOL_IMAGE, FALSE,
-       (JDIMENSION) jround_up((long) compptr->width_in_blocks,
+       (JDIMENSION) round_up((long) compptr->width_in_blocks,
                               (long) compptr->h_samp_factor),
-       (JDIMENSION) jround_up((long) compptr->height_in_blocks,
+       (JDIMENSION) round_up((long) compptr->height_in_blocks,
                               (long) compptr->v_samp_factor),
        (JDIMENSION) compptr->v_samp_factor);
   }

@@ -6,6 +6,6 @@ includedir=${prefix}/include
 Name: JEL
 Description: JPEG Embedding Library
 Version: @VERSION@
-Libs: -L${libdir} -ljel
-Cflags: -I${includedir} -I${includedir}/jel -I${includedir}/jel/jpeg-9a
+Libs: -L${libdir} -ljel -ljpeg
+Cflags: -I${includedir} -I${includedir}/jel 
 

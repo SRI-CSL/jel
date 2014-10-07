@@ -10,6 +10,7 @@
 
 #include <jel/jel.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 /*
  * Argument-parsing code.

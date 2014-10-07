@@ -1,1 +1,0 @@
-../../../jpeg-6b/jconfig.h

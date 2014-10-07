@@ -12,11 +12,18 @@
 #ifndef __JEL_H__
 
 #include <string.h>
-#include <jel/jpeg-9a/jinclude.h>
-#include <jel/jpeg-9a/jpeglib.h>
-#include <jel/jpeg-9a/jerror.h>
-#include <jel/jpeg-9a/jpegint.h>
+
+
+//iam: these are needed for jpeglib.h
+#include <stddef.h>
+#include <stdio.h>
+
+#include <jpeglib.h>
+#include <jerror.h>
+
 #include <stdarg.h>
+
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
