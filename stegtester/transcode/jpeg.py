@@ -11,9 +11,10 @@ if len(sys.argv) == 4:
      fileout = sys.argv[2]
      target_jpeg_quality = int(sys.argv[3])
      img = Image.open(filein)
-     print "img info: ", img.format, img.size, img.mode
-     # img.save(fileout, "JPEG", quality=target_jpeg_quality)
-     img.save(fileout, "JPEG")
+     print "input img info: ", img.format, img.size, img.mode
+     img.save(fileout, "JPEG", quality=target_jpeg_quality)
+     img = Image.open(fileout)
+     print "output img info: ", img.format, img.size, img.mode
 else:
      print "Usage: jpeg.py <input file> <output file> <target jpeg quality>"
 
