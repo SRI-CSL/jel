@@ -73,8 +73,7 @@ METHODDEF(boolean)
 empty_output_buffer (j_compress_ptr cinfo)
 {
   fd_dest_ptr dest = (fd_dest_ptr) cinfo->dest;
-  //iam: this was a fullwrite
-  if (write(dest->fd, (char*) dest->buffer, OUTPUT_BUF_SIZE) !=
+  if (fullwrite(dest->fd, (char*) dest->buffer, OUTPUT_BUF_SIZE) !=
       (size_t) OUTPUT_BUF_SIZE)
     ERREXIT(cinfo, JERR_FILE_WRITE);
 
@@ -102,8 +101,7 @@ term_destination (j_compress_ptr cinfo)
 
   /* Write any data remaining in the buffer */
   if (datacount > 0) {
-    //iam: this was a fullwrite
-    if (write(dest->fd, (char*) dest->buffer, datacount) != datacount)
+    if (fullwrite(dest->fd, (char*) dest->buffer, datacount) != datacount)
       ERREXIT(cinfo, JERR_FILE_WRITE);
   }
   /* Make sure we wrote the output file OK */
