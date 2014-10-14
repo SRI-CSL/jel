@@ -7,6 +7,8 @@ from subprocess import call
 
 import os.path
 
+culprits = [];
+
 failures = 0
 
 successes = 0
@@ -33,14 +35,19 @@ def wedge_unwedge(dir, imageno):
 def wedge_transcode_unwedge(dir, imageno):
     global successes
     global failures
+    global culprits
     image = str(imageno)
-    call(['wedge', '-message', '0123456789', dir + '/' + image + '.jpg',  image + '_jel.jpg'])
+    source = dir + '/' + image + '.jpg'
+    call(['wedge', '-message', '0123456789', source,  image + '_jel.jpg'])
     transcode(image + '_jel.jpg',  image + '_jel_tr.jpg', 30)
     call(['unwedge', image + '_jel_tr.jpg', 'text.txt'])
     failure = call(['diff', 'text.txt', 'orig.bin'])
     if failure:
         print "wedge_transcode_unwedge %s FAILED\n" % format( image + '.jpg')
         failures += 1
+        culprits.append(source);
+
+
     else:
         print "wedge_transcode_unwedge %s OK\n" % format( image + '.jpg')
         successes += 1
@@ -51,6 +58,10 @@ for imageno in range(101, 500):
         wedge_unwedge('q30', imageno)
         wedge_transcode_unwedge('q30', imageno)
 
+print "Successes: ", successes
+
 print "Failures: ", failures
 
-print "Successes: ", successes
+
+print "Culprits: ", culprits
+
