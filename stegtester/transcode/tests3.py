@@ -74,8 +74,9 @@ def diff(file1, file2):
 
 
 def make_randmsg(nbytes):
+    global randmsg
     f = open('/tmp/wedgetest.msg', "wb")
-    call(["randmsg", str(nbytes)], stdout=f)
+    call([randmsg, str(nbytes)], stdout=f)
     f.close()
 
 
