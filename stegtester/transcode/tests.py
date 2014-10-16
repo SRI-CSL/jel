@@ -63,8 +63,8 @@ def wedge_unwedge(dir, imageno, messagein, messageout):
     if failure:
         print "wedge-unwedge %s FAILED\n" % format( image + '.jpg')
         exit()
-    #else:
-    #    print "wedge-unwedge %s OK\n" % format( image + '.jpg')
+    else:
+        print "wedge-unwedge %s OK\n" % format( image + '.jpg')
 
 
 def wedge_transcode_unwedge(dir, imageno, messagein, messageout):
@@ -85,7 +85,7 @@ def wedge_transcode_unwedge(dir, imageno, messagein, messageout):
         successes += 1
 
 
-generate_message("message_in.bin", 10)
+generate_message("message_in.bin", 1024)
 
 for imageno in range(101, 500):
     image = str(imageno)
