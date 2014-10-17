@@ -20,7 +20,7 @@ jeldir = $(prefix)/lib
 jel_LIBRARIES = libjel.a
 
 bindir =  $(exec_prefix)/bin
-bin_PROGRAMS = wedge unwedge jblock jhist jquant wcap 
+bin_PROGRAMS = wedge unwedge jblock jhist jquant wcap energy
 
 pkgconfigdir = $(prefix)/lib/pkgconfig
 pkgconfig_DATA = jel.pc
@@ -54,6 +54,10 @@ jquant_LDADD = $(JEL_LIBS)
 wcap_SOURCES = utils/wcap.c
 
 wcap_LDADD = $(JEL_LIBS)
+
+energy_SOURCES = utils/energy.c
+
+energy_LDADD = $(JEL_LIBS)
 
 RSCODE_SOURCES = \
 	rscode/rs.c  \

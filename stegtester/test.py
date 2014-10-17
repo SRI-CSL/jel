@@ -27,8 +27,8 @@ def byte_hamming(char1, char2):
         if ( x & 1 ): i = i + 1
         x = x >> 1
     
-    fmap[k1] += 1
-    if (i > 0): emap[k1] = emap[k1] + 1
+ #   fmap[k1] += 1
+ #   if (i > 0): emap[k1] = emap[k1] + 1
 
     return i
 

@@ -102,6 +102,31 @@ int *ijel_freqs( jel_config *cfg ) {
 }
 
 
+/*
+ * Returns the l2 norm of the frequency energy EXCLUDING those
+ * frequencies that will be used for embedding.
+ */
+
+static double dct_energy( jel_config *cfg, JCOEF *mcu ) {
+  int i, j, ok;
+  double e = 0.0;
+  jel_freq_spec *fspec = &(cfg->freqs);
+
+  for (i = 0; i < DCTSIZE2; i++) {
+    ok = 1;
+    /* This version computes the energy for frequencies that are not
+       in the admissible set of embedding freqs.  We could narrow this
+       down to the list of in_use freqs. */
+    for (j = 0; j < fspec->nfreqs && ok; j++)
+      if (i == fspec->freqs[j]) ok = 0;
+
+    if (ok) e += (mcu[i] * mcu[i]);
+  }
+
+  return sqrt(e);
+}
+
+
 /* More information could be stored in Message structs, e.g., how many
  * bits per freq. to use.
  */
@@ -121,6 +146,95 @@ static unsigned char extract_byte( int *freq, JCOEF *mcu ) {
     (  0x30 & (mcu[ freq[2] ] << 4)) |
     (  0xC0 & (mcu[ freq[3] ] << 6));
 }
+
+
+/*
+ * Survey of MCU energies:
+ */
+
+int ijel_print_energies(jel_config *cfg) {
+
+  struct jpeg_decompress_struct *cinfo = &(cfg->srcinfo);
+  struct jpeg_compress_struct *dinfo = &(cfg->dstinfo);
+  jvirt_barray_ptr *coef_arrays = cfg->coefs;
+  jel_freq_spec *fspec = &(cfg->freqs);
+
+  /* This could use some cleanup to make sure that we really need all
+   * these variables! */
+  int compnum = 0; /* Component (0 = luminance, 1 = U, 2 = V) */
+  /* need to be able to know what went wrong in deployments */
+  int debug = (cfg->logger != NULL);
+  int blk_y, bheight, bwidth, offset_y;
+  //  JDIMENSION blocknum, MCU_cols;
+  JDIMENSION blocknum;
+  jvirt_barray_ptr comp_array = coef_arrays[compnum];
+  jpeg_component_info *compptr;
+  JQUANT_TBL *qtable;
+  JCOEF *mcu;
+  JBLOCKARRAY row_ptrs;
+  double energy, min_energy, max_energy;
+
+  /* If not already specified, find a set of frequencies suitable for
+     embedding 8 bits per MCU.  Use the destination object, NOT cinfo,
+     which is the source: */
+  if (fspec->nfreqs == 0) {
+    /* If we explicitly set the output quality, then this will be
+     * non-NULL, but otherwise we will need to get the tables from the
+     * source: */
+    qtable = dinfo->quant_tbl_ptrs[0];
+    if (!qtable) qtable = cinfo->quant_tbl_ptrs[0];
+
+    fspec->nfreqs = ijel_find_freqs(qtable, fspec->freqs, 4, fspec->nlevels);
+  }
+
+  /* Check to see that we have at least 4 good frequencies.  This
+     implicitly assumes that we are packing 8 bits per MCU.  We will
+     want to change that in future versions. */ 
+  if (fspec->nfreqs < 4) {
+    if( debug ) {
+      jel_log(cfg, "ijel_stuff_message: Sorry - not enough good frequencies at this quality factor.\n");
+    }
+    return 0;
+  }
+
+  bheight = cinfo->comp_info[compnum].height_in_blocks;
+  bwidth = cinfo->comp_info[compnum].width_in_blocks;
+
+  compptr = cinfo->comp_info + compnum;
+  min_energy = max_energy = -1.0;
+
+  /* Now we walk through the MCUs of the JPEG image. */
+  for (blk_y = 0; blk_y < bheight;
+       blk_y += compptr->v_samp_factor) {
+
+    row_ptrs = ( (cinfo)->mem->access_virt_barray ) 
+      ((j_common_ptr) cinfo,
+       comp_array,
+       blk_y,
+       (JDIMENSION) compptr->v_samp_factor,
+       TRUE);
+
+    for (offset_y = 0; offset_y < compptr->v_samp_factor;  offset_y++) {
+
+      for (blocknum=0; blocknum < bwidth; blocknum++) {
+        /* Grab the next MCU, get the frequencies to use, and insert a
+         * byte: */
+	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+	energy = dct_energy(cfg, mcu);
+	printf("%f\n", energy);
+	if (min_energy < 0.0 || energy < min_energy)
+	  min_energy = energy;
+	if (max_energy < 0.0 || energy > max_energy)
+	  max_energy = energy;
+
+      }
+    }
+  }
+  printf("# min,max energy = %f, %f\n", min_energy, max_energy);
+  
+  return 0;
+}
+
 
 
 /*
