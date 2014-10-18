@@ -142,6 +142,9 @@ jel_config * jel_init( int nlevels ) {
   result->bits_per_freq = 2;
   result->bytes_per_mcu = 1;
 
+  /* MCU energy threshold is 20.0: */
+  result->ethresh = 20.0;
+
   return result;
 }
 
@@ -522,11 +525,11 @@ int    jel_capacity( jel_config * cfg ) {
    * AFTER we have called 'jel_set_xxx_source'.  At present, only
    * luminance is considered.
    */
-  struct jpeg_decompress_struct *cinfo;
   int ijel_ecc_cap(int);
-  int bwidth, bheight, cap1, cap2;
-  int compnum = 0;
+  int ijel_capacity(jel_config *);
+  int cap1;
 
+#if 0
   cinfo = &(cfg->srcinfo);
 
   /* This doesn't take into account the h_ and v_ sampling factors,
@@ -547,6 +550,11 @@ int    jel_capacity( jel_config * cfg ) {
   /* cap2 is consistently 0 */
   jel_log(cfg, "jel_capacity returns %d (bwidth=%d, bheight=%d, image dimension says %d)\n",
 	  cap1, bwidth, bheight, cap2);
+
+#endif
+
+  /* This measures capacity by taking into account the energy constraints: */
+  cap1 = ijel_capacity(cfg);
 
   /* If ECC is requested, compute capacity subject to ECC overhead: */
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {

@@ -4,12 +4,13 @@ import sys
 from PIL import Image
 
 from subprocess import call
+from subprocess import check_output
 
 import os.path
 
 randmsg = '../../bin/randmsg'
 
-msglen = 18000
+# msglen = 18000
 
 flist = '10,9,8,3'
 flist = '18,17,16,10'
@@ -92,10 +93,26 @@ def wedge_unwedge(dir, imageno):
     global successes
     global failures
     image = str(imageno)
+    source = dir + '/' + image + '.jpg'
+
+    msglen = int(check_output(['wcap', source])) - 10 
     make_randmsg(msglen)
-    call(['wedge', '-data', '/tmp/wedgetest.msg', '-ecc', str(ecclen), '-nolength',  '-freq', flist, dir + '/' + image + '.jpg',  image + '_jel.jpg'])
-    call(['unwedge', '-length', str(msglen), '-ecc', str(ecclen), '-freq', flist, image + '_jel.jpg', 'text.txt'])
+
+    call(['wedge',
+          '-data', '/tmp/wedgetest.msg',
+#          '-ecc', str(ecclen),
+          '-nolength',
+#          '-freq', flist,
+          source,  image + '_jel.jpg'])
+
+    call(['unwedge',
+          '-length', str(msglen),
+#          '-ecc', str(ecclen),
+#          '-freq', flist,
+          image + '_jel.jpg', 'text.txt'])
+
 #    failure = call(['diff', 'text.txt', '/tmp/wedgetest.msg'])
+
     [failure, nbits, tot] = diff('text.txt', '/tmp/wedgetest.msg')
     if failure:
         print "wedge-unwedge {0} FAILED ({1} bits)\n".format( image + '.jpg', nbits)
@@ -104,23 +121,41 @@ def wedge_unwedge(dir, imageno):
         print "wedge-unwedge %s OK\n" % format( image + '.jpg')
         successes += 1
 
+
+
 def wedge_transcode_unwedge(dir, imageno):
     global successes
     global failures
     global culprits
     image = str(imageno)
     source = dir + '/' + image + '.jpg'
+
+    msglen = int(check_output(['wcap', source])) - 10 
     make_randmsg(msglen)
-    call(['wedge', '-data', '/tmp/wedgetest.msg', '-ecc', str(ecclen), '-nolength', '-freq', flist, source,  image + '_jel.jpg'])
+
+    call(['wedge',
+          '-data', '/tmp/wedgetest.msg',
+#          '-ecc', str(ecclen),
+          '-nolength',
+          '-freq', flist,
+          source,  image + '_jel.jpg'])
+
     transcode_1(image + '_jel.jpg',  image + '_jel_tr.jpg', 30)
-    call(['unwedge', '-length', str(msglen), '-ecc', str(ecclen), '-freq', flist, image + '_jel_tr.jpg', 'text.txt'])
+
+    call(['unwedge',
+          '-length', str(msglen),
+#          '-ecc', str(ecclen),
+          '-freq', flist,
+          image + '_jel_tr.jpg', 'text.txt'])
+
 #    failure = call(['diff', 'text.txt', '/tmp/wedgetest.msg'])
+
     [failure, nbits, tot] = diff('text.txt', '/tmp/wedgetest.msg')
     if failure:
         print "wedge_transcode_unwedge {0} FAILED ({1} bits)\n".format( image + '.jpg', nbits)
         failures += 1
         culprits.append(source);
-        call(['convert', '-compose', 'subtract', image + '_jel.jpg', image + '_jel_tr.jpg', image + '_diff.jpg'])
+        call(['composite', '-compose', 'subtract', image + '_jel.jpg', image + '_jel_tr.jpg', image + '_diff.jpg'])
 
     else:
         print "wedge_transcode_unwedge %s OK\n" % format( image + '.jpg')

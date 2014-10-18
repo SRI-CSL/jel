@@ -14,7 +14,7 @@ ACLOCAL_AMFLAGS = -I config-aux --install
 
 AM_CPPFLAGS = -Werror -Wall -DECC -DJEL_VERSION='"$(VERSION)"' -I. -I$(srcdir)/include -I$(srcdir)/rscode  $(PROJECT_GIT_STAMPS)
 
-LIBS = -ljpeg
+LIBS = -ljpeg -lm
 
 jeldir = $(prefix)/lib
 jel_LIBRARIES = libjel.a

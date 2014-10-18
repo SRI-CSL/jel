@@ -116,7 +116,7 @@ typedef struct {
   int ecc_blocklen;
   int bits_per_freq;
   int bytes_per_mcu;
-
+  double ethresh;       // Energy threshold for MCU
 } jel_config;
 
 

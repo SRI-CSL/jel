@@ -15,6 +15,8 @@ AC_CHECK_HEADER(jpeglib.h)
 
 AC_CHECK_LIB(jpeg, main)
 
+AC_CHECK_LIB(m, main)
+
 AC_CONFIG_FILES([Makefile jel.pc])
 
 AC_OUTPUT

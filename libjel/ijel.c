@@ -103,16 +103,26 @@ int *ijel_freqs( jel_config *cfg ) {
 
 
 /*
- * Returns the l2 norm of the frequency energy EXCLUDING those
- * frequencies that will be used for embedding.
+ * Returns the l2 norm of the AC energy EXCLUDING those frequencies
+ * that will be used for embedding.
  */
 
-static double dct_energy( jel_config *cfg, JCOEF *mcu ) {
+#if 0
+static double dc_value( jel_config *cfg, JCOEF *mcu) {
+  struct jpeg_decompress_struct *info = &(cfg->srcinfo);
+  JQUANT_TBL *qtable;
+
+  qtable = info->quant_tbl_ptrs[0];
+}
+#endif
+
+static double ac_energy( jel_config *cfg, JCOEF *mcu ) {
   int i, j, ok;
   double e = 0.0;
   jel_freq_spec *fspec = &(cfg->freqs);
 
-  for (i = 0; i < DCTSIZE2; i++) {
+  /* We'll treat the DC component separately, so leave it out: */
+  for (i = 1; i < DCTSIZE2; i++) {
     ok = 1;
     /* This version computes the energy for frequencies that are not
        in the admissible set of embedding freqs.  We could narrow this
@@ -220,7 +230,7 @@ int ijel_print_energies(jel_config *cfg) {
         /* Grab the next MCU, get the frequencies to use, and insert a
          * byte: */
 	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
-	energy = dct_energy(cfg, mcu);
+	energy = ac_energy(cfg, mcu);
 	printf("%f\n", energy);
 	if (min_energy < 0.0 || energy < min_energy)
 	  min_energy = energy;
@@ -236,6 +246,89 @@ int ijel_print_energies(jel_config *cfg) {
 }
 
 
+
+int ijel_usable_mcu(jel_config *cfg, JCOEF *mcu) {
+  //  return ( ac_energy(cfg, mcu) < cfg->ethresh );
+  return 1;
+}
+
+
+
+int ijel_capacity(jel_config *cfg) {
+  /* Returns the number of admissible MCUs */
+
+  struct jpeg_decompress_struct *cinfo = &(cfg->srcinfo);
+  struct jpeg_compress_struct *dinfo = &(cfg->dstinfo);
+  jvirt_barray_ptr *coef_arrays = cfg->coefs;
+  jel_freq_spec *fspec = &(cfg->freqs);
+
+  /* This could use some cleanup to make sure that we really need all
+   * these variables! */
+  int compnum = 0; /* Component (0 = luminance, 1 = U, 2 = V) */
+  /* need to be able to know what went wrong in deployments */
+  int debug = (cfg->logger != NULL);
+  int blk_y, bheight, bwidth, offset_y;
+  //  JDIMENSION blocknum, MCU_cols;
+  JDIMENSION blocknum;
+  jvirt_barray_ptr comp_array = coef_arrays[compnum];
+  jpeg_component_info *compptr;
+  JQUANT_TBL *qtable;
+  JCOEF *mcu;
+  JBLOCKARRAY row_ptrs;
+  int capacity = 0;
+
+  /* If not already specified, find a set of frequencies suitable for
+     embedding 8 bits per MCU.  Use the destination object, NOT cinfo,
+     which is the source: */
+  if (fspec->nfreqs == 0) {
+    /* If we explicitly set the output quality, then this will be
+     * non-NULL, but otherwise we will need to get the tables from the
+     * source: */
+    qtable = dinfo->quant_tbl_ptrs[0];
+    if (!qtable) qtable = cinfo->quant_tbl_ptrs[0];
+
+    fspec->nfreqs = ijel_find_freqs(qtable, fspec->freqs, 4, fspec->nlevels);
+  }
+
+  /* Check to see that we have at least 4 good frequencies.  This
+     implicitly assumes that we are packing 8 bits per MCU.  We will
+     want to change that in future versions. */ 
+  if (fspec->nfreqs < 4) {
+    if( debug ) {
+      jel_log(cfg, "ijel_stuff_message: Sorry - not enough good frequencies at this quality factor.\n");
+    }
+    return 0;
+  }
+
+  bheight = cinfo->comp_info[compnum].height_in_blocks;
+  bwidth = cinfo->comp_info[compnum].width_in_blocks;
+
+  compptr = cinfo->comp_info + compnum;
+
+  /* Now we walk through the MCUs of the JPEG image. */
+  for (blk_y = 0; blk_y < bheight;
+       blk_y += compptr->v_samp_factor) {
+
+    row_ptrs = ( (cinfo)->mem->access_virt_barray ) 
+      ((j_common_ptr) cinfo,
+       comp_array,
+       blk_y,
+       (JDIMENSION) compptr->v_samp_factor,
+       TRUE);
+
+    for (offset_y = 0; offset_y < compptr->v_samp_factor;  offset_y++) {
+
+      for (blocknum=0; blocknum < bwidth; blocknum++) {
+        /* Grab the next MCU, get the frequencies to use, and insert a
+         * byte: */
+	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        if ( ijel_usable_mcu(cfg, mcu) ) capacity++;
+      }
+    }
+  }
+  
+  return capacity;
+}
 
 /*
  * Primary embedding function:
@@ -382,20 +475,24 @@ int ijel_stuff_message(jel_config *cfg) {
         /* Grab the next MCU, get the frequencies to use, and insert a
          * byte: */
 	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        flist = ijel_freqs(cfg);
+        
+        /* Don't use this MCU unless it's well-behaved: */
+        if ( ijel_usable_mcu(cfg, mcu) ) {
 
-	flist = ijel_freqs(cfg);
-	if (embed_k > 0) {  /* Message length goes first: */
-	  byte = (unsigned char) (0xFF & length_in);
-	  //	  insert_byte( byte, fspec->freqs, mcu );
-	  insert_byte( byte, flist, mcu );
-	  length_in = length_in >> 8;
-	  embed_k--;
-	} else {            /* Bytes of the message: */
-	  if (echo) printf("%c", message[k]);
-	  //	  insert_byte( (unsigned char) (message[k] & 0xFF), fspec->freqs, mcu );
-	  insert_byte( (unsigned char) (message[k] & 0xFF), flist, mcu );
-	  k++;
-	}
+          if (embed_k > 0) {  /* Message length goes first: */
+            byte = (unsigned char) (0xFF & length_in);
+            //	  insert_byte( byte, fspec->freqs, mcu );
+            insert_byte( byte, flist, mcu );
+            length_in = length_in >> 8;
+            embed_k--;
+          } else {            /* Bytes of the message: */
+            if (echo) printf("%c", message[k]);
+            //	  insert_byte( (unsigned char) (message[k] & 0xFF), fspec->freqs, mcu );
+            insert_byte( (unsigned char) (message[k] & 0xFF), flist, mcu );
+            k++;
+          }
+        }
       }
     }
   }
@@ -507,24 +604,29 @@ int ijel_unstuff_message(jel_config *cfg) {
 	 offset_y++) {
       for (blocknum=0; blocknum < bwidth && k < msglen;  blocknum++) {
 	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        flist = ijel_freqs(cfg);
 
-	flist = ijel_freqs(cfg);
-	//	v = extract_byte(fspec->freqs, mcu);
-	v = extract_byte(flist, mcu);
+        /* Don't extract from this MCU unless it's well-behaved: */
 
-	if (embed_k <= 0) {
-	  message[k++] = v;
-	  if (echo) printf("%c", v);
-	} else {  /* Message length goes first: */
-	  length_in = length_in | (v << bits_up);
-	  bits_up += 8;
-	  embed_k--;
-	  if (embed_k <= 0) {
-	    msglen = length_in;
-	    if (msglen > cfg->maxlen) msglen = cfg->maxlen;
-	    cfg->len = msglen;
-	  }
-	}
+        if ( ijel_usable_mcu(cfg, mcu) ) {
+
+          //	v = extract_byte(fspec->freqs, mcu);
+          v = extract_byte(flist, mcu);
+
+          if (embed_k <= 0) {
+            message[k++] = v;
+            if (echo) printf("%c", v);
+          } else {  /* Message length goes first: */
+            length_in = length_in | (v << bits_up);
+            bits_up += 8;
+            embed_k--;
+            if (embed_k <= 0) {
+              msglen = length_in;
+              if (msglen > cfg->maxlen) msglen = cfg->maxlen;
+              cfg->len = msglen;
+            }
+          }
+        }
       }
     }
   }
