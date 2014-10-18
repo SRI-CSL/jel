@@ -292,7 +292,10 @@ int jel_set_mem_source( jel_config *cfg, unsigned char *mem, int size ) {
   cfg->srcinfo.err = jpeg_std_error(&jerr.mgr);
   jerr.mgr.error_exit = jel_error_exit;
 
-  if (setjmp(jerr.jmpbuff)) { return -1; }
+  if (setjmp(jerr.jmpbuff)) { 
+    jel_log(cfg, "jel_set_mem_source: caught a libjpeg error!\n");
+    return -1; 
+  }
 
   jpeg_memory_src( &(cfg->srcinfo), mem, size );
 
@@ -655,6 +658,33 @@ int jel_embed( jel_config * cfg, unsigned char * msg, int len) {
     cfg->jel_errno = JEL_ERR_NOMSG;
     return cfg->jel_errno;
   }
+
+  /* graceful-ish exit on error  */
+
+  struct jel_error_mgr src_jerr;
+
+  struct jel_error_mgr dst_jerr;
+
+  cfg->srcinfo.err = jpeg_std_error(&src_jerr.mgr);
+  src_jerr.mgr.error_exit = jel_error_exit;
+
+  cfg->dstinfo.err = jpeg_std_error(&dst_jerr.mgr);
+  dst_jerr.mgr.error_exit = jel_error_exit;
+
+
+  if (setjmp(src_jerr.jmpbuff)) { 
+    /* jpeg library has signalled an error on srcinfo */
+    jel_log(cfg, "jel_embed: caught a libjpeg error in srcinfo!\n");
+    return -1; 
+  }
+
+  if (setjmp(dst_jerr.jmpbuff)) { 
+    /* jpeg library has signalled an error on destinfo */
+    jel_log(cfg, "jel_embed: caught a libjpeg error in destinfo!\n");
+    return -1; 
+  }
+  
+  
 
   /* Insert the message: */
   ijel_set_message(cfg, msg, len);

@@ -102,6 +102,7 @@ static int capacity(image_p image){
     fprintf(stderr, "Can't open %s!\n", IMAGES_LOG);
     jel->logger = stderr;
   }
+  
   ret = jel_set_mem_source(jel, image->bytes, image->size);
   if (ret != 0) {
     fprintf(stderr, "jel: Error - exiting (need a diagnostic!)\n");
@@ -236,12 +237,13 @@ static image_p embed_message_aux(image_p cover, unsigned char* message, int mess
   image_p retval = NULL;
   if(destination != NULL){
     jel_config *jel = jel_init(JEL_NLEVELS);
-    int ret = jel_open_log(jel, (char *)IMAGES_LOG);
     int bytes_embedded = 0;
+    int ret = jel_open_log(jel, (char *)IMAGES_LOG);
     if (ret == JEL_ERR_CANTOPENLOG) {
       fprintf(stderr, "extract_message: can't open %s!\n", IMAGES_LOG);
       jel->logger = stderr;
     }
+
     ret = jel_set_mem_source(jel, cover->bytes, cover->size);
     if (ret != 0) {
       fprintf(stderr, "jel: error - setting source memory!");
@@ -322,12 +324,14 @@ int extract_message(unsigned char** messagep, int message_length, unsigned char*
   if((messagep != NULL) && (jpeg_data != NULL)){
     fprintf(stderr, "extract_message:  %u\n", jpeg_data_length);
     jel_config *jel = jel_init(JEL_NLEVELS);
+    
     int ret = jel_open_log(jel, (char *)IMAGES_LOG);
     if (ret == JEL_ERR_CANTOPENLOG) {
       fprintf(stderr, "extract_message: can't open %s!\n", IMAGES_LOG);
       jel->logger = stderr;
     }
-    ret = jel_set_mem_source(jel, jpeg_data, jpeg_data_length);
+
+    jel_set_mem_source(jel, jpeg_data, jpeg_data_length);
 
     fprintf(stderr, "embed_length: %d\n", embed_length);
     fprintf(stderr, "message_length: %d\n", message_length);
@@ -374,7 +378,8 @@ int extract_message_orig(unsigned char** messagep, unsigned char* jpeg_data, uns
       fprintf(stderr, "extract_message: can't open %s!\n", IMAGES_LOG);
       jel->logger = stderr;
     }
-    ret = jel_set_mem_source(jel, jpeg_data, jpeg_data_length);
+
+    jel_set_mem_source(jel, jpeg_data, jpeg_data_length);
     int msglen = jel_capacity(jel);
     fprintf(stderr, "extract_message: capacity = %d\n", msglen);
     unsigned char* message = (unsigned char*)calloc(msglen+1, sizeof(unsigned char));
