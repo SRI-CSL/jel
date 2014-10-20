@@ -8,17 +8,20 @@ from subprocess import check_output
 
 import os.path
 
+images = 'q30'
+#images = 'q30-squashed'
+
 randmsg = '../../bin/randmsg'
 
-# msglen = 18000
+l = 10000
 
-flist = '10,9,8,3'
+#flist = '10,9,8,3'
 flist = '18,17,16,10'
-flist = '18,16,10,3'
+#flist = '18,16,10,3'
 
 seed = 20
 
-ecclen = 10
+ecclen = 20
 
 culprits = [];
 
@@ -50,10 +53,13 @@ def byte_hamming(char1, char2):
 # Return the Hamming distance between two strings:
 #
 def hamming(str1, str2):
-    if (len(str1) != len(str2)):
+    i = len(str1)
+    j = len(str2)
+    if (i != j):
         print "Different string lengths?"
         print "Length of string 1 = {:d}".format(len(str1))
         print "Length of string 2 = {:d}".format(len(str2))
+        return 8 * abs(i-j), i*8
 
     sum = 0
     for k in range(0,min(len(str1), len(str2))):
@@ -95,7 +101,8 @@ def wedge_unwedge(dir, imageno):
     image = str(imageno)
     source = dir + '/' + image + '.jpg'
 
-    msglen = int(check_output(['wcap', source])) - 10 
+    msglen = int(check_output(['wcap', source])) / 2
+
     make_randmsg(msglen)
 
     call(['wedge',
@@ -130,14 +137,15 @@ def wedge_transcode_unwedge(dir, imageno):
     image = str(imageno)
     source = dir + '/' + image + '.jpg'
 
-    msglen = int(check_output(['wcap', source])) - 10 
+    msglen = int(check_output(['wcap', source]))
+    print "msglen for {0} = {1} bytes".format(source, msglen)
     make_randmsg(msglen)
 
     call(['wedge',
           '-data', '/tmp/wedgetest.msg',
 #          '-ecc', str(ecclen),
           '-nolength',
-          '-freq', flist,
+#          '-freq', flist,
           source,  image + '_jel.jpg'])
 
     transcode_1(image + '_jel.jpg',  image + '_jel_tr.jpg', 30)
@@ -145,7 +153,7 @@ def wedge_transcode_unwedge(dir, imageno):
     call(['unwedge',
           '-length', str(msglen),
 #          '-ecc', str(ecclen),
-          '-freq', flist,
+#          '-freq', flist,
           image + '_jel_tr.jpg', 'text.txt'])
 
 #    failure = call(['diff', 'text.txt', '/tmp/wedgetest.msg'])
@@ -163,9 +171,9 @@ def wedge_transcode_unwedge(dir, imageno):
 
 for imageno in range(101, 500):
     image = str(imageno)
-    if os.path.exists( 'q30-squashed/' + image + '.jpg' ):
-        wedge_unwedge('q30-squashed', imageno)
-        wedge_transcode_unwedge('q30-squashed', imageno)
+    if os.path.exists( images+'/' + image + '.jpg' ):
+        wedge_unwedge(images, imageno)
+        wedge_transcode_unwedge(images, imageno)
 
 print "Successes: ", successes
 

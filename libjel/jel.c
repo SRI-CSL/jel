@@ -143,7 +143,8 @@ jel_config * jel_init( int nlevels ) {
   result->bytes_per_mcu = 1;
 
   /* MCU energy threshold is 20.0: */
-  result->ethresh = 20.0;
+  //  result->ethresh = 700.0;
+  result->ethresh = 40000;
 
   return result;
 }
