@@ -8,20 +8,14 @@ from subprocess import check_output
 
 import os.path
 
-images = 'q30'
-#images = 'q30-squashed'
+#images = 'q30'
+images = 'q30-squashed'
 
 randmsg = '../../bin/randmsg'
 
 l = 10000
 
-#flist = '10,9,8,3'
-flist = '18,17,16,10'
-#flist = '18,16,10,3'
-
 seed = 20
-
-ecclen = 20
 
 culprits = [];
 
@@ -107,18 +101,12 @@ def wedge_unwedge(dir, imageno):
 
     call(['wedge',
           '-data', '/tmp/wedgetest.msg',
-#          '-ecc', str(ecclen),
           '-nolength',
-#          '-freq', flist,
           source,  image + '_jel.jpg'])
 
     call(['unwedge',
           '-length', str(msglen),
-#          '-ecc', str(ecclen),
-#          '-freq', flist,
           image + '_jel.jpg', 'text.txt'])
-
-#    failure = call(['diff', 'text.txt', '/tmp/wedgetest.msg'])
 
     [failure, nbits, tot] = diff('text.txt', '/tmp/wedgetest.msg')
     if failure:
@@ -143,20 +131,14 @@ def wedge_transcode_unwedge(dir, imageno):
 
     call(['wedge',
           '-data', '/tmp/wedgetest.msg',
-#          '-ecc', str(ecclen),
           '-nolength',
-#          '-freq', flist,
           source,  image + '_jel.jpg'])
 
     transcode_1(image + '_jel.jpg',  image + '_jel_tr.jpg', 30)
 
     call(['unwedge',
           '-length', str(msglen),
-#          '-ecc', str(ecclen),
-#          '-freq', flist,
           image + '_jel_tr.jpg', 'text.txt'])
-
-#    failure = call(['diff', 'text.txt', '/tmp/wedgetest.msg'])
 
     [failure, nbits, tot] = diff('text.txt', '/tmp/wedgetest.msg')
     if failure:

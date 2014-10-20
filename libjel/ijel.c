@@ -275,7 +275,7 @@ int ijel_usable_mcu(jel_config *cfg, JCOEF *mcu) {
   return ( // 1 ||
 	   (
 	    x > 15 && x < 240
-	    && ac_energy(cfg, mcu) < cfg->ethresh
+            //	    && ac_energy(cfg, mcu) < cfg->ethresh
 	    ));
 }
 
