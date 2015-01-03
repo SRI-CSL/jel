@@ -25,10 +25,14 @@
 
 #include <stdlib.h>
 
+#include <stdbool.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+  /* switches on verbose logging; defined and set in jel.c */
+  extern bool jel_verbose;
 
 #define JEL_NLEVELS 8  /* Default number of quanta for each freq. */
 

@@ -95,8 +95,10 @@ int *ijel_freqs( jel_config *cfg ) {
       if (j != i) fspec->in_use[i] = fspec->in_use[j];
       fspec->in_use[j] = fspec->freqs[i];
     }
-    jel_log(cfg, "ijel_freqs selected frequencies: %d %d %d %d\n",
-	    fspec->in_use[0], fspec->in_use[1], fspec->in_use[2], fspec->in_use[3]);
+    if(jel_verbose){
+      jel_log(cfg, "ijel_freqs selected frequencies: %d %d %d %d\n",
+	      fspec->in_use[0], fspec->in_use[1], fspec->in_use[2], fspec->in_use[3]);
+    }
   }
   return fspec->in_use;
 }
@@ -404,17 +406,21 @@ int ijel_stuff_message(jel_config *cfg) {
   JBLOCKARRAY row_ptrs;
   //size_t block_row_size = (size_t) SIZEOF(JCOEF)*DCTSIZE2*cinfo->comp_info[compnum].width_in_blocks;
 
-  jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
-	  raw[0], raw[1], raw[2], raw[3], raw[4]);
+  if(jel_verbose){
+    jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
+	    raw[0], raw[1], raw[2], raw[3], raw[4]);
+  }
 
   plain_len = msglen; /* Save the plaintext length */
 
   /* Check to see if we want ECC turned on: */
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
 
-    if (ijel_ecc_sanity_check(raw, msglen))
+    if (ijel_ecc_sanity_check(raw, msglen)){
       jel_log(cfg, "ijel_stuff_message: FYI, sanity check failed.\n");
-
+      /* iam asks: why do we carry on regardless? */
+    }
+    
     if (!cfg->embed_length){
       message = ijel_encode_ecc_nolength(raw, msglen, &i);
     } else {
@@ -425,9 +431,12 @@ int ijel_stuff_message(jel_config *cfg) {
       jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
               message[0], message[1], message[2], message[3], message[4]);
 
-    if (!message) message = raw; /* No ecc */
-    else {
-      jel_log(cfg, "ijel_stuff_message: ECC enabled, %d bytes of message encoded in %d bytes.\n", msglen, i); 
+    if (!message){
+      message = raw; /* No ecc */
+    }  else {
+      if(jel_verbose){
+	jel_log(cfg, "ijel_stuff_message: ECC enabled, %d bytes of message encoded in %d bytes.\n", msglen, i);
+      }
       msglen = i;
       ecc = 1;
     }
@@ -459,7 +468,7 @@ int ijel_stuff_message(jel_config *cfg) {
   
 
   /* If requested, be verbose: */
-  if ( debug ) {     /* Do we want to use verbosity levels? */
+  if ( debug && jel_verbose ) {     /* Do we want to use verbosity levels? */
     jel_log(cfg, "(:components #(");
     for (i = 0; i < fspec->nfreqs; i++) jel_log(cfg, "%d ", fspec->freqs[i]);
     jel_log(cfg, "))\n");
@@ -481,8 +490,13 @@ int ijel_stuff_message(jel_config *cfg) {
   length_in = msglen;
   k = 0;
 
-  if (!cfg->embed_length) embed_k = 0;
-  else jel_log(cfg, "ijel_stuff_message: embedded length = %d bytes\n", length_in);
+  if (!cfg->embed_length){
+    embed_k = 0;
+  } else {
+    if(jel_verbose){
+      jel_log(cfg, "ijel_stuff_message: embedded length = %d bytes\n", length_in);
+    }
+  }
 
   /* Now we walk through the MCUs of the JPEG image. */
   for (blk_y = 0; blk_y < bheight && k < msglen;
@@ -575,16 +589,14 @@ int ijel_unstuff_message(jel_config *cfg) {
   if ( fspec->nfreqs < 4 ) {
     if(debug){
       jel_log(cfg, "ijel_unstuff_message: Sorry - not enough good frequencies at this quality factor.\n");
-    } else {
-      printf("Sorry - not enough good frequencies at this quality factor.\n");
     }
     return -1;
   }
 
-  if ( cinfo->err->trace_level > 0 ) {
-    printf("(:components #(");
-    for (i = 0; i < fspec->nfreqs; i++) printf("%d ", fspec->freqs[i]);
-    printf("))\n");
+  if ( cinfo->err->trace_level > 0 && debug && jel_verbose) {
+    jel_log(cfg, "(:components #(");
+    for (i = 0; i < fspec->nfreqs; i++) jel_log(cfg, "%d ", fspec->freqs[i]);
+    jel_log(cfg, "))\n");
   }
 
   bheight = cinfo->comp_info[compnum].height_in_blocks;
@@ -610,14 +622,18 @@ int ijel_unstuff_message(jel_config *cfg) {
     if (cfg->ecc_method == JEL_ECC_RSCODE) {
       //      msglen = length_in = ijel_ecc_length(msglen);
       msglen = length_in = ijel_message_ecc_length(msglen, 0);
-      jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
-	      msglen, length_in, cfg->len);
+      if(jel_verbose){
+	jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
+		msglen, length_in, cfg->len);
+      }
     }
 
   }
 
-  jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
-	  msglen, length_in, cfg->len);
+  if(jel_verbose){
+    jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
+	    msglen, length_in, cfg->len);
+  }
 	  
   k = 0;
 
@@ -664,7 +680,9 @@ int ijel_unstuff_message(jel_config *cfg) {
 
   //  printf ("k = %d, msglen = %d\n", k, msglen);
 
-  if (cfg->embed_length) jel_log(cfg, "ijel_unstuff_message: embedded length = %d bytes\n", length_in);
+  if (cfg->embed_length && jel_verbose){
+    jel_log(cfg, "ijel_unstuff_message: embedded length = %d bytes\n", length_in);
+  }
 
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     /* If we have reached here, we are using rscode for Reed-Solomon
@@ -676,10 +694,11 @@ int ijel_unstuff_message(jel_config *cfg) {
     int truek;
     unsigned char *raw;
     truek = ijel_ecc_block_length(k);
-    jel_log(cfg, "ijel_unstuff_message: ijel_ecc_length(%d) => %d\n", k, truek);
-
-    jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
-	    message[0], message[1], message[2], message[3], message[4]);
+    if(jel_verbose){
+      jel_log(cfg, "ijel_unstuff_message: ijel_ecc_length(%d) => %d\n", k, truek);
+      jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
+	      message[0], message[1], message[2], message[3], message[4]);
+    }
 
     /* If we are not embedding length, then plaintext length is a
      * shared secret and we pass it: */
@@ -691,7 +710,10 @@ int ijel_unstuff_message(jel_config *cfg) {
 
     /* 'raw' is a newly-allocated buffer.  When should it be freed?? */
     if (raw) {
-      jel_log(cfg, "ijel_unstuff_message: ECC enabled, %d bytes of ECC data decoded into %d bytes of message.\n", k, i); 
+      if(jel_verbose){
+	jel_log(cfg, "ijel_unstuff_message: ECC enabled, %d bytes of ECC data decoded into %d bytes of message.\n", k, i);
+      }
+      
       /* Fails on Linux: */
       //      free(message);
       k = i;
@@ -700,8 +722,10 @@ int ijel_unstuff_message(jel_config *cfg) {
       //      cfg->data = raw;
       memcpy(cfg->data, raw, k);
 
-      jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
-	      raw[0], raw[1], raw[2], raw[3], raw[4]);
+      if(jel_verbose){
+	jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
+		raw[0], raw[1], raw[2], raw[3], raw[4]);
+      }
  
       /* Raw was allocated above solely because of ECC.  Free it here? */
       free(raw);
@@ -710,7 +734,9 @@ int ijel_unstuff_message(jel_config *cfg) {
   }
 
   cfg->len = k;
-  jel_log(cfg, "ijel_unstuff_message: k=%d\n", k);
+  if(jel_verbose){
+    jel_log(cfg, "ijel_unstuff_message: k=%d\n", k);
+  }
 
   return k;
 }

@@ -15,7 +15,8 @@
 
 #define WEDGEDEBUG 0
 #define UNWEDGEDEBUG 0
-#define VERBOSE 0
+
+bool jel_verbose = false;
 
 /* 
  * iam: we need to be able to be able to fail more gracefully than exit
@@ -243,7 +244,7 @@ static int ijel_open_source(jel_config *cfg) {
 
   jpeg_copy_critical_parameters( &(cfg->srcinfo), &(cfg->dstinfo) );
 
-  if(VERBOSE){
+  if(jel_verbose){
     jel_log(cfg, "ijel_open_source: all done.\n");
   }
 
@@ -555,7 +556,7 @@ int    jel_capacity( jel_config * cfg ) {
   cap2 = (cinfo->output_width / 8) * (cinfo->output_height / 8);
 
   /* cap2 is consistently 0 */
-  if(VERBOSE){
+  if(jel_verbose){
     jel_log(cfg, "jel_capacity returns %d (bwidth=%d, bheight=%d, image dimension says %d)\n",
 	    cap1, bwidth, bheight, cap2);
   }
@@ -568,12 +569,12 @@ int    jel_capacity( jel_config * cfg ) {
   /* If ECC is requested, compute capacity subject to ECC overhead: */
   if (jel_getprop(cfg, JEL_PROP_ECC_METHOD) == JEL_ECC_RSCODE) {
     cap1 = ijel_capacity_ecc(cap1);
-    if(VERBOSE){ jel_log(cfg, "jel_capacity assuming ECC returns %d\n", cap1); }
+    if(jel_verbose){ jel_log(cfg, "jel_capacity assuming ECC returns %d\n", cap1); }
   }
 
   if (jel_getprop(cfg, JEL_PROP_EMBED_LENGTH) == 1) {
     cap1 = cap1 - 4;
-    if(VERBOSE){ jel_log(cfg, "jel_capacity assuming embedded length returns %d\n", cap1); }
+    if(jel_verbose){ jel_log(cfg, "jel_capacity assuming embedded length returns %d\n", cap1); }
   }
 
   cfg->jel_errno = JEL_SUCCESS;
@@ -698,7 +699,7 @@ int jel_embed( jel_config * cfg, unsigned char * msg, int len) {
 
   if ( cfg->quality > 0 ) {
     jpeg_set_quality( &(cfg->dstinfo), cfg->quality, FALSE );
-    if(VERBOSE){ jel_log(cfg, "jel_embed: Reset quality to %d after jpeg_copy_critical_parameters.\n", cfg->quality); }
+    if(jel_verbose){ jel_log(cfg, "jel_embed: Reset quality to %d after jpeg_copy_critical_parameters.\n", cfg->quality); }
   }
 
   //  ijel_log_qtables(cfg);
@@ -715,7 +716,7 @@ int jel_embed( jel_config * cfg, unsigned char * msg, int len) {
   jpeg_finish_compress(&cfg->dstinfo);
 
   cfg->jpeglen = ijel_get_jpeg_length(cfg);
-  if(VERBOSE){ jel_log(cfg, "jel_embed: JPEG compressed output size is %d.\n", cfg->jpeglen); }
+  if(jel_verbose){ jel_log(cfg, "jel_embed: JPEG compressed output size is %d.\n", cfg->jpeglen); }
 
   //ian moved this to jel_free
   //jpeg_destroy_compress(&cfg->dstinfo);
