@@ -75,8 +75,3 @@ libjel_a_SOURCES = \
 	libjel/jel.c \
 	$(RSCODE_SOURCES)
 
-#	libjel/jpeg-fd-dst.c \
-#	libjel/jpeg-fd-src.c \
-#	libjel/misc.c \
-#
-#

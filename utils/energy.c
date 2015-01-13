@@ -2,8 +2,6 @@
  * energy.c - Report the frequency domain energies of each MCU in a JPEG file.
  */
 
-//#include <sys/stat.h>
-//#include <fcntl.h>
 #include <jel/jel.h>
 #include <stdlib.h>
 

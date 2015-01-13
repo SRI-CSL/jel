@@ -2,8 +2,6 @@
  * wcap.c - Report the capacity of a JPEG file.
  */
 
-//#include <sys/stat.h>
-//#include <fcntl.h>
 #include <jel/jel.h>
 #include <stdlib.h>
 
