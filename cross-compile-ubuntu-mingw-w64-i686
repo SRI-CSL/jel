@@ -1,9 +1,10 @@
 #!/bin/bash -e
 #
-# StegoTorus Windows cross-compile script
+# Jel Windows cross-compile script
 #
 # Copyright (C)2013 Farsight Security, Inc.
 # written by Jeroen Massar <massar@fsi.io>
+# rewritten by Ian Mason <iam@csl.sri.com>
 #
 # Make sure that CFLAGS/LDFLAGS etc is not set...
 
@@ -66,7 +67,7 @@ chmod +x ${PKGCONFIG}
 ##############################################################################
 
 cxenv() {
-    CXLog "Setting up cross-compile environment: CC=${CC} -I/${PREFIX}/include -L/${PREFIX}/lib"
+    #CXLog "Setting up cross-compile environment: CC=${CC} -I/${PREFIX}/include -L/${PREFIX}/lib"
     CC="${CC} -I/${PREFIX}/include -L/${PREFIX}/lib" AR=${AR} RANLIB=${RANLIB} PKG_CONFIG=${PKGCONFIG} CPP=${CPP} $@
 }
 
