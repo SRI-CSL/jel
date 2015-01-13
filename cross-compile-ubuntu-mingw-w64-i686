@@ -1,0 +1,103 @@
+#!/bin/bash -e
+#
+# StegoTorus Windows cross-compile script
+#
+# Copyright (C)2013 Farsight Security, Inc.
+# written by Jeroen Massar <massar@fsi.io>
+#
+# Make sure that CFLAGS/LDFLAGS etc is not set...
+
+CXLog() {
+	echo "======================================"
+	echo "======================================"
+	echo "=== $@"
+	echo "======================================"
+	echo "======================================"
+}
+
+CXLog "Setting up cross-compile environment"
+
+CXHOME=$(pwd)
+MPFX=i686-w64-mingw32
+AR=${MPFX}-ar
+CC=${MPFX}-gcc
+CPP="${CC} -E"
+RANLIB=${MPFX}-ranlib
+OBJDUMP=${MPFX}-objdump
+
+PREFIX=~/.cross/mingw
+SRC=/${PREFIX}/src/
+CROSSCFG="--build=amd64-pc-linux-gnu --host=${MPFX} --target=${MPFX}"
+LINKCFG="--enable-static --disable-shared"
+PKGCONFIG="${PREFIX}/bin/${MPFX}-pkg-config"
+DEBSRC="${PREFIX}/deb-src"
+
+CXLog "Our MingW Prefix = ${PREFIX}"
+
+if [ "$(which ${CC})X" = "X" ];
+then
+	echo >&2 "Error: Please install mingw: apt-get install  g++-mingw-w64-i686 mingw-w64-tools mingw-w64"
+	exit 1
+fi
+
+mkdir -p ${PREFIX} 2>/dev/null
+
+if [ ! -d ${PREFIX} ];
+then
+	echo >&2 "No ${PREFIX}, got sufficient permissions?"
+	echo >&2 "Please create ${PREFIX} as root and chown it to a normal user"
+	exit 1
+fi
+
+CXLog "Preparing environment"
+
+mkdir -p ${PREFIX}/bin ${PREFIX}/lib/pkgconfig
+
+cat >${PKGCONFIG} <<HERE
+#!/bin/sh
+
+PREFIX=${PREFIX}
+export PKG_CONFIG_LIBDIR=\${PREFIX}/lib/pkgconfig
+
+exec pkg-config "\$@"
+HERE
+chmod +x ${PKGCONFIG}
+
+##############################################################################
+
+cxenv() {
+    CXLog "Setting up cross-compile environment: CC=${CC} -I/${PREFIX}/include -L/${PREFIX}/lib"
+    CC="${CC} -I/${PREFIX}/include -L/${PREFIX}/lib" AR=${AR} RANLIB=${RANLIB} PKG_CONFIG=${PKGCONFIG} CPP=${CPP} $@
+}
+
+##############################################################################
+
+mkdir -p ${DEBSRC}
+cd ${DEBSRC}
+wget http://www.ijg.org/files/jpegsrc.v9a.tar.gz
+tar xvfz jpegsrc.v9a.tar.gz
+cd jpeg-9a
+
+cxenv ./configure ${CROSSCFG} ${LINKCFG} --prefix=${PREFIX}
+
+cxenv make 
+
+cxenv make install
+
+
+
+cd ${CXHOME}
+
+
+# Do we have a configure script?
+if [ ! -f configure ];
+then
+	# Clean, thus generate configure etc
+	autoreconf -i
+fi
+
+cxenv ./configure ${CROSSCFG} --prefix=${PREFIX}
+
+make clean
+cxenv make 
+cxenv make install

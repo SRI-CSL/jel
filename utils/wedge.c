@@ -16,10 +16,7 @@
  *
  */
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <errno.h>
+#include <stdio.h>
 #include <jel/jel.h>
 
 #include <ctype.h>		/* to declare isprint() */
@@ -275,39 +272,32 @@ print_text_marker (j_decompress_ptr cinfo)
 }
 #endif
 
-/*
- * This version uses file descriptors to avoid stdio ambiguities
- * wrt. binary files.
- */
 static size_t read_message(char *filename, unsigned char *message, int maxlen, int abort_on_overflow) {
-  size_t k;
-  int fd;
-  //char ch;
-  struct stat buf;
-
-  if (filename != NULL) fd = open(filename, O_RDONLY);
-  else {
-    fprintf(stderr,"This version cannot use stdio for message input.\n");
-    exit(-3);
-  }
-
-  k = 0;
-  if (fd > 0) {
-    fstat(fd, &buf);
-    k = buf.st_size;
-
-    if (k > maxlen) {
-      fprintf(stderr, "Message (%" PriSize_t " bytes) is too long (maxlen=%d)!\n", k, maxlen);
-      exit(-1);
+  long length;
+  FILE * fp = fopen (filename, "rb");
+  
+  if(fp ==NULL){
+    fprintf(stderr, "Opening %s failed\n", filename);
+    return 0;
+  } else {
+    fseek (fp, 0, SEEK_END);
+    length = ftell (fp);
+    fseek (fp, 0, SEEK_SET);
+    
+    if(length > maxlen){
+      fprintf(stderr, "Message of length %ld is too long (maxlen=%d)!\n", length, maxlen);
+      return 0;
+    } else {
+      size_t bytes = fread(message, 1, length, fp);
+      fclose (fp);
+      if(bytes < length){
+	fprintf(stderr, "Read failed to fetch all the bytes,  only read %" PriSize_t " out of %ld\n", bytes, length);
+	return 0;
+      } else {
+	return bytes;
+      }
     }
-
-    /* Read the whole file: */
-    if(read(fd, message, k) == -1){
-      fprintf(stderr, "read_message: read failed %s\n", strerror(errno));
-    }
-    close(fd);
   }
-  return k;
 }
 
 

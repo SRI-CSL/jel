@@ -68,13 +68,15 @@ RSCODE_SOURCES = \
 libjel_a_SOURCES = \
 	libjel/ijel-ecc.c \
 	libjel/ijel.c \
-	libjel/jpeg-fd-dst.c \
-	libjel/jpeg-fd-src.c \
 	libjel/jpeg-mem-dst.c \
 	libjel/jpeg-mem-src.c \
 	libjel/jpeg-stdio-dst.c \
 	libjel/jpeg-stdio-src.c \
 	libjel/jel.c \
-	libjel/misc.c \
 	$(RSCODE_SOURCES)
 
+#	libjel/jpeg-fd-dst.c \
+#	libjel/jpeg-fd-src.c \
+#	libjel/misc.c \
+#
+#

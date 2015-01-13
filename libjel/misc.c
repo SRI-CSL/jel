@@ -5,7 +5,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #endif
-#include <time.h>
+//#include <time.h>
 #include <errno.h>
 
 long round_up (long a, long b)

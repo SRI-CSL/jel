@@ -25,11 +25,8 @@ bool jel_verbose = false;
  */
 #include <setjmp.h>
 
-
 void jpeg_memory_src (j_decompress_ptr cinfo, unsigned char *data, int size);
 void jpeg_memory_dest (j_compress_ptr cinfo, unsigned char* data, int size);
-
-
 
 int ijel_stuff_message(jel_config *cfg);
 int ijel_unstuff_message(jel_config *cfg);
@@ -204,6 +201,15 @@ static void jel_error_exit (j_common_ptr cinfo){
 
   longjmp(jelerr->jmpbuff, 1);
 
+}
+
+//clone of jround_up
+static long round_up (long a, long b)
+/* Compute a rounded up to next multiple of b, ie, ceil(a/b)*b */
+/* Assumes a >= 0, b > 0 */
+{
+  a += b - 1L;
+  return a - (a % b);
 }
 
     
@@ -777,3 +783,5 @@ int jel_extract( jel_config * cfg, unsigned char * msg, int maxlen) {
   return msglen;	
 
 }
+
+

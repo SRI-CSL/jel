@@ -1,10 +1,6 @@
+#ifndef _MISC_H_
+#define  _MISC_H_
 //jpeg libraries insist on this macro.
 #define SIZEOF(object)	((size_t) sizeof(object))
 
-//clone of jround_up
-long round_up (long a, long b);
-
-int fullread(int fd, char *buf, int nbytes);
-
-int fullwrite(int fd, char *buf, int nbytes);
-
+#endif //_MISC_H_
