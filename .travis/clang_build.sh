@@ -9,5 +9,14 @@ autoreconf -i
 
 make clean
 make
+RETURN="$?"
+
+
+if [ "${RETURN}" != "0" ]; then
+    echo "Building jel failed!"
+    exit 1
+fi
+
+
 
 
