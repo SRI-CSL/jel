@@ -13,8 +13,7 @@ install:
 
 #tests
 script:
-  - ${JEL_HOME}/.travis/gcc_build.sh
-  - ${JEL_HOME}/.travis/clang_build.sh
+  - ${JEL_HOME}/.travis/build.sh
 
   
 
