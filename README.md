@@ -1,3 +1,7 @@
+
+[![Build Status](https://travis-ci.org/SRI-CSL/jel.svg?branch=master)](https://travis-ci.org/SRI-CSL/jel)
+
+
 libjel -- JPEG Embedding Library
 ==========
 

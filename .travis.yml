@@ -1,0 +1,20 @@
+language: c
+
+compiler:
+  - clang
+  - gcc
+
+
+#dependencies
+install:
+  - sudo apt-get update
+  - sudo apt-get install autoconf libtool libjpeg-dev
+  - export JEL_HOME=`pwd`
+
+#tests
+script:
+  - ${JEL_HOME}/.travis/gcc_build.sh
+  - ${JEL_HOME}/.travis/clang_build.sh
+
+  
+
