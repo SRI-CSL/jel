@@ -1,5 +1,6 @@
 
 [![Build Status](https://travis-ci.org/SRI-CSL/jel.svg?branch=master)](https://travis-ci.org/SRI-CSL/jel)
+[![Coverity Scan Build Status](https://scan.coverity.com/projects/2535/badge.svg)](https://scan.coverity.com/projects/2535)
 
 
 libjel -- JPEG Embedding Library
