@@ -1,6 +1,4 @@
-#!bin/bash
-rm -rf cov-int
-cov-build --dir cov-int make
+#!/bin/bash
 rm jel.tgz
 tar czvf jel.tgz cov-int
 curl --form token=AmqWaXsrHc2fd2b7LoMgMg \
