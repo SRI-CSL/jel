@@ -1,0 +1,11 @@
+#!bin/bash
+rm -rf cov-int
+cov-build --dir cov-int make
+rm jel.tgz
+tar czvf jel.tgz cov-int
+curl --form token=AmqWaXsrHc2fd2b7LoMgMg \
+  --form email=iam@csl.sri.com \
+  --form file=@jel.tgz \
+  --form version="Final DEFIANCE Version" \
+  --form description="Final DEFIANCE Version" \
+  https://scan.coverity.com/builds?project=JPEG+Embedding+Library
