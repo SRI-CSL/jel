@@ -97,7 +97,7 @@ int *ijel_freqs( jel_config *cfg ) {
     }
     if(jel_verbose){
       jel_log(cfg, "ijel_freqs selected frequencies: %d %d %d %d\n",
-	      fspec->in_use[0], fspec->in_use[1], fspec->in_use[2], fspec->in_use[3]);
+              fspec->in_use[0], fspec->in_use[1], fspec->in_use[2], fspec->in_use[3]);
     }
   }
   return fspec->in_use;
@@ -175,7 +175,7 @@ static void insert_byte( unsigned char v, int *freq, JCOEF *mcu ) {
 
 static unsigned char extract_byte( int *freq, JCOEF *mcu ) {
   return
-      (0x03 &  mcu[ freq[0] ])       |
+    (0x03 &  mcu[ freq[0] ])       |
     (  0x0C & (mcu[ freq[1] ] << 2)) |
     (  0x30 & (mcu[ freq[2] ] << 4)) |
     (  0xC0 & (mcu[ freq[3] ] << 6));
@@ -253,13 +253,13 @@ int ijel_print_energies(jel_config *cfg) {
       for (blocknum=0; blocknum < bwidth; blocknum++) {
         /* Grab the next MCU, get the frequencies to use, and insert a
          * byte: */
-	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
-	energy = ac_energy(cfg, mcu);
-	printf("%d\n", energy);
-	if (min_energy < 0 || energy < min_energy)
-	  min_energy = energy;
-	if (max_energy < 0 || energy > max_energy)
-	  max_energy = energy;
+        mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        energy = ac_energy(cfg, mcu);
+        printf("%d\n", energy);
+        if (min_energy < 0 || energy < min_energy)
+          min_energy = energy;
+        if (max_energy < 0 || energy > max_energy)
+          max_energy = energy;
 
       }
     }
@@ -275,10 +275,10 @@ int ijel_usable_mcu(jel_config *cfg, JCOEF *mcu) {
   int x = dc_value(cfg, mcu);
   //  jel_log(cfg, " DC = %f\n", x);
   return ( // 1 ||
-	   (
-	    x > 15 && x < 240
-            //	    && ac_energy(cfg, mcu) < cfg->ethresh
-	    ));
+          (
+           x > 15 && x < 240
+           //	    && ac_energy(cfg, mcu) < cfg->ethresh
+           ));
 }
 
 
@@ -350,7 +350,7 @@ int ijel_capacity(jel_config *cfg) {
       for (blocknum=0; blocknum < bwidth; blocknum++) {
         /* Grab the next MCU, get the frequencies to use, and insert a
          * byte: */
-	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
         if ( ijel_usable_mcu(cfg, mcu) ) capacity++;
       }
     }
@@ -389,7 +389,7 @@ int ijel_stuff_message(jel_config *cfg) {
 
   /* This could use some cleanup to make sure that we really need all
    * these variables! */
-  int echo = 0;
+  //int echo = 0;
   int embed_k = 4; /* Allows us to embed 4 bytes of length. */
   int compnum = 0; /* Component (0 = luminance, 1 = U, 2 = V) */
   int length_in;
@@ -408,7 +408,7 @@ int ijel_stuff_message(jel_config *cfg) {
 
   if(jel_verbose){
     jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
-	    raw[0], raw[1], raw[2], raw[3], raw[4]);
+            raw[0], raw[1], raw[2], raw[3], raw[4]);
   }
 
   plain_len = msglen; /* Save the plaintext length */
@@ -427,15 +427,16 @@ int ijel_stuff_message(jel_config *cfg) {
       message = ijel_encode_ecc(raw,  msglen, &i);
     }
 
-    if (cfg->verbose > 1)
-      jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
-              message[0], message[1], message[2], message[3], message[4]);
-
     if (!message){
       message = raw; /* No ecc */
     }  else {
+
+      if (cfg->verbose > 1)
+        jel_log(cfg, "ijel_stuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
+                message[0], message[1], message[2], message[3], message[4]);
+      
       if(jel_verbose){
-	jel_log(cfg, "ijel_stuff_message: ECC enabled, %d bytes of message encoded in %d bytes.\n", msglen, i);
+        jel_log(cfg, "ijel_stuff_message: ECC enabled, %d bytes of message encoded in %d bytes.\n", msglen, i);
       }
       msglen = i;
       ecc = 1;
@@ -463,6 +464,7 @@ int ijel_stuff_message(jel_config *cfg) {
     if( debug ) {
       jel_log(cfg, "ijel_stuff_message: Sorry - not enough good frequencies at this quality factor.\n");
     }
+    free(message);
     return 0;
   }
   
@@ -478,7 +480,7 @@ int ijel_stuff_message(jel_config *cfg) {
      compatible with the image.  Message gets truncated if it's longer
      than the number of MCU's in the luminance channel.  We will want
      to expand to the color components too:
-   */
+  */
   bheight = cinfo->comp_info[compnum].height_in_blocks;
   bwidth = cinfo->comp_info[compnum].width_in_blocks;
   //  printf("In theory, we can store %d bytes\n", bheight*bwidth);
@@ -510,16 +512,16 @@ int ijel_stuff_message(jel_config *cfg) {
        TRUE);
 
     for (offset_y = 0; offset_y < compptr->v_samp_factor && k < msglen;
-	 offset_y++) {
+         offset_y++) {
 
       for (blocknum=0; blocknum < bwidth && k < msglen; blocknum++) {
         /* Grab the next MCU, get the frequencies to use, and insert a
          * byte: */
-	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
         
         /* Don't use this MCU unless it's well-behaved: */
         if ( ijel_usable_mcu(cfg, mcu) ) {
-	  flist = ijel_freqs(cfg);
+          flist = ijel_freqs(cfg);
 
           if (embed_k > 0) {  /* Message length goes first: */
             byte = (unsigned char) (0xFF & length_in);
@@ -528,7 +530,7 @@ int ijel_stuff_message(jel_config *cfg) {
             length_in = length_in >> 8;
             embed_k--;
           } else {            /* Bytes of the message: */
-            if (echo) printf("%c", message[k]);
+            //if (echo) printf("%c", message[k]);
             //	  insert_byte( (unsigned char) (message[k] & 0xFF), fspec->freqs, mcu );
             insert_byte( (unsigned char) (message[k] & 0xFF), flist, mcu );
             k++;
@@ -569,7 +571,7 @@ int ijel_unstuff_message(jel_config *cfg) {
   int embed_k = 4;         /* For now, we will always embed 4 bytes of message length first. */
   int length_in = 0;
   int bits_up = 0;
-  int echo = 0;
+  //int echo = 0;
   int v;
   int blk_y, bheight, bwidth, offset_y, i, k;
   JDIMENSION blocknum; // , MCU_cols;
@@ -623,8 +625,8 @@ int ijel_unstuff_message(jel_config *cfg) {
       //      msglen = length_in = ijel_ecc_length(msglen);
       msglen = length_in = ijel_message_ecc_length(msglen, 0);
       if(jel_verbose){
-	jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
-		msglen, length_in, cfg->len);
+        jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
+                msglen, length_in, cfg->len);
       }
     }
 
@@ -632,7 +634,7 @@ int ijel_unstuff_message(jel_config *cfg) {
 
   if(jel_verbose){
     jel_log(cfg, "ijel_unstuff_message: msglen=%d, length_in=%d, cfg->len=%d\n",
-	    msglen, length_in, cfg->len);
+            msglen, length_in, cfg->len);
   }
 	  
   k = 0;
@@ -642,25 +644,25 @@ int ijel_unstuff_message(jel_config *cfg) {
 
     row_ptrs = ((cinfo)->mem->access_virt_barray) 
       ( (j_common_ptr) cinfo, comp_array, blk_y,
-	(JDIMENSION) compptr->v_samp_factor, FALSE);
+        (JDIMENSION) compptr->v_samp_factor, FALSE);
 
     for (offset_y = 0; offset_y < compptr->v_samp_factor && k < msglen;
-	 offset_y++) {
+         offset_y++) {
       for (blocknum=0; blocknum < bwidth && k < msglen;  blocknum++) {
-	mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
+        mcu =(JCOEF*) row_ptrs[offset_y][blocknum];
 
         /* Don't extract from this MCU unless it's well-behaved: */
 
         if ( ijel_usable_mcu(cfg, mcu) ) {
-	  flist = ijel_freqs(cfg);
+          flist = ijel_freqs(cfg);
 
           //	v = extract_byte(fspec->freqs, mcu);
           v = extract_byte(flist, mcu);
-	  capacity++;
+          capacity++;
 
           if (embed_k <= 0) {
             message[k++] = v;
-            if (echo) printf("%c", v);
+            //if (echo) printf("%c", v);
           } else {  /* Message length goes first: */
             length_in = length_in | (v << bits_up);
             bits_up += 8;
@@ -697,7 +699,7 @@ int ijel_unstuff_message(jel_config *cfg) {
     if(jel_verbose){
       jel_log(cfg, "ijel_unstuff_message: ijel_ecc_length(%d) => %d\n", k, truek);
       jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of ECC data = %d %d %d %d %d\n", 
-	      message[0], message[1], message[2], message[3], message[4]);
+              message[0], message[1], message[2], message[3], message[4]);
     }
 
     /* If we are not embedding length, then plaintext length is a
@@ -711,7 +713,7 @@ int ijel_unstuff_message(jel_config *cfg) {
     /* 'raw' is a newly-allocated buffer.  When should it be freed?? */
     if (raw) {
       if(jel_verbose){
-	jel_log(cfg, "ijel_unstuff_message: ECC enabled, %d bytes of ECC data decoded into %d bytes of message.\n", k, i);
+        jel_log(cfg, "ijel_unstuff_message: ECC enabled, %d bytes of ECC data decoded into %d bytes of message.\n", k, i);
       }
       
       /* Fails on Linux: */
@@ -723,14 +725,14 @@ int ijel_unstuff_message(jel_config *cfg) {
       memcpy(cfg->data, raw, k);
 
       if(jel_verbose){
-	jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
-		raw[0], raw[1], raw[2], raw[3], raw[4]);
+        jel_log(cfg, "ijel_unstuff_message: 1st 5 bytes of plain text = %d %d %d %d %d\n", 
+                raw[0], raw[1], raw[2], raw[3], raw[4]);
       }
  
       /* Raw was allocated above solely because of ECC.  Free it here? */
       free(raw);
 
-   }
+    }
   }
 
   cfg->len = k;

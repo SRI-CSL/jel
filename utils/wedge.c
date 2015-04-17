@@ -17,6 +17,7 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 #include <jel/jel.h>
 
 #include <ctype.h>		/* to declare isprint() */
@@ -136,19 +137,25 @@ parse_switches (jel_config *cfg, int argc, char **argv)
     if (keymatch(arg, "data", 4)) {
       /* Set output file name. */
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
+      /* coverity: prevent leak if multiple output files */
+      if(msgfilename != NULL){ free(msgfilename); }
       msgfilename = strdup(argv[argn]);	/* save it away for later use */
-
+      
     } else if (keymatch(arg, "outfile", 3)) {
       /* Set output file name. */
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
+      /* coverity: prevent leak if multiple output files */
+      if(outfilename != NULL){ free(outfilename); }
       outfilename = strdup(argv[argn]);	/* save it away for later use */
 
     } else if (keymatch(arg, "message", 3)) {
       /* Message string */
       if (++argn >= argc)	/* advance to next argument */
-	usage();
+        usage();
+      /* coverity:  prevent leak if multiple messages */
+      if(message != NULL){ free(message); }
       message = (unsigned char *) strdup(argv[argn]);
 
     } else if (keymatch(arg, "nolength", 5)) {
@@ -160,34 +167,34 @@ parse_switches (jel_config *cfg, int argc, char **argv)
     } else if (keymatch(arg, "ecc", 3)) {
       /* Block length to use for error correction */
       if (++argn >= argc)
-	usage();
+        usage();
       ecclen = strtol(argv[argn], NULL, 10);
     } else if (keymatch(arg, "frequencies", 4)) {
       /* freq. components */
       if (++argn >= argc)
-	usage();
+        usage();
       if (sscanf(argv[argn], "%d,%d,%d,%d",
-		 &freq[0], &freq[1], &freq[2], &freq[3]) != 4)
-	usage();
+                 &freq[0], &freq[1], &freq[2], &freq[3]) != 4)
+        usage();
       nfreq = 4;
     } else if (keymatch(arg, "quanta", 4)) {
       /* Start block */
       if (++argn >= argc)
-	usage();
+        usage();
       cfg->freqs.nlevels = strtol(argv[argn], NULL, 10);
     } else if (keymatch(arg, "quality", 4)) {
       /* Start block */
       if (++argn >= argc)
-	usage();
+        usage();
       quality = strtol(argv[argn], NULL, 10);
     } else if (keymatch(arg, "seed", 4)) {
       /* Start block */
       if (++argn >= argc)
-	usage();
+        usage();
       seed = strtol(argv[argn], NULL, 10);
     } else if (keymatch(arg, "version", 7)) {
       fprintf(stderr, "wedge version %s (libjel version %s)\n",
-	      WEDGE_VERSION, jel_version_string());
+              WEDGE_VERSION, jel_version_string());
       exit(-1);
     } else {
       usage();			/* bogus switch */
@@ -238,7 +245,7 @@ print_text_marker (j_decompress_ptr cinfo)
       fprintf(stderr, "Comment, length %ld:\n", (long) length);
     else			/* assume it is an APPn otherwise */
       fprintf(stderr, "APP%d, length %ld:\n",
-	      cinfo->unread_marker - JPEG_APP0, (long) length);
+              cinfo->unread_marker - JPEG_APP0, (long) length);
   }
 
   while (--length >= 0) {
@@ -250,16 +257,16 @@ print_text_marker (j_decompress_ptr cinfo)
        * Newlines in CR, CR/LF, or LF form will be printed as one newline.
        */
       if (ch == '\r') {
-	fprintf(stderr, "\n");
+        fprintf(stderr, "\n");
       } else if (ch == '\n') {
-	if (lastch != '\r')
-	  fprintf(stderr, "\n");
+        if (lastch != '\r')
+          fprintf(stderr, "\n");
       } else if (ch == '\\') {
-	fprintf(stderr, "\\\\");
+        fprintf(stderr, "\\\\");
       } else if (isprint(ch)) {
-	putc(ch, stderr);
+        putc(ch, stderr);
       } else {
-	fprintf(stderr, "\\%03o", ch);
+        fprintf(stderr, "\\%03o", ch);
       }
       lastch = ch;
     }
@@ -275,29 +282,30 @@ print_text_marker (j_decompress_ptr cinfo)
 static size_t read_message(char *filename, unsigned char *message, int maxlen, int abort_on_overflow) {
   long length;
   FILE * fp = fopen (filename, "rb");
-  
-  if(fp ==NULL){
+  size_t retval = 0;
+  if(fp == NULL){
     fprintf(stderr, "Opening %s failed\n", filename);
-    return 0;
   } else {
+    
     fseek (fp, 0, SEEK_END);
     length = ftell (fp);
     fseek (fp, 0, SEEK_SET);
     
     if(length > maxlen){
       fprintf(stderr, "Message of length %ld is too long (maxlen=%d)!\n", length, maxlen);
-      return 0;
+    } else if(length < 0){
+      fprintf(stderr, "ftell failed: %s\n", strerror(errno));
     } else {
       size_t bytes = fread(message, 1, length, fp);
-      fclose (fp);
       if(bytes < length){
-	fprintf(stderr, "Read failed to fetch all the bytes,  only read %" PriSize_t " out of %ld\n", bytes, length);
-	return 0;
+        fprintf(stderr, "Read failed to fetch all the bytes,  only read %" PriSize_t " out of %ld\n", bytes, length);
       } else {
-	return bytes;
+        retval = bytes;
       }
     }
+    fclose (fp);
   }
+  return retval;
 }
 
 
