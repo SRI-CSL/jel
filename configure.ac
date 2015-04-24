@@ -11,9 +11,15 @@ AC_PROG_CC
 
 AC_PROG_RANLIB
 
-AC_CHECK_HEADER(jpeglib.h)
+AC_CHECK_HEADER(jpeglib.h, [], [
+  echo "Error! You need to have jpeglib.h around."
+  exit -1
+])
 
-AC_CHECK_LIB(jpeg, main)
+AC_CHECK_LIB(jpeg, main, [], [
+  echo "Error! You need to have libjpeg around."
+  exit -1
+])
 
 AC_CHECK_LIB(m, main)
 
